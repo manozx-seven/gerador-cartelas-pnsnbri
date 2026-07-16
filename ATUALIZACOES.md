@@ -9,6 +9,32 @@
 
 ---
 
+## 2026-07-16 — PONTO DE PARADA (retomar em outro computador)
+
+- **Estado:** sistema **funcional, publicado e testado no celular** (login, geração de
+  cartelas nos dois modos, painel de administradores, histórico, presença/tempo real,
+  responsividade — tudo OK). Repositório **sincronizado** com o GitHub (branch `main`,
+  commit `8903d84`).
+- **Repositório:** https://github.com/manozx-seven/gerador-cartelas-pnsnbri
+- **Firebase:** projeto `gerador-cartelas-pnsnbri` configurado (Auth + Firestore + regras
+  publicadas). Chaves já estão em `site/assets/js/firebase.js` (versionadas — normal e seguro).
+- **Netlify:** conectado ao GitHub (deploy automático); domínio
+  `gerador-cartelas-pnsnbri.netlify.app` autorizado no Firebase Auth.
+
+**Para continuar em outro computador:**
+1. `git clone https://github.com/manozx-seven/gerador-cartelas-pnsnbri.git`
+2. Abrir a pasta e editar normalmente. `CONTEXTO.md` e `ATUALIZACOES.md` estão no repo
+   (dão todo o histórico). Fazer `git pull` antes de começar e `git push` ao terminar.
+3. **Atenção — o que NÃO está no repositório** (ficam só nesta máquina, por estarem no
+   `.gitignore`): **`PROPOSTA.md`** (documento comercial) e **`.claude/`** (config local,
+   incluindo o hook que lê o contexto ao abrir o terminal). Se quiser a proposta no outro PC,
+   copie o arquivo à parte.
+
+**Ideias/pendências futuras (registradas):**
+- Ao remover um admin, apagar também a conta no Firebase Authentication (hoje exige o Console).
+- Possível "limpar histórico" (só DEV) direto no painel.
+- Exportar/imprimir o próprio histórico, se necessário.
+
 ## 2026-07-16 — Paridade total com o login de Beruri + site 100% responsivo
 
 - **Login/painel idênticos ao projeto de Beruri (em funcionamento):**
