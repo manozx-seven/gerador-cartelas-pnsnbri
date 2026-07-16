@@ -9,6 +9,31 @@
 
 ---
 
+## 2026-07-16 — Histórico (auditoria), presença online, spam, favicon e redirect
+
+Paridade com o projeto Paróquia Beruri (entrada de 16/07 lá) + ajustes pedidos:
+
+- **Redirect resolvido:** o "Redirecionando…" sumiu — o **login virou a `index.html`**
+  (login.html removido). Raiz do site abre direto no login, com URL limpa. Os redirects
+  passaram a apontar para `./` (login) e `app.html`.
+- **Favicon:** logo da paróquia (`logo-paroquia.jpeg`) como ícone da aba em index/app/admin.
+- **Orientação de spam:** ao clicar em "Esqueci minha senha", abre uma tela (`#viewEsqueci`)
+  mostrando o e-mail e orientando a checar **Spam/Lixo** e marcar "Não é spam".
+- **Permissão restrita:** só **DEV** vê o seletor de papel e pode criar DEV; **Administrador
+  comum só cria Administrador** (forçado no JS, `role = dev ? escolha : 'adm'`).
+- **Histórico de atividades (auditoria):** nova coleção **`atividades`**; `session.js` com
+  `registrarAtividade(acao, descricao)`. Ações: **login, logout, criar_admin, excluir_admin,
+  alterar_senha, gerar_cartelas** (o app registra as gerações de PDF). Login registrado 1x
+  por sessão (`sessionStorage`). Nova **aba "Histórico"** no painel: lista (até 300, recentes
+  primeiro), filtros por administrador e por ação, botão Atualizar e contador.
+- **Presença / último acesso:** campos `ultimoAcesso` e `ultimoAtivo` (heartbeat a cada 1 min
+  + `visibilitychange`) nos docs de `admins`. A lista de admins mostra **"online agora"**
+  (ativo nos últimos 2 min) ou **"último acesso: dd/mm/aaaa HH:MM (há X)"**.
+- **Regras:** `firestore.rules` ganhou a coleção `atividades` (read p/ admin; create só do
+  próprio uid; update proibido; delete só DEV). **Precisa republicar as regras no Console.**
+- Novos helpers em `utils.js` (`paraData`, `dataHoraBR`, `tempoRelativo`, `estaOnline`) e
+  módulo **`session.js`** (presença + auditoria), usado por `app-guard.js` e `admin.js`.
+
 ## 2026-07-16 — Login (Firebase) + estrutura para publicar no Netlify
 
 - **Reestruturado para deploy:** criada a pasta **`site/`** (publicada pelo Netlify via

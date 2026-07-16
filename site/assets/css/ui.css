@@ -65,6 +65,25 @@ ul.regras li::before{content:'○';position:absolute;left:2px}
 ul.regras li.ok{color:var(--ok)}
 ul.regras li.ok::before{content:'✓';color:var(--ok)}
 
+/* orientações (spam) */
+.orient{background:#e7effc;border-radius:14px;padding:14px 16px;box-shadow:inset 2px 2px 6px rgba(72,110,205,.14),inset -2px -2px 5px #fff}
+.orient p{margin:0 0 9px;font-size:13px;line-height:1.5;color:var(--ink2)}
+.orient p:last-child{margin-bottom:0}
+
+/* tabs (admin) */
+.tabs{display:flex;gap:6px;margin-bottom:16px;padding:5px;border-radius:15px;background:#e7effc;box-shadow:inset 2px 2px 6px rgba(72,110,205,.18),inset -2px -2px 5px #fff}
+.tabs .tab{flex:1;background:transparent;border:none;box-shadow:none;color:var(--muted);padding:10px;border-radius:11px;font-weight:600}
+.tabs .tab.on{background:linear-gradient(145deg,#fff,#e9f0fd);color:var(--ink);box-shadow:4px 4px 10px var(--sd2),-3px -3px 8px var(--sl)}
+.online{color:var(--ok);font-weight:600;font-size:12px;display:inline-flex;align-items:center;gap:5px}
+.online::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,122,77,.18)}
+.acesso{font-size:11.5px;color:var(--faint)}
+.log-item{display:flex;align-items:flex-start;gap:11px;background:#e7effc;border-radius:12px;padding:11px 13px;margin-top:8px;box-shadow:inset 2px 2px 6px rgba(72,110,205,.12),inset -2px -2px 5px #fff}
+.log-dot{width:30px;height:30px;flex:none;border-radius:9px;background:linear-gradient(145deg,#4a83ff,#1c47c4);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.log-item .m{flex:1;min-width:0}
+.log-item .ac{font-weight:600;font-size:13px}
+.log-item .ds{font-size:12px;color:var(--ink2)}
+.log-item .qd{font-size:11px;color:var(--faint);white-space:nowrap}
+
 /* ---- topbar (admin) ---- */
 .topbar{display:flex;align-items:center;gap:14px;padding:12px 22px;background:linear-gradient(145deg,#fff,#e8f0fd);box-shadow:0 6px 18px -8px var(--sd)}
 .topbar .logo{width:40px;height:40px;object-fit:contain;border-radius:12px;padding:3px;background:#fff;box-shadow:5px 5px 12px var(--sd2),-3px -3px 8px var(--sl)}

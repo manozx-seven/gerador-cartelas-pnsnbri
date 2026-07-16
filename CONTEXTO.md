@@ -75,8 +75,9 @@ abas**:
 | `ATUALIZACOES.md` | Registro de todas as mudanças/decisões (changelog). |
 | `site/` | **Pasta publicada no Netlify.** Contém o app e o sistema de login/admins. |
 | `site/app.html` | **App principal** (canônico) — editor de sobreposição + construtor A4. Antes era `bingo-sobreposicao.html` na raiz (movido para cá). |
-| `site/login.html` · `site/admin.html` · `site/index.html` | Login, painel de administradores e redirecionamento. |
-| `site/assets/js/` | `firebase.js`, `utils.js`, `login.js`, `admin.js`, `app-guard.js`. |
+| `site/index.html` | **Tela de login** (é a página inicial; não há mais `login.html`). |
+| `site/admin.html` | Painel de administração: abas **Administradores** e **Histórico**. |
+| `site/assets/js/` | `firebase.js`, `utils.js`, `session.js` (presença+auditoria), `login.js`, `admin.js`, `app-guard.js`. |
 | `site/libs/` · `site/fonts/` | Bibliotecas (pdf.js, pdf-lib, jszip) e fontes locais (offline). |
 | `firestore.rules` · `netlify.toml` · `SETUP-FIREBASE.md` | Regras do Firestore, config do Netlify e guia de publicação. |
 | `contexto-sistema-cartelas-bingo.md` | Nota de contexto original (histórico da conversa). |
@@ -123,11 +124,16 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
 
 - Coleção **`admins`** no Firestore (id do doc = UID do Auth), com campos `email`,
   `role` (`dev` ou `adm`) e `mustChangePassword`.
-- **`login.html`**: entra, confere se é admin, e força troca de senha no 1º acesso.
+- **`index.html`**: tela de login (entra, confere admin, força troca de senha no 1º acesso,
+  tela de orientação de spam no "esqueci minha senha").
 - **`app.html`**: protegido por `app-guard.js` (redireciona para o login se não autorizado);
-  topo mostra o usuário, botão **Admins** e **Sair**.
-- **`admin.html`**: cria admins (via app secundário, sem deslogar), remove (dev remove
-  qualquer um; adm só remove `adm`) e troca a própria senha.
+  topo mostra o usuário, botão **Admins** e **Sair**. Registra as gerações de PDF no histórico.
+- **`admin.html`**: abas **Administradores** (cria via app secundário sem deslogar; remove —
+  dev remove qualquer um, adm só remove `adm`; mostra online/último acesso; troca a própria
+  senha) e **Histórico** (auditoria de tudo que os admins fazem).
+- **Permissões:** só **DEV** escolhe DEV/Administrador ao criar; admin comum só cria `adm`.
+- **Presença/auditoria:** `session.js` grava `ultimoAcesso`/`ultimoAtivo` (heartbeat) e a
+  coleção `atividades`. **As regras precisam ser republicadas** quando o `firestore.rules` muda.
 - Regras em `firestore.rules`. Firebase = **projeto NOVO só do bingo** (isolado do Beruri).
 - Chaves do Firebase ficam em `site/assets/js/firebase.js` (placeholders `COLE_AQUI`).
 - Passo a passo completo em **`SETUP-FIREBASE.md`**.

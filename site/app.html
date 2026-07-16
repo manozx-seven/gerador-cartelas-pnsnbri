@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cartelas · Editor de sobreposição</title>
+<title>Gerador de Cartelas · Paróquia N. S. de Nazaré</title>
+<link rel="icon" type="image/jpeg" href="logo-paroquia.jpeg">
+<link rel="apple-touch-icon" href="logo-paroquia.jpeg">
 <style>
   @font-face{font-family:'Poppins';src:url('fonts/poppins-400.woff2') format('woff2');font-weight:400;font-display:swap}
   @font-face{font-family:'Poppins';src:url('fonts/poppins-500.woff2') format('woff2');font-weight:500;font-display:swap}
@@ -798,6 +800,7 @@ $('#generate').onclick=async()=>{
     const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download='cartelas-bingo.pdf';a.click();URL.revokeObjectURL(url);
     showMsg('Pronto! '+qty+' folha(s) geradas e baixadas em cartelas-bingo.pdf','ok');setStep(4);
+    if(window.registrarAtividade)window.registrarAtividade('gerar_cartelas','Sobreposição no PDF · '+qty+' folha(s)');
   }catch(e){showMsg('Erro ao gerar: '+e.message,'err');}
   finally{btn.disabled=false;setTimeout(()=>prog.style.display='none',900);}
 };
@@ -986,6 +989,7 @@ $('#bGenerate').onclick=async()=>{
     prog.querySelector('i').style.width='100%';
     const bytes=await out.save();const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='modelo-bingo.pdf';a.click();URL.revokeObjectURL(url);
     bShowMsg('Pronto! '+qty+' folha(s) geradas em modelo-bingo.pdf','ok');
+    if(window.registrarAtividade)window.registrarAtividade('gerar_cartelas','Modelo A4 · '+qty+' folha(s)');
   }catch(e){bShowMsg('Erro ao gerar: '+e.message,'err');}
   finally{$('#bGenerate').disabled=false;setTimeout(()=>prog.style.display='none',900);}
 };

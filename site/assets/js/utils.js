@@ -55,3 +55,34 @@ export function validarSenhaForte(senha){
   const faltas = REGRAS_SENHA.filter(r => !r.teste(s));
   return { ok: faltas.length === 0, faltas };
 }
+
+// ---- Datas (aceita Timestamp do Firestore, {seconds}, número ou string) ----
+export function paraData(v){
+  if (!v) return null;
+  if (typeof v.toDate === 'function') return v.toDate();
+  if (typeof v.seconds === 'number') return new Date(v.seconds * 1000);
+  const d = new Date(v);
+  return isNaN(d) ? null : d;
+}
+export function dataHoraBR(v){
+  const d = paraData(v);
+  if (!d) return '—';
+  return d.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+export function tempoRelativo(v){
+  const d = paraData(v);
+  if (!d) return '';
+  const seg = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (seg < 60) return 'há poucos segundos';
+  const min = Math.floor(seg / 60);
+  if (min < 60) return `há ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `há ${h} h`;
+  const dias = Math.floor(h / 24);
+  return `há ${dias} dia${dias > 1 ? 's' : ''}`;
+}
+// Ativo nos últimos N minutos?
+export function estaOnline(v, minutos = 2){
+  const d = paraData(v);
+  return d ? (Date.now() - d.getTime()) < minutos * 60000 : false;
+}

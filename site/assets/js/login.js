@@ -28,17 +28,24 @@ document.getElementById('senha').addEventListener('keydown', e => { if (e.key ==
 btnSalvarSenha.addEventListener('click', () => comCarregamento(btnSalvarSenha, salvarSenha));
 
 const linkEsqueci = document.getElementById('linkEsqueci');
+const viewEsqueci = document.getElementById('viewEsqueci');
 linkEsqueci.addEventListener('click', () => comCarregamento(linkEsqueci, async () => {
   const email = document.getElementById('email').value.trim();
   if (!email){ toast('Digite seu e-mail no campo acima primeiro.', 'warn'); return; }
   try {
     await sendPasswordResetEmail(auth, email);
-    toast('Enviamos um link de redefinição para o seu e-mail. Verifique também o spam.', 'ok', 7000);
+    document.getElementById('emailEnviado').textContent = email;
+    viewLogin.classList.add('hidden');
+    viewEsqueci.classList.remove('hidden'); viewEsqueci.classList.add('fade-in');
   } catch (e){
     const map = { 'auth/invalid-email': 'E-mail inválido.', 'auth/user-not-found': 'E-mail não encontrado.' };
     toast(map[e.code] || 'Não foi possível enviar o e-mail.', 'erro');
   }
 }));
+document.getElementById('btnVoltarLogin').addEventListener('click', () => {
+  viewEsqueci.classList.add('hidden');
+  viewLogin.classList.remove('hidden'); viewLogin.classList.add('fade-in');
+});
 
 // Lista visual de regras de senha
 const listaRegras = document.getElementById('regrasSenha');

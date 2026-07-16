@@ -20,3 +20,5 @@ export const db = getFirestore(app);
 
 // Coleção de administradores (id do documento = uid do Auth).
 export const COL_ADMINS = "admins";
+// Coleção de auditoria (histórico de ações dos admins).
+export const COL_LOGS = "atividades";

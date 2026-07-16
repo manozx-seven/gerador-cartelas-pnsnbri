@@ -2,10 +2,59 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=login.html">
-<title>Gerador de Cartelas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar · Gerador de Cartelas</title>
+<link rel="icon" type="image/jpeg" href="logo-paroquia.jpeg">
+<link rel="apple-touch-icon" href="logo-paroquia.jpeg">
+<link rel="stylesheet" href="assets/css/ui.css">
 </head>
 <body>
-<p>Redirecionando… <a href="login.html">Clique aqui se não for automático.</a></p>
+<div class="center">
+  <div class="card-clay fade-in">
+    <div class="brand-c">
+      <img src="logo-paroquia.jpeg" alt="Logo">
+      <h1>Gerador de Cartelas</h1>
+      <p>PARÓQUIA NOSSA SENHORA DE NAZARÉ</p>
+    </div>
+
+    <!-- Login -->
+    <div id="viewLogin">
+      <h2 class="sec">Acesso restrito</h2>
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" placeholder="voce@exemplo.com">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha">
+      <button id="btnEntrar" class="gold wide mt">Entrar</button>
+      <button id="linkEsqueci" class="linklike mt" style="width:100%">Esqueci minha senha</button>
+      <div class="hint">Somente pessoas autorizadas (administradores) têm acesso.</div>
+    </div>
+
+    <!-- Trocar senha (1º acesso) -->
+    <div id="viewTrocarSenha" class="hidden">
+      <h2 class="sec">Crie sua nova senha</h2>
+      <p class="muted" style="margin:0 0 8px;font-size:13px">É seu primeiro acesso. Defina uma senha só sua.</p>
+      <label for="novaSenha">Nova senha</label>
+      <input id="novaSenha" type="password" autocomplete="new-password">
+      <label for="novaSenha2">Repita a nova senha</label>
+      <input id="novaSenha2" type="password" autocomplete="new-password">
+      <ul class="regras" id="regrasSenha"></ul>
+      <button id="btnSalvarSenha" class="primary wide mt" disabled>Salvar e entrar</button>
+    </div>
+
+    <!-- Orientações após "Esqueci minha senha" (spam) -->
+    <div id="viewEsqueci" class="hidden">
+      <h2 class="sec">Verifique seu e-mail</h2>
+      <p style="margin:0 0 10px;font-size:13.5px">Enviamos um link de redefinição de senha para:</p>
+      <p style="margin:0 0 14px;font-weight:600" id="emailEnviado">—</p>
+      <div class="orient">
+        <p><strong>1.</strong> Abra o e-mail e clique no link para cadastrar a nova senha.</p>
+        <p><strong>2.</strong> Não achou? Veja a pasta de <strong>Spam / Lixo eletrônico</strong>.</p>
+        <p><strong>3.</strong> Se estiver no spam, marque <strong>"Não é spam"</strong> para os próximos e-mails caírem na caixa de entrada.</p>
+      </div>
+      <button id="btnVoltarLogin" class="primary wide mt">Voltar ao login</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="assets/js/login.js"></script>
 </body>
 </html>

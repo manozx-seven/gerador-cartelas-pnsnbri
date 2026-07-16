@@ -58,9 +58,19 @@ O que é publicado: **só a pasta `site/`**. O restante (contexto, PDFs de exemp
 
 ---
 
+## ⚠️ Se você já tinha publicado as regras antes
+O arquivo `firestore.rules` ganhou a coleção **`atividades`** (histórico) e o app passou a
+gravar **presença/último acesso** nos docs de `admins`. **Republique as regras**: Firebase →
+**Firestore → Regras** → cole de novo o conteúdo de `firestore.rules` → **Publicar**.
+Sem isso, a aba **Histórico** dá erro de permissão.
+
 ## Como usar depois
-- Abrir o site → **Entrar** com e-mail e senha (só administradores).
-- No app, botão **Admins** (topo) → adicionar/remover administradores e trocar sua senha.
+- Abrir o site → cai direto na tela de **Entrar** (a página inicial já é o login).
+- Entrar com e-mail e senha (só administradores). No 1º acesso o sistema pede para criar a senha.
+- No app, botão **Admins** (topo) → aba **Administradores** (adicionar/remover, ver quem está
+  online / último acesso, trocar sua senha) e aba **Histórico** (tudo que os admins fizeram).
+- **Permissões:** só o **DEV** escolhe DEV/Administrador ao criar; um Administrador comum só
+  consegue criar outro **Administrador**.
 
 ## Observações
 - **Excluir um administrador** pelo painel remove o acesso (o doc em `admins` some), mas a

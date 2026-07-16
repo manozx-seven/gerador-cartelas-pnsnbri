@@ -27,6 +27,15 @@ service cloud.firestore {
       allow delete: if ehDev() || (ehAdmin() && resource.data.role == 'adm');
     }
 
+    // ---- Histórico de atividades (auditoria) ----
+    match /atividades/{id} {
+      allow read: if ehAdmin();                 // ver o histórico: qualquer admin
+      // criar: só o próprio usuário grava a própria ação
+      allow create: if ehAdmin() && request.resource.data.uid == request.auth.uid;
+      allow update: if false;                   // imutável
+      allow delete: if ehDev();                 // só DEV pode limpar
+    }
+
     // Nada mais é acessível (o app gera as cartelas 100% no navegador,
     // sem guardar dados no Firestore).
     match /{document=**} {
