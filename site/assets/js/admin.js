@@ -1,11 +1,11 @@
 import { app, auth, db, firebaseConfig, COL_ADMINS, COL_LOGS } from './firebase.js';
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  onAuthStateChanged, signOut, getAuth, createUserWithEmailAndPassword,
-  signOut as signOutApp, updatePassword, reauthenticateWithCredential, EmailAuthProvider
+  onAuthStateChanged, signOut, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut as signOutApp, updatePassword, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-  collection, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, limit
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { toast, comCarregamento, REGRAS_SENHA, validarSenhaForte, olhoSenhaEm, dataHoraBR, tempoRelativo, estaOnline } from './utils.js';
 import { iniciarSessao, registrarAtividade } from './session.js';
@@ -16,8 +16,10 @@ let MEU = { uid: null, email: null, role: null };
 const ACOES = {
   login: 'Entrou no sistema', logout: 'Saiu do sistema',
   criar_admin: 'Criou administrador', excluir_admin: 'Removeu administrador',
+  reset_senha: 'Reiniciou a senha de um admin',
   alterar_senha: 'Alterou a senha', gerar_cartelas: 'Gerou cartelas'
 };
+let ADMINS = [];
 
 // ---------- Guarda de acesso ----------
 onAuthStateChanged(auth, async (user) => {
@@ -54,13 +56,14 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
 // ---------- Administradores ----------
 async function carregarAdmins(){
   const qs = await getDocs(collection(db, COL_ADMINS));
-  const admins = qs.docs.map(d => ({ id: d.id, ...d.data() }))
+  ADMINS = qs.docs.map(d => ({ id: d.id, ...d.data() }))
     .sort((a, b) => (a.email || '').localeCompare(b.email || ''));
   const box = $('#listaAdmins'); box.innerHTML = '';
-  admins.forEach(a => {
+  ADMINS.forEach(a => {
     const ehDev = a.role === 'dev';
     const souEu = a.id === MEU.uid;
     const podeExcluir = !souEu && (MEU.role === 'dev' || (MEU.role === 'adm' && !ehDev));
+    const podeResetar = !souEu && (MEU.role === 'dev' || !ehDev);
     const online = estaOnline(a.ultimoAtivo);
     const presenca = online
       ? '<span class="online">online agora</span>'
@@ -72,27 +75,49 @@ async function carregarAdmins(){
       ${souEu ? '<span class="muted">(você)</span>' : ''}
       ${a.mustChangePassword ? '<span class="muted">• senha provisória</span>' : ''}
       <span class="sp"></span>${presenca}
-      ${podeExcluir ? `<button class="danger" data-del="${a.id}" style="margin-left:12px">Excluir</button>` : ''}`;
+      ${podeResetar ? `<button data-reset="${a.id}" style="margin-left:10px">Reiniciar senha</button>` : ''}
+      ${podeExcluir ? `<button class="danger" data-del="${a.id}" style="margin-left:8px">Excluir</button>` : ''}`;
     box.appendChild(div);
   });
   box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => excluirAdmin(b.dataset.del, b)));
+  box.querySelectorAll('[data-reset]').forEach(b => b.addEventListener('click', () => resetarSenhaAdmin(b.dataset.reset, b)));
   // alimenta o filtro de administradores do histórico
   const sel = $('#logFiltroAdmin'); const atual = sel.value;
-  sel.innerHTML = '<option value="">Todos</option>' + admins.map(a => `<option value="${a.email}">${a.email}</option>`).join('');
+  sel.innerHTML = '<option value="">Todos</option>' + ADMINS.map(a => `<option value="${a.email}">${a.email}</option>`).join('');
   sel.value = atual;
 }
 
 async function excluirAdmin(uid, btn){
   if (!confirm('Excluir este administrador? O acesso dele será removido do sistema.')) return;
+  const alvo = ADMINS.find(x => x.id === uid);
   await comCarregamento(btn, async () => {
     try {
-      const alvo = (await getDoc(doc(db, COL_ADMINS, uid))).data() || {};
       await deleteDoc(doc(db, COL_ADMINS, uid));
-      await registrarAtividade('excluir_admin', alvo.email || uid);
+      await registrarAtividade('excluir_admin', `Removeu o administrador ${alvo?.email || uid}`);
       toast('Administrador removido.', 'ok', 5000);
       toast('Obs.: a conta de login continua no Firebase Auth até ser apagada no Console.', 'info', 8000);
       await carregarAdmins(); await carregarHistorico();
     } catch (e){ console.error(e); toast('Erro ao excluir. Verifique sua permissão.', 'erro'); }
+  });
+}
+
+// Reinicia a senha de outro admin: envia e-mail de redefinição + marca "trocar no 1º acesso".
+async function resetarSenhaAdmin(uid, btn){
+  const alvo = ADMINS.find(x => x.id === uid); if (!alvo) return;
+  if (!confirm(`Reiniciar a senha de ${alvo.email}?\n\nEle receberá um e-mail para definir nova senha e, ao entrar, será obrigado a cadastrar uma nova (como no primeiro acesso).`)) return;
+  await comCarregamento(btn, async () => {
+    try {
+      await sendPasswordResetEmail(auth, alvo.email);
+      await updateDoc(doc(db, COL_ADMINS, uid), { mustChangePassword: true });
+      await registrarAtividade('reset_senha', `Reiniciou a senha de ${alvo.email}`);
+      toast('E-mail de redefinição enviado. Ao entrar, ele terá que cadastrar nova senha.', 'ok', 7000);
+      toast('Peça para verificar o SPAM e marcar "não é spam".', 'info', 8000);
+      await carregarAdmins(); await carregarHistorico();
+    } catch (e){
+      console.error(e);
+      const map = { 'auth/invalid-email': 'E-mail inválido.', 'auth/user-not-found': 'Conta de login não encontrada no Authentication.', 'auth/too-many-requests': 'Muitas tentativas. Aguarde e tente de novo.' };
+      toast(map[e.code] || 'Não foi possível reiniciar a senha.', 'erro');
+    }
   });
 }
 
@@ -103,22 +128,39 @@ btnCriarAdm.addEventListener('click', () => comCarregamento(btnCriarAdm, async (
   // segurança: só DEV pode criar DEV; admin comum sempre cria "adm"
   const role = MEU.role === 'dev' ? $('#admRole').value : 'adm';
   if (!email || senha.length < 6){ toast('Informe e-mail e senha (mín. 6 caracteres).', 'warn'); return; }
+  // App secundário para NÃO deslogar o admin atual ao criar a conta.
   const secApp = initializeApp(firebaseConfig, 'sec_' + Date.now());
   const secAuth = getAuth(secApp);
   try {
-    const cred = await createUserWithEmailAndPassword(secAuth, email, senha);
+    let cred, vinculado = false;
+    try {
+      cred = await createUserWithEmailAndPassword(secAuth, email, senha);
+    } catch (e){
+      // Já existe conta de login com esse e-mail (ex.: sobra de um admin excluído do sistema
+      // mas não do Auth). Tenta entrar com a senha informada para vincular ao sistema.
+      if (e.code === 'auth/email-already-in-use'){
+        cred = await signInWithEmailAndPassword(secAuth, email, senha).catch(() => { throw { code: 'login-existe-senha-errada' }; });
+        vinculado = true;
+      } else { throw e; }
+    }
     await setDoc(doc(db, COL_ADMINS, cred.user.uid), {
       email, role, mustChangePassword: true, criadoEm: serverTimestamp()
     });
     await signOutApp(secAuth);
     $('#admEmail').value = ''; $('#admSenha').value = '';
-    await registrarAtividade('criar_admin', `${email} (${role === 'dev' ? 'DEV' : 'ADM'})`);
-    toast('Administrador criado! Ele trocará a senha no primeiro acesso.', 'ok', 6000);
+    await registrarAtividade('criar_admin', `${vinculado ? 'Vinculou' : 'Criou'} o administrador ${email} (${role === 'dev' ? 'DEV' : 'ADM'})`);
+    toast(vinculado
+      ? 'Conta de login já existia e foi vinculada ao sistema. Ele trocará a senha no primeiro acesso.'
+      : 'Administrador criado! Ele trocará a senha no primeiro acesso.', 'ok', 7000);
     await carregarAdmins(); await carregarHistorico();
   } catch (e){
     console.error(e);
-    const map = { 'auth/email-already-in-use': 'Este e-mail já está em uso.', 'auth/invalid-email': 'E-mail inválido.', 'auth/weak-password': 'Senha muito fraca (mín. 6 caracteres).' };
-    toast(map[e.code] || 'Erro ao criar administrador.', 'erro');
+    const map = {
+      'auth/invalid-email': 'E-mail inválido.',
+      'auth/weak-password': 'Senha muito fraca (mín. 6 caracteres).',
+      'login-existe-senha-errada': 'Este e-mail já tem uma conta de login, mas a senha não confere. Digite a senha atual dessa conta para vinculá-la, ou apague-a no Authentication e crie de novo.'
+    };
+    toast(map[e.code] || 'Erro ao criar administrador.', 'erro', 9000);
   } finally { try { await deleteApp(secApp); } catch (_){} }
 }));
 

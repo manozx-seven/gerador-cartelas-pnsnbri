@@ -9,6 +9,35 @@
 
 ---
 
+## 2026-07-16 — Paridade total com o login de Beruri + site 100% responsivo
+
+- **Login/painel idênticos ao projeto de Beruri (em funcionamento):**
+  - **Tempo real:** `session.js` vigia o próprio doc (`onSnapshot`). Se outro admin **remove
+    seu acesso** ou **reinicia sua senha** com você logado, você é **deslogado na hora** e o
+    login mostra o aviso (`avisoLogin` via `sessionStorage`). Vale no app e no painel.
+  - **Reiniciar senha de outro admin:** botão na lista (dev reinicia qualquer um; adm reinicia
+    quem não é dev) — envia e-mail de redefinição + marca `mustChangePassword`. Ação `reset_senha`.
+  - **Criar admin robusto:** se já existe conta de login com o e-mail (sobra do Auth), tenta
+    entrar com a senha informada e **vincula** ao sistema (mensagem "Vinculou/Criou").
+  - **Tela de spam** com os **4 passos** e o texto igual ao de Beruri.
+- **Responsividade total:** breakpoints no `app.html` (header quebra, abas viram largura total,
+  layout empilha viewer + painel, editor usável no toque) e no `ui.css` (login, topbar e painel
+  adaptáveis). Funciona em celular/tablet/computador (editor mais preciso no computador).
+- **Proposta (`PROPOSTA.md`, fora do git):** adicionada a responsividade (é responsivo, mas
+  recomenda computador para precisão) e reescrita como **sistema a ser feito**, com prazo de
+  **até 30 dias**.
+
+## 2026-07-16 — Botão voltar no 1º acesso + expiração de sessão (1h inativo)
+
+- **Tela "Crie sua nova senha" (1º acesso)** ganhou o botão **"Voltar à página inicial"**
+  (`btnVoltarTroca`): faz `signOut` da sessão provisória e volta ao formulário de login.
+- **Expiração por inatividade:** `session.js` desloga automaticamente após **1h sem
+  atividade** (mouse/teclado/scroll/touch/click reiniciam o timer). Ao expirar, registra
+  `logout` e volta ao login com `?expirado=1` (mostra aviso "Sua sessão expirou…").
+- **Nota (dado, não código):** o 1º acesso só pede troca de senha se `mustChangePassword`
+  for **boolean `true`** no doc `admins/{uid}`. O usuário recriou o DEV com esse campo
+  correto e o fluxo passou a funcionar.
+
 ## 2026-07-16 — Histórico (auditoria), presença online, spam, favicon e redirect
 
 Paridade com o projeto Paróquia Beruri (entrada de 16/07 lá) + ajustes pedidos:

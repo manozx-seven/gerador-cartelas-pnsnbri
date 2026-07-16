@@ -69,6 +69,9 @@ ul.regras li.ok::before{content:'✓';color:var(--ok)}
 .orient{background:#e7effc;border-radius:14px;padding:14px 16px;box-shadow:inset 2px 2px 6px rgba(72,110,205,.14),inset -2px -2px 5px #fff}
 .orient p{margin:0 0 9px;font-size:13px;line-height:1.5;color:var(--ink2)}
 .orient p:last-child{margin-bottom:0}
+.orient-ol{margin:6px 0 0;padding:14px 16px 14px 34px;background:#e7effc;border-radius:14px;box-shadow:inset 2px 2px 6px rgba(72,110,205,.14),inset -2px -2px 5px #fff}
+.orient-ol li{font-size:13px;line-height:1.5;color:var(--ink2);margin-bottom:9px}
+.orient-ol li:last-child{margin-bottom:0}
 
 /* tabs (admin) */
 .tabs{display:flex;gap:6px;margin-bottom:16px;padding:5px;border-radius:15px;background:#e7effc;box-shadow:inset 2px 2px 6px rgba(72,110,205,.18),inset -2px -2px 5px #fff}
@@ -111,3 +114,24 @@ ul.regras li.ok::before{content:'✓';color:var(--ok)}
 #authOverlay{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
   background:radial-gradient(1100px 700px at 12% -8%,#e6eeff 0%,transparent 55%),var(--bg);color:var(--ink)}
 #authOverlay .big{width:56px;height:56px;border:4px solid rgba(47,107,255,.25);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
+
+/* ---------- responsivo ---------- */
+@media (max-width:640px){
+  body{font-size:13.5px}
+  .center{padding:16px}
+  .card-clay{padding:24px 20px;border-radius:22px}
+  .brand-c img{width:66px;height:66px}
+  .brand-c h1{font-size:20px}
+  .topbar{flex-wrap:wrap;gap:10px;padding:12px 14px}
+  .topbar .t{font-size:15px}
+  .topbar .who{margin-left:0;width:100%;flex-wrap:wrap;gap:8px;font-size:12px}
+  .topbar .who button{padding:9px 11px}
+  .wrap{padding:0 12px 50px;margin:16px auto}
+  .panel{padding:16px;border-radius:18px}
+  .row2>*{min-width:100%}
+  .adm-item{flex-wrap:wrap;gap:7px}
+  .adm-item .sp{display:none}
+  .adm-item button{margin-left:0!important}
+  .tabs .tab{padding:9px 6px;font-size:12.5px}
+  .log-item .qd{white-space:normal}
+}

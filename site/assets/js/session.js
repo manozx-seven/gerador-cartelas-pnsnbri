@@ -2,12 +2,31 @@
 // e expiração automática por inatividade.
 import { auth, db, COL_ADMINS, COL_LOGS } from './firebase.js';
 import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, updateDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let CUR = null;
 let beatTimer = null;
 let idleTimer = null;
+let saindoForcado = false;
 const IDLE_MS = 60 * 60 * 1000; // 1 hora sem atividade
+
+// Desloga e volta ao login deixando um aviso do motivo (mostrado na tela de login).
+async function forcarSaida(motivo){
+  saindoForcado = true;
+  try { sessionStorage.setItem('avisoLogin', motivo); } catch (_) {}
+  try { await signOut(auth); } catch (_) {}
+  location.replace('./');
+}
+
+// Vigilância em tempo real da própria conta: se OUTRO admin remover meu acesso
+// (doc apagado) ou reiniciar minha senha (mustChangePassword=true), sou deslogado NA HORA.
+function vigiarMinhaConta(uid){
+  onSnapshot(doc(db, COL_ADMINS, uid), (snap) => {
+    if (saindoForcado) return;
+    if (!snap.exists()){ forcarSaida('Seu acesso de administrador foi removido por outro administrador.'); return; }
+    if (snap.data().mustChangePassword){ forcarSaida('Sua senha foi reiniciada. Entre novamente para cadastrar uma nova senha.'); }
+  }, () => {});
+}
 
 function iniciarInatividade(){
   const expirar = async () => {
@@ -50,6 +69,7 @@ export function iniciarSessao(user, adm){
   }
   // disponibiliza para scripts não-módulo (ex.: geração de PDF no app.html)
   window.registrarAtividade = registrarAtividade;
-  iniciarInatividade(); // expira a sessão após 1h sem atividade
+  iniciarInatividade();        // expira a sessão após 1h sem atividade
+  vigiarMinhaConta(user.uid);  // reage em tempo real a remoção/reset por outro admin
   return CUR;
 }

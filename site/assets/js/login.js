@@ -14,6 +14,13 @@ const btnSalvarSenha = document.getElementById('btnSalvarSenha');
 
 olhoSenhaEm(document.getElementById('senha'), novaSenhaEl, novaSenha2El);
 
+// Aviso vindo do painel/app quando a sessão foi encerrada em tempo real
+// (acesso removido ou senha reiniciada por outro administrador).
+try {
+  const aviso = sessionStorage.getItem('avisoLogin');
+  if (aviso){ toast(aviso, 'warn', 8000); sessionStorage.removeItem('avisoLogin'); }
+} catch (_){}
+
 // Se já estiver logado e for admin sem senha provisória, vai direto para o app.
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
