@@ -1,9 +1,25 @@
-// Sessão do usuário: presença (último acesso + heartbeat) e auditoria (histórico).
-import { db, COL_ADMINS, COL_LOGS } from './firebase.js';
+// Sessão do usuário: presença (último acesso + heartbeat), auditoria (histórico)
+// e expiração automática por inatividade.
+import { auth, db, COL_ADMINS, COL_LOGS } from './firebase.js';
+import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { doc, updateDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let CUR = null;
 let beatTimer = null;
+let idleTimer = null;
+const IDLE_MS = 60 * 60 * 1000; // 1 hora sem atividade
+
+function iniciarInatividade(){
+  const expirar = async () => {
+    try { await registrarAtividade('logout', 'Sessão expirada por inatividade'); } catch (_) {}
+    try { await signOut(auth); } catch (_) {}
+    location.replace('./?expirado=1');
+  };
+  const resetar = () => { if (idleTimer) clearTimeout(idleTimer); idleTimer = setTimeout(expirar, IDLE_MS); };
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(ev =>
+    document.addEventListener(ev, resetar, { passive: true }));
+  resetar();
+}
 
 // Registra uma ação no histórico (falha em silêncio para nunca quebrar a ação).
 export async function registrarAtividade(acao, descricao){
@@ -34,5 +50,6 @@ export function iniciarSessao(user, adm){
   }
   // disponibiliza para scripts não-módulo (ex.: geração de PDF no app.html)
   window.registrarAtividade = registrarAtividade;
+  iniciarInatividade(); // expira a sessão após 1h sem atividade
   return CUR;
 }

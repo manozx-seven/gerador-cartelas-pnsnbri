@@ -47,6 +47,18 @@ document.getElementById('btnVoltarLogin').addEventListener('click', () => {
   viewLogin.classList.remove('hidden'); viewLogin.classList.add('fade-in');
 });
 
+// Voltar da tela "crie sua nova senha" (1º acesso) → sai da sessão provisória e volta ao login
+document.getElementById('btnVoltarTroca').addEventListener('click', async () => {
+  try { await signOut(auth); } catch (_) {}
+  viewTroca.classList.add('hidden');
+  viewLogin.classList.remove('hidden'); viewLogin.classList.add('fade-in');
+});
+
+// Mensagem quando a sessão expirou por inatividade
+if (new URLSearchParams(location.search).get('expirado')){
+  toast('Sua sessão expirou por inatividade. Entre novamente.', 'info', 6000);
+}
+
 // Lista visual de regras de senha
 const listaRegras = document.getElementById('regrasSenha');
 REGRAS_SENHA.forEach(r => { const li = document.createElement('li'); li.dataset.id = r.id; li.textContent = r.txt; listaRegras.appendChild(li); });
