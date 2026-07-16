@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logado() { return request.auth != null; }
+    // qualquer administrador (adm ou dev): existe doc em /admins/{uid}
+    function ehAdmin() {
+      return logado() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    // desenvolvedor (superadmin)
+    function ehDev() {
+      return ehAdmin() &&
+        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'dev';
+    }
+
+    // ---- Administradores ----
+    match /admins/{uid} {
+      // ler o próprio doc (após login) ou, se for admin, ler qualquer um.
+      allow get: if logado() && (request.auth.uid == uid || ehAdmin());
+      allow list: if ehAdmin();
+      // criar novos admins: qualquer admin pode.
+      allow create: if ehAdmin();
+      // atualizar: o próprio (baixar flag mustChangePassword) ou um admin.
+      allow update: if logado() && (request.auth.uid == uid || ehAdmin());
+      // excluir: dev remove qualquer um; adm só remove quem tem role 'adm'.
+      allow delete: if ehDev() || (ehAdmin() && resource.data.role == 'adm');
+    }
+
+    // Nada mais é acessível (o app gera as cartelas 100% no navegador,
+    // sem guardar dados no Firestore).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administradores · Gerador de Cartelas</title>
+<link rel="stylesheet" href="assets/css/ui.css">
+</head>
+<body>
+<div id="authOverlay"><div class="big"></div><div>Carregando…</div></div>
+
+<div class="topbar">
+  <img class="logo" src="logo-paroquia.jpeg" alt="Logo">
+  <div class="t">Administradores<small>PARÓQUIA NOSSA SENHORA DE NAZARÉ</small></div>
+  <div class="who">
+    <span id="quemSou"></span>
+    <a href="app.html"><button>← Voltar ao app</button></a>
+    <button id="btnSair" class="danger">Sair</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- Novo admin -->
+  <div class="panel">
+    <h2 class="sec">Adicionar administrador</h2>
+    <div class="row2">
+      <div><label>E-mail</label><input id="admEmail" type="email" placeholder="novo@exemplo.com"></div>
+      <div><label>Senha provisória</label><input id="admSenha" type="password" placeholder="mín. 6 caracteres"></div>
+      <div style="max-width:170px"><label>Permissão</label>
+        <select id="admRole"><option value="adm">Administrador</option><option value="dev">Desenvolvedor (dev)</option></select>
+      </div>
+    </div>
+    <button id="btnCriarAdm" class="primary mt">Criar administrador</button>
+    <div class="hint">A pessoa entra com essa senha provisória e o sistema pede para ela criar a senha própria no primeiro acesso.</div>
+  </div>
+
+  <!-- Lista -->
+  <div class="panel">
+    <h2 class="sec">Administradores atuais</h2>
+    <div id="listaAdmins"></div>
+  </div>
+
+  <!-- Minha senha -->
+  <div class="panel">
+    <h2 class="sec">Alterar minha senha</h2>
+    <div class="row2">
+      <div><label>Senha atual</label><input id="pwAtual" type="password"></div>
+      <div><label>Nova senha</label><input id="pwNova" type="password"></div>
+      <div><label>Repita a nova</label><input id="pwNova2" type="password"></div>
+    </div>
+    <ul class="regras" id="pwRegras"></ul>
+    <button id="btnTrocarSenha" class="primary mt" disabled>Salvar nova senha</button>
+  </div>
+</div>
+
+<script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>

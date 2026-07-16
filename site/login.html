@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar · Gerador de Cartelas</title>
+<link rel="stylesheet" href="assets/css/ui.css">
+</head>
+<body>
+<div class="center">
+  <div class="card-clay fade-in">
+    <div class="brand-c">
+      <img src="logo-paroquia.jpeg" alt="Logo">
+      <h1>Gerador de Cartelas</h1>
+      <p>PARÓQUIA NOSSA SENHORA DE NAZARÉ</p>
+    </div>
+
+    <!-- Login -->
+    <div id="viewLogin">
+      <h2 class="sec">Acesso restrito</h2>
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" placeholder="voce@exemplo.com">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha">
+      <button id="btnEntrar" class="gold wide mt">Entrar</button>
+      <button id="linkEsqueci" class="linklike mt" style="width:100%">Esqueci minha senha</button>
+      <div class="hint">Somente pessoas autorizadas (administradores) têm acesso.</div>
+    </div>
+
+    <!-- Trocar senha (1º acesso) -->
+    <div id="viewTrocarSenha" class="hidden">
+      <h2 class="sec">Crie sua nova senha</h2>
+      <p class="muted" style="margin:0 0 8px;font-size:13px">É seu primeiro acesso. Defina uma senha só sua.</p>
+      <label for="novaSenha">Nova senha</label>
+      <input id="novaSenha" type="password" autocomplete="new-password">
+      <label for="novaSenha2">Repita a nova senha</label>
+      <input id="novaSenha2" type="password" autocomplete="new-password">
+      <ul class="regras" id="regrasSenha"></ul>
+      <button id="btnSalvarSenha" class="primary wide mt" disabled>Salvar e entrar</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="assets/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# saídas geradas / temporários
+cartelas-bingo.pdf
+modelo-bingo.pdf
+_check.js
+*.log
+
+# sistema
+.DS_Store
+Thumbs.db
+node_modules/
+
+# config local do Claude Code (caminhos da máquina)
+.claude/
