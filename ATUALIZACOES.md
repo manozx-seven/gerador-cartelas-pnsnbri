@@ -9,6 +9,29 @@
 
 ---
 
+## 2026-07-17 — PONTO DE PARADA — Proposta alinhada ao contrato + PDF (retomar em casa)
+
+- **O que foi feito nesta sessão:**
+  - **`PROPOSTA.md` alinhada ao contrato** (`contrato.html` da pasta `Contratos Murylo Dev`,
+    contrato-padrão da Murylo Dev — contratado: Murylo Neves, Manaus/AM). Ajustadas as seções:
+    - **§4 Valores/Pagamento:** trocado o texto genérico pelas opções reais do contrato —
+      **Pix com entrada (50% + 50%)**, Pix à vista e **cartão InfinityPay (2x a 6x, taxas
+      repassadas)**; manutenção mensal **à vista, sem parcelamento**.
+    - **§6 Prazo:** "a partir da confirmação do pagamento", com os **7 dias de planejamento**
+      (Art. 49 CDC), **3 rodadas de revisão** e **garantia de 30 dias**.
+    - **§7 Dados p/ contrato:** incluídos Contratado (Manaus/AM), pagamento detalhado,
+      **prazo p/ pagar (3 dias após assinatura)**, revisões, garantia, manutenção à vista e
+      **foro de Manaus/AM**. (Valores R$ 2.500 dev + R$ 80/mês mantidos — o contrato não os define.)
+  - **Gerado `PROPOSTA.html`** (layout A4 estilizado) e **`PROPOSTA.pdf`** (via Chrome headless
+    `--print-to-pdf`). Fonte editável = `.md`; para regerar o PDF, abrir o `.html` e imprimir.
+- **Decisão importante:** a proposta **passou a ser versionada**. Removida a linha `PROPOSTA.md`
+  do `.gitignore` (antes marcada como "documento comercial — não publicar"). Agora
+  `PROPOSTA.md/.html/.pdf` estão no repositório. Commit `ba9a80d`, **pushado** para `main`.
+  - ⚠️ **Atenção:** o conteúdo comercial (valores/pagamento) agora está no **histórico do Git**.
+    Apagar o arquivo depois não o remove do histórico — precisaria reescrever (`git filter-repo`).
+- **Para continuar em casa:** `git pull` na pasta do projeto → os 3 arquivos da proposta já vêm
+  junto (não precisa mais copiar à parte). O `.claude/` continua fora do repo (config local).
+
 ## 2026-07-16 — PONTO DE PARADA (retomar em outro computador)
 
 - **Estado:** sistema **funcional, publicado e testado no celular** (login, geração de
