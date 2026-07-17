@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Proposta — Sistema Gerador de Cartelas de Bingo</title>
+<style>
+  :root{
+    --azul:#1f4e79; --azul2:#2f6db3; --tinta:#22303f; --cinza:#5b6b7a;
+    --linha:#e3e9f0; --suave:#f5f8fc; --verde:#1f7a4d;
+  }
+  *{box-sizing:border-box;}
+  @page{ size:A4; margin:18mm 16mm; }
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI",Calibri,Arial,sans-serif;
+    color:var(--tinta); font-size:11pt; line-height:1.55;
+    background:#fff;
+  }
+  .doc{max-width:180mm;margin:0 auto;}
+  header.capa{
+    border-bottom:3px solid var(--azul);
+    padding-bottom:14px;margin-bottom:8px;
+  }
+  header.capa .marca{
+    font-size:9.5pt;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--azul2);font-weight:700;margin-bottom:6px;
+  }
+  h1{
+    font-size:20pt;line-height:1.2;color:var(--azul);
+    margin:0 0 12px;font-weight:700;
+  }
+  .meta{
+    display:grid;grid-template-columns:auto 1fr;gap:2px 12px;
+    font-size:10pt;color:var(--cinza);
+  }
+  .meta b{color:var(--tinta);font-weight:600;}
+  h2{
+    font-size:13pt;color:var(--azul);margin:22px 0 8px;
+    padding-bottom:5px;border-bottom:1px solid var(--linha);
+    font-weight:700;
+  }
+  h2 .n{
+    display:inline-block;min-width:22px;height:22px;line-height:22px;
+    text-align:center;background:var(--azul);color:#fff;border-radius:6px;
+    font-size:10pt;margin-right:8px;
+  }
+  h3{font-size:11pt;color:var(--tinta);margin:14px 0 4px;font-weight:700;}
+  p{margin:7px 0;}
+  ul,ol{margin:7px 0;padding-left:20px;}
+  li{margin:4px 0;}
+  li ul,li ol{margin:3px 0;}
+  strong{color:var(--tinta);font-weight:700;}
+  em{color:var(--cinza);}
+  hr{border:none;border-top:1px solid var(--linha);margin:18px 0;}
+  blockquote{
+    margin:12px 0;padding:10px 14px;background:var(--suave);
+    border-left:4px solid var(--azul2);border-radius:0 8px 8px 0;
+    color:#2a3b4a;font-size:10.5pt;
+  }
+  blockquote p{margin:0;}
+  table{
+    border-collapse:collapse;width:100%;margin:10px 0;font-size:10.5pt;
+  }
+  th,td{border:1px solid var(--linha);padding:9px 12px;text-align:left;}
+  thead th{background:var(--azul);color:#fff;font-weight:600;}
+  tbody tr:nth-child(even){background:var(--suave);}
+  .preco{color:var(--verde);font-weight:700;white-space:nowrap;}
+  .yes{color:var(--verde);}
+  .no{color:#b03636;}
+  .dados li{margin:5px 0;}
+  footer.fim{
+    margin-top:22px;padding-top:12px;border-top:1px solid var(--linha);
+    font-size:9.5pt;color:var(--cinza);font-style:italic;text-align:center;
+  }
+  .avoid{break-inside:avoid;}
+  h2{break-after:avoid;}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="capa">
+    <div class="marca">Murylo Dev · Soluções Digitais</div>
+    <h1>Proposta — Sistema Gerador de Cartelas de Bingo</h1>
+    <div class="meta">
+      <b>Para:</b><span>Paróquia Nossa Senhora de Nazaré — Beruri/AM</span>
+      <b>De:</b><span>Murylo Dev — Murylo Neves</span>
+      <b>Contato:</b><span>WhatsApp / e-mail</span>
+      <b>Data:</b><span>Beruri/AM, julho de 2026</span>
+      <b>Validade:</b><span>30 dias</span>
+    </div>
+  </header>
+
+  <section class="avoid">
+    <h2><span class="n">1</span>O que é</h2>
+    <p>Um <strong>sistema sob medida</strong> para gerar as cartelas dos bingos da paróquia —
+    acabando com o trabalho manual de hoje. O acesso é <strong>restrito</strong> (login e senha),
+    só para pessoas autorizadas da paróquia. Funciona pelo navegador, sem instalar nada.</p>
+    <p>Ele oferece <strong>dois caminhos</strong>, para a paróquia usar do jeito que preferir:</p>
+    <ul>
+      <li><strong>Criar o bingo pelo próprio sistema:</strong> modelos prontos (título, rodadas,
+      prêmios, valores, arte) que a paróquia personaliza na tela — escreve textos, adiciona
+      imagens e posiciona as cartelas. Depois é só gerar.</li>
+      <li><strong>Usar a arte que a paróquia já faz:</strong> a paróquia continua montando o
+      cartaz como sempre fez (nome do evento, rodadas, prêmios, valores). A única mudança é deixar
+      <strong>só os quadrados em branco</strong> onde entram as cartelas. Ela sobe esse arquivo e o
+      <strong>sistema posiciona as grades e preenche os números do bingo</strong> exatamente nesses
+      espaços, gerando quantas cartelas quiser — cada uma numerada, tudo automático e com os
+      números <strong>batendo entre todas as rodadas</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">2</span>O que o sistema resolve (antes × depois)</h2>
+    <p><strong>Como era feito (manual):</strong> para cada bingo, imprimiam cerca de
+    <strong>200 cópias</strong>. Aí:</p>
+    <ol>
+      <li>Alguém <strong>colava à mão</strong> uma cartela de bingo no espaço vazio de cada uma
+      das 200 folhas.</li>
+      <li>As <strong>outras rodadas</strong> (só com o cabeçalho “BINGO” e grades vazias) eram
+      <strong>preenchidas à mão</strong>, número por número, <strong>copiando a cartela
+      principal</strong> — em cada uma das 200 folhas.</li>
+    </ol>
+    <p>Isso significava <strong>horas de trabalho de várias pessoas</strong>, com
+    <strong>risco de erro</strong> e <strong>custos fixos toda vez</strong>: cola e compra das
+    cartelas de bingo.</p>
+    <p><strong>Como fica com o sistema:</strong> ele <strong>preenche tudo sozinho</strong> — a
+    cartela principal e todas as rodadas, já com os números conferindo entre si — e devolve as
+    folhas <strong>prontas para imprimir</strong>.</p>
+    <p><strong>Elimina de vez:</strong></p>
+    <ul>
+      <li><span class="no">❌</span> <strong>Cola</strong> e o trabalho de colar 200 cartelas.</li>
+      <li><span class="no">❌</span> <strong>Compra das cartelas de bingo</strong> para colar
+      (gasto que se repetia a cada evento).</li>
+      <li><span class="no">❌</span> <strong>Preencher as rodadas à mão</strong>, copiando a
+      principal — 200 vezes.</li>
+      <li><span class="no">❌</span> <strong>Erros humanos</strong> (número trocado, rodada que
+      não bate).</li>
+      <li><span class="yes">✅</span> Mais tempo dos voluntários e <strong>cada evento mais barato
+      e mais rápido</strong>.</li>
+    </ul>
+    <blockquote><p>Em resumo: o que antes era um mutirão de horas e gastava com cola e cartelas,
+    agora sai pronto para a impressora em minutos — <strong>sem custo de material e sem
+    erro</strong>.</p></blockquote>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">3</span>O que está incluído</h2>
+    <ul>
+      <li>Gerador nos <strong>dois modos</strong> (criar no sistema / sobre a arte da paróquia).</li>
+      <li>Editor visual: arrastar, redimensionar, modelos prontos, fundos, desfazer/refazer.</li>
+      <li>Geração de <strong>PDF</strong> com numeração automática e sorteio dos números.</li>
+      <li><strong>Login e controle de acesso</strong> (administradores), com painel para:
+        <ul>
+          <li>adicionar/remover administradores;</li>
+          <li><strong>histórico</strong> de tudo que é feito no sistema;</li>
+          <li>ver quem está <strong>online / último acesso</strong>.</li>
+        </ul>
+      </li>
+      <li><strong>Responsivo:</strong> funciona em <strong>celular, tablet e computador</strong>,
+      adaptando-se a qualquer tela. <em>(Para o editor de cartelas, recomenda-se o uso no
+      computador, por dar mais precisão no posicionamento.)</em></li>
+      <li>Publicação do site no ar + identidade da paróquia (logo/ícone).</li>
+      <li><strong>Treinamento</strong> de uso para a equipe + suporte inicial.</li>
+    </ul>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">4</span>Valores</h2>
+    <table>
+      <thead><tr><th>Item</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Desenvolvimento e entrega</strong> (valor único)</td>
+            <td class="preco">R$ 2.500,00</td></tr>
+        <tr><td><strong>Manutenção mensal</strong></td>
+            <td class="preco">R$ 80,00/mês <em style="font-weight:400">(ou R$ 800,00/ano — 2 meses de cortesia)</em></td></tr>
+      </tbody>
+    </table>
+    <p><strong>Forma de pagamento (desenvolvimento)</strong> — via <strong>Pix</strong> ou
+    <strong>cartão</strong> (link InfinityPay):</p>
+    <ul>
+      <li><strong>Pix com entrada (recomendado):</strong> <strong>50% de sinal na contratação
+      (R$ 1.250,00)</strong> para iniciar o desenvolvimento + <strong>50% na entrega final
+      aprovada (R$ 1.250,00)</strong>.</li>
+      <li><strong>Pix à vista:</strong> pagamento integral, com o desenvolvimento iniciando após
+      a confirmação.</li>
+      <li><strong>Cartão de crédito/débito (InfinityPay):</strong> à vista ou <strong>parcelado
+      em 2x a 6x</strong>. As taxas da operadora são repassadas e o <strong>valor exato é
+      informado antes do pagamento</strong>.</li>
+    </ul>
+    <p><strong>Manutenção mensal:</strong> paga <strong>à vista</strong> (Pix ou cartão à vista),
+    sem parcelamento.</p>
+    <p><strong>Observação:</strong> a hospedagem do sistema <strong>não tem custo mensal</strong>
+    (usa serviços gratuitos que suportam bem o uso da paróquia). A manutenção cobre o
+    <strong>suporte e a continuidade</strong>, não taxa de servidor.</p>
+    <blockquote><p>Este é um <strong>valor justo/social</strong>, pensado para a realidade da
+    paróquia. Considerando a economia de cola, de compra de cartelas e de horas de trabalho a
+    cada evento, a manutenção <strong>se paga sozinha</strong>.</p></blockquote>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">5</span>O que a manutenção cobre</h2>
+    <h3>Incluído (mensalidade)</h3>
+    <ul>
+      <li>Manter o sistema <strong>no ar</strong> e funcionando.</li>
+      <li><strong>Correção de eventuais erros</strong> (bugs).</li>
+      <li><strong>Pequenos ajustes</strong> e suporte por WhatsApp.</li>
+    </ul>
+    <h3>Cobrado à parte (orçado separadamente)</h3>
+    <ul>
+      <li>Recursos novos grandes, redesenho ou <strong>novos modelos</strong> sob medida.</li>
+      <li>Integrações novas.</li>
+    </ul>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">6</span>Prazo de desenvolvimento</h2>
+    <ul>
+      <li><strong>Até 30 dias corridos a partir da confirmação do pagamento</strong>, incluindo os
+      <strong>7 dias iniciais de planejamento/levantamento</strong> (período legal de arrependimento
+      — Art. 49 do CDC), o desenvolvimento, a publicação do site no ar e o treinamento da equipe.
+      <em>(Podem ser feitas entregas parciais para acompanhamento ao longo do período.)</em></li>
+      <li>Após a entrega da primeira versão, estão inclusas <strong>3 rodadas de revisão</strong>
+      para ajustes.</li>
+      <li><strong>Garantia de 30 dias corridos</strong> após a entrega final para correção de
+      eventuais bugs.</li>
+    </ul>
+  </section>
+
+  <section class="avoid">
+    <h2><span class="n">7</span>Dados para o contrato (Murylo Dev)</h2>
+    <ul class="dados">
+      <li><strong>Serviço:</strong> Personalizado — “Sistema Gerador de Cartelas de Bingo”</li>
+      <li><strong>Contratado:</strong> Murylo Neves — Murylo Dev (Manaus/AM)</li>
+      <li><strong>Contratante:</strong> Paróquia Nossa Senhora de Nazaré (Beruri/AM)</li>
+      <li><strong>Valor do desenvolvimento:</strong> R$ 2.500,00</li>
+      <li><strong>Pagamento:</strong> Pix (à vista ou 50% de entrada + 50% na entrega aprovada)
+      ou cartão via InfinityPay (à vista ou 2x a 6x, taxas da operadora repassadas)</li>
+      <li><strong>Prazo para pagamento:</strong> até 3 dias corridos após a assinatura do contrato</li>
+      <li><strong>Prazo de desenvolvimento:</strong> até 30 dias corridos a partir da confirmação
+      do pagamento (planejamento + desenvolvimento + publicação + treinamento)</li>
+      <li><strong>Revisões inclusas:</strong> 3 rodadas</li>
+      <li><strong>Garantia:</strong> 30 dias corridos (correção de bugs)</li>
+      <li><strong>Valor mensal de manutenção:</strong> R$ 80,00 (à vista, sem parcelamento)</li>
+      <li><strong>Vigência (manutenção):</strong> 12 meses (renovável)</li>
+      <li><strong>Escopo da manutenção:</strong> manter no ar, correção de bugs, pequenos ajustes
+      e suporte (recursos novos/grandes orçados à parte)</li>
+      <li><strong>Foro:</strong> comarca de Manaus/AM</li>
+    </ul>
+  </section>
+
+  <footer class="fim">
+    Proposta elaborada por Murylo Dev. Valores e condições sujeitos a acordo entre as partes.
+  </footer>
+
+</div>
+</body>
+</html>

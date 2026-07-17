@@ -11,6 +11,3 @@ node_modules/
 
 # config local do Claude Code (caminhos da máquina)
 .claude/
-
-# documentos comerciais (não publicar no repositório)
-PROPOSTA.md
