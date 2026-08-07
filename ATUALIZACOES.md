@@ -9,6 +9,89 @@
 
 ---
 
+## 2026-08-07 — PONTO DE PARADA — Consolidação do estado e das pendências (retomar em outro PC)
+
+> **Nesta sessão não houve alteração de código.** Foi uma sessão de retomada: revisão do
+> `CONTEXTO.md` + `ATUALIZACOES.md` e consolidação, num só lugar, de tudo que está pronto,
+> tudo que foi decidido e tudo que ficou pendente. Última alteração real do projeto:
+> **17/07/2026** (proposta comercial).
+
+### Estado do repositório
+- Branch **`main`**, working tree **limpo**, sincronizado com o GitHub no commit **`b5522fb`**.
+- Repositório: https://github.com/manozx-seven/gerador-cartelas-pnsnbri
+- Nada pendente para commitar antes desta entrada.
+
+### O que já está PRONTO e no ar
+- **Netlify:** publicado a partir da pasta `site/` (`netlify.toml`), deploy automático
+  ligado ao GitHub. Domínio **`gerador-cartelas-pnsnbri.netlify.app`** autorizado no
+  Firebase Auth.
+- **Firebase:** projeto **`gerador-cartelas-pnsnbri`** (novo e isolado do Beruri), com
+  Auth (e-mail/senha) + Firestore + **regras publicadas**. Chaves reais já commitadas em
+  `site/assets/js/firebase.js` (normal e seguro para app web).
+- **Login e administração** (paridade total com o projeto Paróquia Beruri): login na
+  `index.html`, troca de senha obrigatória no 1º acesso (com botão "voltar"), tela de
+  orientação de spam no "esqueci minha senha", reset de senha de outro admin, vínculo de
+  conta já existente no Auth, papéis **DEV/ADM** (só DEV cria DEV), remoção de admin,
+  **presença online em tempo real**, **histórico/auditoria** (`atividades`) e **expiração
+  de sessão após 1h de inatividade**.
+- **App (`site/app.html`)** com os dois modos: **sobreposição** sobre o PDF da paróquia e
+  **construtor A4** no sistema (estruturas prontas, elementos livres, desfazer/refazer,
+  fundos, imagem e numeração por cartela, geração de N folhas em PDF).
+- **Responsividade total** (celular/tablet/computador) e **teste real no celular OK**.
+- **Proposta comercial** pronta e versionada: `PROPOSTA.md` (fonte editável),
+  `PROPOSTA.html` e `PROPOSTA.pdf`, alinhada ao contrato-padrão da Murylo Dev.
+
+### Decisões tomadas (consolidado — continuam valendo)
+1. **Modelo do bingo:** 1 bilhete = 5 rodadas, **mesmos 25 números** em todas; grade 5×5
+   com **centro livre**; faixas B 1–15, I 16–30, N 31–45, G 46–60, O 61–75.
+2. **Sem backend:** tudo roda no navegador (pdf.js, pdf-lib, jszip locais em `site/libs/`)
+   — funciona offline, exceto o login.
+3. **Saída em PDF primeiro** (Word e PNG/zip ficaram para depois).
+4. **Modo dos números escolhível na tela:** todas iguais / independentes / por grupo (rodada).
+5. **Firebase em projeto novo e isolado** do Beruri, para não misturar regras e admins.
+6. **Login virou a `index.html`** (não existe mais `login.html`) — acabou o "Redirecionando…".
+7. **Só DEV pode criar DEV**; administrador comum só cria administrador comum.
+8. **Design:** claymorphism em azul/dourado da logo da Paróquia Nossa Senhora de Nazaré,
+   fontes Quicksand + Poppins **locais** (`site/fonts/`), **ícones SVG embutidos** — nada de
+   CDN (lordicon foi descartado justamente por exigir internet).
+9. **Proposta é versionada** (17/07): tirada do `.gitignore`. ⚠️ Os valores comerciais estão
+   no **histórico do Git** — apagar o arquivo não os remove (exigiria `git filter-repo`).
+10. **Valores da proposta:** R$ 2.500 de desenvolvimento + R$ 80/mês de manutenção; Pix
+    (50%+50% ou à vista) ou cartão InfinityPay 2x–6x com taxas repassadas; prazo até 30 dias
+    a partir da confirmação do pagamento; 7 dias de planejamento (Art. 49 CDC); 3 rodadas de
+    revisão; garantia de 30 dias; foro de Manaus/AM.
+11. **`.claude/` fica fora do repositório** (config local, incluindo o hook que lê o contexto
+    ao abrir o terminal) — precisa ser recriado em cada máquina, se quiser o hook lá também.
+
+### PENDÊNCIAS (o que retomar)
+**Prioridade — validação com a paróquia**
+1. **Testar o modo sobreposição com o PDF real do São Pedro impresso**: conferir o encaixe
+   dos quadrados, o tamanho da fonte e o alinhamento no papel; ajustar conforme o resultado.
+2. Colher o retorno da paróquia sobre o app publicado (e sobre a proposta).
+
+**Funcionalidades pendentes**
+3. Ao **remover um admin**, apagar também a conta no **Firebase Authentication** (hoje só
+   pelo Console; exigiria Admin SDK / Cloud Function).
+4. **"Limpar histórico"** (só DEV) direto no painel.
+5. **Exportar/imprimir o histórico** de atividades.
+6. **Exportar em Word e em PNG/zip** (o `jszip` já está baixado em `site/libs/`).
+7. Possível **"snap" automático** dos quadrados aos espaços vazios do PDF.
+8. Estender **desfazer/refazer** ao modo A (sobreposição) — hoje só existe no construtor A4.
+9. Reintegrar a antiga aba "Modelo do sistema" (layout pronto) num app único, se ainda fizer
+   sentido depois do construtor A4.
+
+**Operacional**
+10. Sempre que o `firestore.rules` mudar, **republicar as regras** no Console do Firebase.
+11. Registrar toda decisão nova neste arquivo.
+
+### Para continuar em outro computador
+1. `git clone https://github.com/manozx-seven/gerador-cartelas-pnsnbri.git`
+   (ou `git pull` se a pasta já existir).
+2. Ler `CONTEXTO.md` e este `ATUALIZACOES.md` — dão o histórico completo.
+3. Os arquivos da proposta (`PROPOSTA.md/.html/.pdf`) **já vêm no repositório**.
+4. Só **não** vem o `.claude/` (config local do assistente).
+5. Ao terminar, `git push`.
+
 ## 2026-07-17 — PONTO DE PARADA — Proposta alinhada ao contrato + PDF (retomar em casa)
 
 - **O que foi feito nesta sessão:**

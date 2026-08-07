@@ -142,7 +142,24 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
 
 ## 7. Próximos passos em aberto
 
-- Testar `bingo-sobreposicao.html` com o PDF real do São Pedro (encaixe dos quadrados e
-  impressão) e ajustar tamanhos/fonte conforme o resultado.
-- Reintegrar a aba "Modelo do sistema" (layout pronto) num app único, se desejado.
-- (Registrar cada decisão nova no `ATUALIZACOES.md`.)
+> Lista consolidada em **07/08/2026**. O detalhamento (com o que já está pronto e as
+> decisões tomadas) está na entrada de mesma data no `ATUALIZACOES.md`.
+
+**Validação com a paróquia**
+- Testar o **modo sobreposição com o PDF real do São Pedro impresso** (encaixe dos
+  quadrados, tamanho da fonte, alinhamento no papel) e ajustar conforme o resultado.
+- Colher o retorno da paróquia sobre o app publicado e sobre a proposta comercial.
+
+**Funcionalidades pendentes**
+- Ao remover um admin, apagar também a conta no **Firebase Authentication** (hoje só pelo
+  Console; exigiria Admin SDK / Cloud Function).
+- **"Limpar histórico"** (só DEV) direto no painel.
+- **Exportar/imprimir o histórico** de atividades.
+- **Exportar em Word e em PNG/zip** (`jszip` já está em `site/libs/`).
+- Possível **"snap" automático** dos quadrados aos espaços vazios do PDF.
+- Estender **desfazer/refazer** ao modo A (sobreposição) — hoje só no construtor A4.
+- Reintegrar a aba "Modelo do sistema" (layout pronto) num app único, se ainda desejado.
+
+**Operacional**
+- Republicar as **regras do Firestore** no Console sempre que o `firestore.rules` mudar.
+- Registrar cada decisão nova no `ATUALIZACOES.md`.
