@@ -9,6 +9,20 @@
 
 ---
 
+## 2026-08-09 — "Quantidade de folhas a gerar" movida para o passo Gerar
+
+- O campo **Quantidade de folhas a gerar** saiu do passo **Números** e foi para o passo
+  **Gerar**, logo acima da Prévia e do botão de gerar o PDF — é a decisão que se toma na hora
+  de imprimir, não na configuração inicial. Vale nos dois modos (`cfgQty` no passo 5 da
+  sobreposição e `bQty` no passo 4 do construtor A4).
+- A dica do passo Gerar passou a dizer só que a faixa de números e o modo de sorteio ficam no
+  passo 2.
+- **Arquivo afetado:** `site/app.html` (só HTML — os ids não mudaram, `syncStyle`/`bSyncStyle`
+  continuam lendo os mesmos campos).
+- **Testado no navegador:** os campos continuam alimentando `style.quantity`/`styleB.quantity`
+  e a geração com o PDF real do São Pedro saiu com o número certo de folhas (3 pedidas,
+  3 páginas no PDF).
+
 ## 2026-08-09 — Cantos arredondados, seleção múltipla, prévia por cartela e passos reordenados
 
 Cinco melhorias pedidas pelo usuário, aplicadas **nos dois modos** (Sobreposição e Construtor A4).

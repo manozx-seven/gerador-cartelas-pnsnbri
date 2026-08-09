@@ -300,8 +300,6 @@
         <label><input type="radio" name="mode" value="independent"><span>Cada cartela independente<small>Cada cartela da folha sorteia números diferentes das outras.</small></span></label>
         <label><input type="radio" name="mode" value="group"><span>Por grupo / rodada<small>Você dá um número de grupo a cada cartela (o campo aparece ao selecioná-la). Cartelas do mesmo grupo saem com os mesmos números; grupos diferentes saem diferentes.</small></span></label>
       </div>
-      <label style="margin-top:14px">Quantidade de folhas a gerar</label>
-      <input type="number" id="cfgQty" value="30" min="1" max="3000">
     </div>
 
     <!-- 3 -->
@@ -396,7 +394,9 @@
     <!-- 5 -->
     <div class="box">
       <h2><span class="stepno">5</span> Gerar</h2>
-      <div class="hint" style="margin-top:0">A faixa de números, o modo de sorteio e a quantidade de folhas ficam no <b>passo 2</b>.</div>
+      <label>Quantidade de folhas a gerar</label>
+      <input type="number" id="cfgQty" value="30" min="1" max="3000">
+      <div class="hint" style="margin-top:7px">A faixa de números e o modo de sorteio ficam no <b>passo 2</b>.</div>
       <div class="btns" style="margin-top:13px">
         <button id="preview" disabled style="width:100%"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button>
       </div>
@@ -457,8 +457,6 @@
       <div class="toggle" style="padding-top:0"><span class="lbl">Centro livre nas cartelas</span><label class="sw"><input type="checkbox" id="bFree" checked><span class="tr"></span></label></div>
       <label style="margin-top:12px">Números entre as cartelas da folha</label>
       <select id="bMode"><option value="same">Todas iguais</option><option value="independent">Cada cartela diferente</option><option value="group">Por grupo / rodada</option></select>
-      <label style="margin-top:12px">Quantidade de folhas a gerar</label>
-      <input type="number" id="bQty" value="30" min="1" max="3000">
     </div>
 
     <div class="box">
@@ -529,7 +527,9 @@
 
     <div class="box">
       <h2><span class="stepno">4</span> Gerar</h2>
-      <div class="hint" style="margin-top:0">A faixa de números, o modo de sorteio e a quantidade de folhas ficam no <b>passo 2</b>.</div>
+      <label>Quantidade de folhas a gerar</label>
+      <input type="number" id="bQty" value="30" min="1" max="3000">
+      <div class="hint" style="margin-top:7px">A faixa de números e o modo de sorteio ficam no <b>passo 2</b>.</div>
       <div class="btns" style="margin-top:13px"><button id="bPreview" style="width:100%"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button></div>
       <button class="go" id="bGenerate" style="width:100%;margin-top:10px"><svg class="ico s15" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Gerar PDF (A4)</button>
       <div id="bProgress" style="height:8px;border-radius:8px;overflow:hidden;margin-top:14px;display:none;background:#dbe5f7;box-shadow:inset 2px 2px 5px rgba(72,110,205,.24),inset -2px -2px 4px #fff"><i style="display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd85a,#f0a91f);transition:width .12s;border-radius:8px"></i></div>
