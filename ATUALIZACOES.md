@@ -9,6 +9,47 @@
 
 ---
 
+## 2026-08-09 — Cantos arredondados, seleção múltipla, prévia por cartela e passos reordenados
+
+Cinco melhorias pedidas pelo usuário, aplicadas **nos dois modos** (Sobreposição e Construtor A4).
+
+- **Cantos arredondados nas cartelas** (`c.corner`, 0–100% por cartela, slider no editor):
+  - Motor de desenho ganhou o op **`rrect`** e a função `rrSegs()`, que gera o retângulo
+    arredondado como segmentos (curvas de Bézier, kappa 0.5523) numa única fonte de verdade —
+    o mesmo caminho alimenta a prévia no canvas (`bezierCurveTo`) e o PDF (`page.drawSvgPath`).
+  - Com cantos ligados, a moldura externa vira um `rrect` e só as **linhas internas** da grade
+    continuam retas. O raio é limitado a ¼ do lado menor **e** ao tamanho de uma célula, então
+    as linhas internas nunca escapam da borda.
+  - Cabeçalho BINGO: arredonda só os **cantos de cima** e a grade só os **de baixo**, formando
+    um cartão redondo único quando os dois estão ligados.
+  - "Aplicar grade + cabeçalho a todas" agora aplica **também os cantos** (renomeado). O modo A4
+    ganhou esse botão, que só existia no modo sobreposição.
+- **Seleção múltipla com mover/redimensionar em grupo:** `S.selIds` / `B.selIds`.
+  **Ctrl (ou Shift) + clique** na folha ou na lista adiciona/remove da seleção; **Ctrl+A** e o
+  botão "Selecionar todas/todos" pegam tudo. Com 2+ selecionados aparece uma **caixa tracejada
+  dourada** com 8 alças: arrastar move tudo junto, puxar as alças escala tudo junto preservando
+  o espaçamento relativo (no A4 o **tamanho do texto acompanha** a escala). Arrastar uma peça da
+  seleção move o grupo; soltar sem mover volta à seleção simples. Setas movem todos os
+  selecionados, Del apaga todos, Duplicar duplica todos.
+- **Prévia dentro do editor de cada cartela** (`#previewSel` / `#bPreviewSel`) — não precisa mais
+  rolar até o fim do painel. Além disso, com a prévia ligada, **cartela nova já nasce com números
+  de exemplo** (`refreshPreview()` / `bRefreshPreview()`), que era a queixa original.
+- **Passos reordenados** — a configuração de números subiu para o começo e a geração ficou no fim:
+  - Sobreposição: 1 Folha base · **2 Números** · 3 Cartelas · 4 Estilo · **5 Gerar**
+  - Construtor A4: 1 Folha A4 · **2 Números** · 3 Elementos · **4 Gerar**
+  - A faixa (Nº inicial/final) e o "Centro livre" saíram do Estilo e foram para o passo 2, junto
+    com o modo de sorteio e a quantidade de folhas.
+- **Explicação da faixa de números** nos dois modos: Nº inicial = menor número que pode sair,
+  Nº final = maior, com o exemplo do bingo de 75 bolas e a divisão por coluna (B 1–15 … O 61–75).
+- **Correção de tabela:** `selectCard`/`bSelect` agora redesenham o overlay — antes, selecionar
+  pela lista não atualizava o destaque na folha.
+- **Arquivo afetado:** `site/app.html`.
+- **Testado no navegador** com o PDF real do São Pedro e com o modelo "Tradicional" do A4:
+  cantos 0%/50%/100% com e sem cabeçalho (prévia e **PDF gerado de verdade**, conferido
+  renderizando o PDF de volta com pdf.js — `drawSvgPath` sai só com contorno, sem preenchimento);
+  selecionar tudo, mover e escalar o grupo (13 elementos, texto acompanhando); ctrl+clique
+  adicionando e removendo; apagar seleção múltipla; desfazer/refazer; geração de PDF nos dois modos.
+
 ## 2026-08-09 — Painel de edição da cartela abre logo abaixo do card (modo Sobreposição)
 
 - **Problema:** no modo **"Sobre a folha (PDF)"**, passo 2, a lista mostrava todos os cards
