@@ -9,6 +9,23 @@
 
 ---
 
+## 2026-08-09 — Painel de edição da cartela abre logo abaixo do card (modo Sobreposição)
+
+- **Problema:** no modo **"Sobre a folha (PDF)"**, passo 2, a lista mostrava todos os cards
+  (Cartela 1, Cartela 2, …) e só depois de todos aparecia o bloco de edição da cartela
+  selecionada. Ficava longe do card clicado.
+- **Correção:** `refreshList()` agora envolve cada card num wrapper e **insere o `#selPanel`
+  dentro do wrapper da cartela selecionada** — o bloco de edição abre imediatamente abaixo do
+  respectivo card. Mesmo padrão que o construtor A4 (`bRefresh`) já usava. Antes de limpar a
+  lista, o painel é "estacionado" em `document.body` com `display:none`, para não ser destruído
+  pelo `innerHTML=''` e preservar todos os listeners.
+- CSS: a regra `#bList .item+.selcard{margin-top:8px}` passou a valer também para `#cardList`.
+- **Arquivo afetado:** `site/app.html` (`refreshList()` e a regra de CSS).
+- **Testado no navegador** com o PDF real do São Pedro: selecionar cartela 1/2/3, remover a
+  selecionada (painel volta escondido para o `body`), reselecionar, alternar "Desenhar grade",
+  editar altura e "Duplicar" — o painel acompanha sempre o card certo e os controles continuam
+  funcionando após o reposicionamento.
+
 ## 2026-08-07 — PONTO DE PARADA — Consolidação do estado e das pendências (retomar em outro PC)
 
 > **Nesta sessão não houve alteração de código.** Foi uma sessão de retomada: revisão do
