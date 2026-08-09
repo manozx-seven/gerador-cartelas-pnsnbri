@@ -396,6 +396,9 @@
       <h2><span class="stepno">5</span> Gerar</h2>
       <label>Quantidade de folhas a gerar</label>
       <input type="number" id="cfgQty" value="30" min="1" max="3000">
+      <label style="margin-top:12px">Nome do arquivo</label>
+      <input type="text" id="cfgFileName" value="cartelas-bingo" placeholder="cartelas-bingo" maxlength="80">
+      <div class="hint" style="margin-top:6px">O <b>.pdf</b> é acrescentado sozinho. Vale um nome por evento, tipo <b>bingao-sao-pedro-2026</b>.</div>
       <div class="hint" style="margin-top:7px">A faixa de números e o modo de sorteio ficam no <b>passo 2</b>.</div>
       <div class="btns" style="margin-top:13px">
         <button id="preview" disabled style="width:100%"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button>
@@ -529,6 +532,9 @@
       <h2><span class="stepno">4</span> Gerar</h2>
       <label>Quantidade de folhas a gerar</label>
       <input type="number" id="bQty" value="30" min="1" max="3000">
+      <label style="margin-top:12px">Nome do arquivo</label>
+      <input type="text" id="bFileName" value="modelo-bingo" placeholder="modelo-bingo" maxlength="80">
+      <div class="hint" style="margin-top:6px">O <b>.pdf</b> é acrescentado sozinho. Vale um nome por evento, tipo <b>bingao-sao-pedro-2026</b>.</div>
       <div class="hint" style="margin-top:7px">A faixa de números e o modo de sorteio ficam no <b>passo 2</b>.</div>
       <div class="btns" style="margin-top:13px"><button id="bPreview" style="width:100%"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button></div>
       <button class="go" id="bGenerate" style="width:100%;margin-top:10px"><svg class="ico s15" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Gerar PDF (A4)</button>
@@ -982,8 +988,9 @@ $('#generate').onclick=async()=>{
     prog.querySelector('i').style.width='100%';
     const bytes=await out.save();
     const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download='cartelas-bingo.pdf';a.click();URL.revokeObjectURL(url);
-    showMsg('Pronto! '+qty+' folha(s) geradas e baixadas em cartelas-bingo.pdf','ok');setStep(4);
+    const fname=nomeArquivo('#cfgFileName','cartelas-bingo');
+    a.href=url;a.download=fname;a.click();URL.revokeObjectURL(url);
+    showMsg('Pronto! '+qty+' folha(s) geradas e baixadas em '+fname,'ok');setStep(4);
     if(window.registrarAtividade)window.registrarAtividade('gerar_cartelas','Sobreposição no PDF · '+qty+' folha(s)');
   }catch(e){showMsg('Erro ao gerar: '+e.message,'err');}
   finally{btn.disabled=false;setTimeout(()=>prog.style.display='none',900);}
@@ -1254,8 +1261,10 @@ $('#bGenerate').onclick=async()=>{
       if(copy%4===0){prog.querySelector('i').style.width=Math.round(copy/qty*100)+'%';await new Promise(r=>setTimeout(r));}
     }
     prog.querySelector('i').style.width='100%';
-    const bytes=await out.save();const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='modelo-bingo.pdf';a.click();URL.revokeObjectURL(url);
-    bShowMsg('Pronto! '+qty+' folha(s) geradas em modelo-bingo.pdf','ok');
+    const bytes=await out.save();const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    const fname=nomeArquivo('#bFileName','modelo-bingo');
+    a.href=url;a.download=fname;a.click();URL.revokeObjectURL(url);
+    bShowMsg('Pronto! '+qty+' folha(s) geradas em '+fname,'ok');
     if(window.registrarAtividade)window.registrarAtividade('gerar_cartelas','Modelo A4 · '+qty+' folha(s)');
   }catch(e){bShowMsg('Erro ao gerar: '+e.message,'err');}
   finally{$('#bGenerate').disabled=false;setTimeout(()=>prog.style.display='none',900);}
@@ -1347,6 +1356,13 @@ window.addEventListener('keydown',e=>{
 
 /* ---------- util ---------- */
 function showMsg(t,type){const m=$('#msg');m.className='msg show '+type;m.innerHTML='<span>'+t+'</span>';}
+/* nome do arquivo escolhido pelo usuário: tira o que o Windows/Mac não aceita,
+   garante a extensão .pdf e cai no nome padrão se ficar vazio */
+function nomeArquivo(campo,padrao){
+  let n=(($(campo)&&$(campo).value)||'').trim();
+  n=n.replace(/\.pdf$/i,'').replace(/[\\/:*?"<>|]/g,'').replace(/[\x00-\x1f]/g,'').replace(/\s+/g,' ').replace(/[. ]+$/,'').trim();
+  return (n?n.slice(0,80):padrao)+'.pdf';
+}
 function setStep(n){for(let i=1;i<=4;i++){const c=$('#chip'+i);if(c)c.classList.toggle('on',i<=n);}}
 window.addEventListener('resize',()=>{if($('#modeB').style.display!=='none')bRender();else if(S.pdfjsDoc)redraw();});
 syncStyle();

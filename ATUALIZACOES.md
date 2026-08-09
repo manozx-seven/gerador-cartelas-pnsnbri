@@ -9,6 +9,23 @@
 
 ---
 
+## 2026-08-09 — Campo para escolher o nome do arquivo gerado
+
+- Novo campo **Nome do arquivo** no passo **Gerar** dos dois modos (`cfgFileName` na
+  sobreposição, `bFileName` no construtor A4), logo abaixo da quantidade de folhas. Antes o
+  PDF saía sempre como `cartelas-bingo.pdf` / `modelo-bingo.pdf`.
+- Função `nomeArquivo(campo,padrao)` trata o que o usuário digitar: remove os caracteres que
+  Windows/Mac não aceitam (`\ / : * ? " < > |` e caracteres de controle), colapsa espaços
+  repetidos, tira ponto/espaço no fim, corta em 80 caracteres, acrescenta o `.pdf` sozinho
+  (sem duplicar se a pessoa já digitou) e volta ao nome padrão se o campo ficar vazio.
+- A mensagem de "Pronto!" agora mostra o nome real do arquivo baixado.
+- **Arquivo afetado:** `site/app.html`.
+- **Testado no navegador:** os 9 casos da limpeza do nome (vazio, só espaços, com `.pdf`,
+  `.PDF` maiúsculo, caracteres proibidos, espaços repetidos, terminando em ponto, 120
+  caracteres) e a geração de verdade nos dois modos — modo A baixou
+  `Bingão São Pedro 2026.pdf`, modo B caiu no padrão com o campo vazio e virou
+  `cartelasrodada 1.pdf` quando digitada uma barra.
+
 ## 2026-08-09 — "Quantidade de folhas a gerar" movida para o passo Gerar
 
 - O campo **Quantidade de folhas a gerar** saiu do passo **Números** e foi para o passo
