@@ -9,6 +9,28 @@
 
 ---
 
+## 2026-08-09 — Proposta: prazo com datas concretas e entrega antecipada
+
+- **§6 Prazo de desenvolvimento** virou uma tabela com datas fechadas: **início 10/08/2026**,
+  **entrega final (prazo máximo) 04/09/2026**, **janela de 26 dias corridos** — dentro do limite
+  de até 30 dias do contrato-padrão, então não houve conflito com a cláusula existente.
+- Deixado explícito que **04/09 é o teto, não a data alvo**: o escopo já está definido e os
+  fluxos de geração já foram levantados e testados com o modelo real do São Pedro, então a
+  entrega pode vir antes.
+- **Entrega antecipada não muda o valor.** No pagamento em 50% + 50%, o saldo continua vencendo
+  **na entrega final aprovada** — na data prevista ou antes — sem cobrança adicional pela
+  antecipação. Registrado em **§4 Valores**, em **§6** e na lista de **§7 Dados para o contrato**
+  (novo item "Entrega antecipada").
+- Cabeçalho da proposta atualizado de "julho de 2026" para **"agosto de 2026"**.
+- ⚠️ **Datas corrigidas com o usuário antes de escrever:** ele pediu "de amanhã (09/08/2026) até
+  04/06/2026", mas 09/08 era o próprio dia e 04/06/2026 já tinha passado. Confirmado:
+  **10/08/2026 → 04/09/2026**.
+- **Arquivos afetados:** `PROPOSTA.md` (fonte editável), `PROPOSTA.html` e `PROPOSTA.pdf`.
+- **PDF regerado** com Chrome headless (`--print-to-pdf --no-pdf-header-footer`) a partir do
+  `.html`, e **conferido extraindo o texto do PDF com pdf.js**: 5 páginas, com 10/08/2026,
+  04/09/2026, "26 dias corridos", "Entrega antecipada" e "agosto de 2026" presentes, e sem
+  nenhum resquício de "julho de 2026".
+
 ## 2026-08-09 — Campo para escolher o nome do arquivo gerado
 
 - Novo campo **Nome do arquivo** no passo **Gerar** dos dois modos (`cfgFileName` na

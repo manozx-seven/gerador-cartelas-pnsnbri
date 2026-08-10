@@ -3,7 +3,7 @@
 **Para:** Paróquia Nossa Senhora de Nazaré — Beruri/AM
 **De:** Murylo Dev — Murylo Neves
 **Contato:** _(WhatsApp / e-mail)_
-**Data:** Beruri/AM, julho de 2026
+**Data:** Beruri/AM, agosto de 2026
 **Validade da proposta:** 30 dias
 
 ---
@@ -79,7 +79,9 @@ rodadas, já com os números conferindo entre si — e devolve as folhas **pront
 **Forma de pagamento (desenvolvimento)** — via **Pix** ou **cartão** (link InfinityPay):
 
 - **Pix com entrada (recomendado):** **50% de sinal na contratação (R$ 1.250,00)** para iniciar
-  o desenvolvimento + **50% na entrega final aprovada (R$ 1.250,00)**.
+  o desenvolvimento + **50% na entrega final aprovada (R$ 1.250,00)**. O saldo está amarrado à
+  **entrega**, não a uma data fixa: se o sistema ficar pronto antes de **04/09/2026**, a segunda
+  parte é paga **na entrega**, sem nenhuma cobrança extra pela antecipação.
 - **Pix à vista:** pagamento integral, com o desenvolvimento iniciando após a confirmação.
 - **Cartão de crédito/débito (InfinityPay):** à vista ou **parcelado em 2x a 6x**. As taxas da
   operadora são repassadas e o **valor exato é informado antes do pagamento**.
@@ -111,10 +113,23 @@ de servidor.
 
 ## 6. Prazo de desenvolvimento
 
-- **Até 30 dias corridos a partir da confirmação do pagamento**, incluindo os **7 dias iniciais
-  de planejamento/levantamento** (período legal de arrependimento — Art. 49 do CDC), o
-  desenvolvimento, a publicação do site no ar e o treinamento da equipe. _(Podem ser feitas
-  entregas parciais para acompanhamento ao longo do período.)_
+| | |
+|---|---|
+| **Início do desenvolvimento** | **10/08/2026** |
+| **Entrega final — prazo máximo** | **04/09/2026** |
+| **Janela total** | 26 dias corridos |
+
+- O prazo cobre os **7 dias iniciais de planejamento/levantamento** (período legal de
+  arrependimento — Art. 49 do CDC), o desenvolvimento, a **publicação do site no ar** e o
+  **treinamento da equipe**. Fica dentro do limite contratual de **até 30 dias corridos** a
+  partir da confirmação do pagamento.
+- **04/09/2026 é o prazo máximo, não a data alvo — a entrega pode acontecer antes.** O escopo já
+  está definido e os fluxos de geração das cartelas já foram levantados e testados com o modelo
+  real do Bingão de São Pedro, então boa parte do caminho já está mapeada.
+- **Entregar antes não muda nada no valor.** Para quem optar pelo pagamento em duas partes
+  (50% + 50%), o saldo continua vencendo **na entrega final aprovada** — seja ela na data
+  prevista ou antes. Não há cobrança adicional pela antecipação.
+- Podem ser feitas **entregas parciais** para acompanhamento ao longo do período.
 - Após a entrega da primeira versão, estão inclusas **3 rodadas de revisão** para ajustes.
 - **Garantia de 30 dias corridos** após a entrega final para correção de eventuais bugs.
 
@@ -129,8 +144,11 @@ de servidor.
 - **Pagamento:** Pix (à vista ou 50% de entrada + 50% na entrega aprovada) ou cartão via
   InfinityPay (à vista ou 2x a 6x, taxas da operadora repassadas)
 - **Prazo para pagamento:** até 3 dias corridos após a assinatura do contrato
-- **Prazo de desenvolvimento:** até 30 dias corridos a partir da confirmação do pagamento
-  (planejamento + desenvolvimento + publicação + treinamento)
+- **Prazo de desenvolvimento:** de **10/08/2026 a 04/09/2026** (26 dias corridos —
+  planejamento + desenvolvimento + publicação + treinamento), dentro do limite de até 30 dias
+  corridos a partir da confirmação do pagamento
+- **Entrega antecipada:** permitida, sem alteração de valor. No pagamento em 50% + 50%, o saldo
+  vence na entrega final aprovada, ainda que anterior a 04/09/2026
 - **Revisões inclusas:** 3 rodadas
 - **Garantia:** 30 dias corridos (correção de bugs)
 - **Valor mensal de manutenção:** R$ 80,00 (à vista, sem parcelamento)
