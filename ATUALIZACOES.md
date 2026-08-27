@@ -9,6 +9,50 @@
 
 ---
 
+## 2026-08-27 — Centro livre por cartela, prévia que não some e numeração menor
+
+Três pedidos do usuário, aplicados **nos dois modos** (Sobreposição e Construtor A4).
+
+- **"Centro livre" saiu do passo 2 (Números) e virou opção DE CADA CARTELA**, no passo 3,
+  logo **acima de "Desenhar grade"** — que é onde ficam as outras opções da cartela.
+  - Deixou de ser `style.freeCenter` (global) e passou a ser a propriedade `free` de cada
+    cartela, lida pelo helper **`freeOf(c)`** (`c.free!==false`, então cartela sem a
+    propriedade continua com o centro livre — o padrão do bingo).
+  - A **imagem do centro** some do painel quando a cartela está sem centro livre (não faria
+    sentido escolher imagem para uma casa que vai ter número). Vale nos dois modos.
+  - O botão de replicar agora leva o centro junto: **"Aplicar centro, grade, cabeçalho e
+    cantos a todas"**.
+  - **Sorteio ajustado para não quebrar o "mesmo bilhete":** em *todas iguais* e em *por
+    grupo*, cartelas que só divergem no centro **reaproveitam a mesma grade** via a nova
+    função `adaptGrid()` — quem tem centro livre apaga a casa do meio; quem não tem ganha
+    **um** número a mais, sorteado dentro da faixa da coluna do meio e sem repetir. Antes
+    isso teria virado um sorteio separado, ou seja, outro bilhete.
+- **A prévia não se desliga mais sozinha.** Era a queixa central: ligar a prévia e mexer em
+  qualquer configuração (centro livre, faixa, modo de sorteio) apagava os números e obrigava
+  a clicar de novo.
+  - `refreshPreview()` / `bRefreshPreview()` deixaram de zerar a prévia: agora **re-sorteiam
+    por cima** e, se o sorteio falhar (faixa pequena demais enquanto a pessoa ainda digita),
+    **mantêm os números que já estavam na tela**.
+  - Todos os pontos que faziam `S.previewNums=null` / `B.preview=false` foram trocados por
+    esse re-sorteio: faixa de números, modo de sorteio, centro livre, linhas/colunas, grupo,
+    quantidade, e o desfazer/refazer do modo A4.
+  - Como a prévia não se apaga mais por conta própria, **o botão virou liga/desliga**:
+    "Prévia com números" ↔ **"Ocultar a prévia"**, com o botão afundado quando está ligada.
+    Os dois botões (passo Gerar e painel da cartela) mostram sempre o mesmo estado.
+- **Numeração das cartelas com tamanho ajustável:** novo controle **"Tamanho do número da
+  cartela"** no passo 4 (Estilo), de 12% a 90% da altura de uma casa (`style.idScale`, padrão
+  42% — exatamente o que era fixo antes). O piso do tamanho caiu de 8pt para 4pt, senão em
+  cartela pequena não dava para diminuir de verdade.
+- **Arquivo afetado:** `site/app.html`.
+- **Testado:** sintaxe com `node --check`; **13 testes automatizados do sorteio** em Node
+  (centro livre ligado/desligado, cartela sem a propriedade, 500 sorteios de "todas iguais"
+  com centro misto, 500 do caso inverso, 300 por grupo, tamanhos diferentes de grade, faixa
+  pequena demais e faixa exata 1–25). No navegador, com o **PDF real do São Pedro**: 15
+  mudanças de configuração seguidas sem a prévia sumir, liga/desliga manual, e **PDF gerado
+  de verdade e lido de volta com pdf.js** — cartela sem centro livre saiu com 25 números
+  contendo todos os 24 das outras + 1 no meio, as duas com centro livre idênticas, nenhum
+  repetido e tudo dentro da faixa. A numeração mediu **13pt no padrão e 4,64pt no mínimo**.
+
 ## 2026-08-09 — Proposta: prazo com datas concretas e entrega antecipada
 
 - **§6 Prazo de desenvolvimento** virou uma tabela com datas fechadas: **início 10/08/2026**,

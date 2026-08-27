@@ -102,6 +102,9 @@
     background:linear-gradient(145deg,#ffffff,#e4ecfb);box-shadow:5px 5px 12px var(--sd2),-4px -4px 9px var(--sl)}
   button:hover{box-shadow:6px 6px 14px var(--sd2),-4px -4px 10px var(--sl)}
   button:active{box-shadow:inset 3px 3px 7px rgba(72,110,205,.25),inset -3px -3px 6px #fff}
+  /* prévia ligada: botão fica "afundado" para mostrar que o estado está ativo */
+  #preview.on,#previewSel.on,#bPreview.on,#bPreviewSel.on{color:var(--blue-d);
+    box-shadow:inset 3px 3px 7px rgba(72,110,205,.25),inset -3px -3px 6px #fff}
   button.primary{background:linear-gradient(145deg,#4a83ff,#1c47c4);color:#fff;box-shadow:5px 5px 13px rgba(28,71,196,.4),-4px -4px 9px var(--sl)}
   button.gold,button.go{background:linear-gradient(145deg,#ffd85a,#f0a91f);color:#5a3d00;box-shadow:6px 6px 16px rgba(224,150,20,.5),-4px -4px 10px var(--sl)}
   button.go{font-size:13.5px;padding:13px}
@@ -290,10 +293,6 @@
       <div class="hint" style="margin-top:7px"><b>Nº inicial</b> é o <b>menor</b> número que pode sair numa cartela; <b>Nº final</b> é o <b>maior</b>. Todo número sorteado fica entre os dois — no bingo tradicional de 75 bolas, de <b>1 a 75</b>.<br>A faixa é repartida em partes iguais entre as colunas: com 1–75 e 5 colunas sai <b>B</b> 1–15, <b>I</b> 16–30, <b>N</b> 31–45, <b>G</b> 46–60, <b>O</b> 61–75.</div>
 
       <div class="divider"></div>
-      <div class="toggle" style="padding-top:0"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> Centro livre</span><label class="sw"><input type="checkbox" id="cfgFree" checked><span class="tr"></span></label></div>
-      <div class="hint" style="margin-top:6px">A casa do meio fica sem número. A imagem do centro é definida em cada cartela (passo 3), então cada uma pode ter uma imagem diferente.</div>
-
-      <div class="divider"></div>
       <label>Como sortear os números da folha</label>
       <div class="radio">
         <label><input type="radio" name="mode" value="same" checked><span>Todas iguais<small>Todas as cartelas da folha recebem os mesmos números — o mesmo bilhete, jogado em todas as rodadas.</small></span></label>
@@ -332,11 +331,13 @@
         <div id="grpWrap" style="display:none"><label>Grupo / rodada</label><input type="number" id="cGrp" min="1" value="1"></div>
 
         <div class="divider"></div>
-        <div class="toggle" style="padding-top:0"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg> Desenhar grade <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="cGrid"><span class="tr"></span></label></div>
+        <div class="toggle" style="padding-top:0"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> Centro livre <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="cFree" checked><span class="tr"></span></label></div>
+        <div class="hint" style="margin-top:6px">A casa do meio desta cartela fica sem número, para receber a imagem/logo escolhida mais abaixo.</div>
+        <div class="toggle"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg> Desenhar grade <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="cGrid"><span class="tr"></span></label></div>
         <div class="toggle"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Cabeçalho BINGO <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="cHeader"><span class="tr"></span></label></div>
         <label style="margin-top:12px">Cantos arredondados <span class="valtag" id="cCornerVal">0%</span></label>
         <input type="range" id="cCorner" min="0" max="1" step="0.05" value="0">
-        <button class="linkbtn" id="applyAll">↧ Aplicar grade, cabeçalho e cantos a todas</button>
+        <button class="linkbtn" id="applyAll">↧ Aplicar centro, grade, cabeçalho e cantos a todas</button>
 
         <div class="toggle"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Numerar esta cartela</span><label class="sw"><input type="checkbox" id="cNumber" checked><span class="tr"></span></label></div>
 
@@ -389,6 +390,9 @@
         <option value="bottom-left">Abaixo · esquerda</option>
         <option value="bottom-right">Abaixo · direita</option>
       </select>
+      <label style="margin-top:12px">Tamanho do número da cartela <span class="valtag" id="idScaleVal">42%</span></label>
+      <input type="range" id="cfgIdScale" min="0.12" max="0.9" step="0.01" value="0.42">
+      <div class="hint" style="margin-top:6px">Puxe para a esquerda para <b>diminuir</b> a numeração (Nº 0001). A medida é em relação à altura de uma casa da cartela.</div>
     </div>
 
     <!-- 5 -->
@@ -457,8 +461,7 @@
       <div class="row"><div><label>Nº inicial</label><input type="number" id="bMin" value="1"></div><div><label>Nº final</label><input type="number" id="bMax" value="75"></div></div>
       <div class="hint" style="margin-top:7px"><b>Nº inicial</b> é o <b>menor</b> número que pode sair numa cartela; <b>Nº final</b> é o <b>maior</b>. Todo número sorteado fica entre os dois — no bingo tradicional de 75 bolas, de <b>1 a 75</b>.<br>A faixa é repartida em partes iguais entre as colunas: com 1–75 e 5 colunas sai <b>B</b> 1–15, <b>I</b> 16–30, <b>N</b> 31–45, <b>G</b> 46–60, <b>O</b> 61–75.</div>
       <div class="divider"></div>
-      <div class="toggle" style="padding-top:0"><span class="lbl">Centro livre nas cartelas</span><label class="sw"><input type="checkbox" id="bFree" checked><span class="tr"></span></label></div>
-      <label style="margin-top:12px">Números entre as cartelas da folha</label>
+      <label>Números entre as cartelas da folha</label>
       <select id="bMode"><option value="same">Todas iguais</option><option value="independent">Cada cartela diferente</option><option value="group">Por grupo / rodada</option></select>
     </div>
 
@@ -505,18 +508,21 @@
 
         <div id="bBingoProps" style="display:none">
           <div class="row"><div><label>Colunas</label><input type="number" id="bCols" value="5" min="2" max="12"></div><div><label>Linhas</label><input type="number" id="bRows" value="5" min="2" max="12"></div></div>
+          <div class="toggle"><span class="lbl">Centro livre <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="bFree" checked><span class="tr"></span></label></div>
           <div class="toggle"><span class="lbl">Desenhar grade</span><label class="sw"><input type="checkbox" id="bGrid" checked><span class="tr"></span></label></div>
           <div class="toggle"><span class="lbl">Cabeçalho BINGO</span><label class="sw"><input type="checkbox" id="bHeader" checked><span class="tr"></span></label></div>
           <div class="toggle"><span class="lbl">Numerar esta cartela</span><label class="sw"><input type="checkbox" id="bNum"><span class="tr"></span></label></div>
           <label style="margin-top:12px">Cantos arredondados <span class="valtag" id="bCornerVal">0%</span></label>
           <input type="range" id="bCorner" min="0" max="1" step="0.05" value="0">
-          <button class="linkbtn" id="bApplyAll">↧ Aplicar grade, cabeçalho e cantos a todas</button>
+          <button class="linkbtn" id="bApplyAll">↧ Aplicar centro, grade, cabeçalho e cantos a todas</button>
           <button id="bPreviewSel" style="width:100%;margin-top:4px"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button>
           <div id="bGrpWrap" style="display:none"><label>Grupo / rodada</label><input type="number" id="bGrp" value="1" min="1"></div>
-          <label>Imagem do centro <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· só desta cartela</b></label>
-          <div class="fileinput"><button style="width:100%">Escolher imagem…</button><input type="file" id="bBImg" accept="image/*"></div>
-          <div class="imgprev" id="bBImgPrev" style="display:none"><img id="bBImgThumb"><button class="danger" id="bBImgRemove" style="padding:8px 11px">Remover</button></div>
-          <div id="bBImgScaleWrap" style="display:none"><label style="margin-top:12px">Tamanho da imagem <span class="valtag" id="bBImgScaleVal">85%</span></label><input type="range" id="bBImgScale" min="0.2" max="1" step="0.05" value="0.85"></div>
+          <div id="bImgCenterSection">
+            <label>Imagem do centro <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· só desta cartela</b></label>
+            <div class="fileinput"><button style="width:100%">Escolher imagem…</button><input type="file" id="bBImg" accept="image/*"></div>
+            <div class="imgprev" id="bBImgPrev" style="display:none"><img id="bBImgThumb"><button class="danger" id="bBImgRemove" style="padding:8px 11px">Remover</button></div>
+            <div id="bBImgScaleWrap" style="display:none"><label style="margin-top:12px">Tamanho da imagem <span class="valtag" id="bBImgScaleVal">85%</span></label><input type="range" id="bBImgScale" min="0.2" max="1" step="0.05" value="0.85"></div>
+          </div>
         </div>
 
         <div class="btns" style="margin-top:12px">
@@ -556,11 +562,14 @@ const S={pdfjsDoc:null,pdflibBytes:null,numPages:0,pageIndex:0,viewport:null,sca
 let idSeq=1;
 
 const style={
-  min:1,max:75,freeCenter:true,
+  min:1,max:75,
   headerText:'BINGO',headerFont:'Times',
-  idPos:'top-left',idPrefix:'Nº ',idStart:1,
+  idPos:'top-left',idPrefix:'Nº ',idStart:1,idScale:0.42,
   font:'Helvetica',bold:true,fontScale:0.62,numberMode:'same',quantity:30
 };
+/* "centro livre" é uma opção DE CADA CARTELA (passo 3). Cartela sem a
+   propriedade definida conta como ligada, que é o padrão do bingo. */
+const freeOf=c=>!!c&&c.free!==false;
 
 /* ---------- carregar PDF ---------- */
 async function loadFile(file){
@@ -651,7 +660,7 @@ function cardOps(c,numbers,idText,st){
       ops.push({t:'text',x:x+(cc+.5)*cw,y:(y+h-(r+.5)*ch)-fs*.34,text:String(v),size:fs,align:'center',family:st.font,bold:st.bold});
     }
   }
-  if(st.freeCenter&&c.centerImage){
+  if(freeOf(c)&&c.centerImage){
     const el=c.centerImage.el,ccx=x+(cC+.5)*cw,ccy=y+h-(cR+.5)*ch;
     /* contain: maior tamanho que cabe inteiro na célula, preservando proporção */
     let bw=cw,bh=ch;
@@ -661,7 +670,7 @@ function cardOps(c,numbers,idText,st){
     ops.push({t:'image',x:ccx-bw/2,y:ccy-bh/2,w:bw,h:bh,imgEl:el,imgKey:c.id});
   }
   if(c.number&&idText){
-    const size=Math.max(8,ch*.42),m=size*.4,top=y+h+headerH;let tx,ty,al;
+    const size=Math.max(4,ch*(st.idScale||0.42)),m=size*.4,top=y+h+headerH;let tx,ty,al;
     if(st.idPos==='top-left'){tx=x;ty=top+m;al='left';}
     else if(st.idPos==='top-center'){tx=x+w/2;ty=top+m;al='center';}
     else if(st.idPos==='top-right'){tx=x+w;ty=top+m;al='right';}
@@ -807,13 +816,15 @@ const cardById=id=>S.cards.find(c=>c.id===id);
 $('#addCard').onclick=()=>{
   const wpt=(S.viewport.width*0.26)/S.scale,hpt=wpt;
   const ctr=screenToPdf(S.viewport.width/2,S.viewport.height/2);
-  const c={id:'c'+(idSeq++),page:S.pageIndex,x:ctr.x-wpt/2,y:ctr.y-hpt/2,w:wpt,h:hpt,rows:5,cols:5,group:1,grid:true,header:false,number:true,corner:0,centerImage:null,centerScale:0.85};
+  const c={id:'c'+(idSeq++),page:S.pageIndex,x:ctr.x-wpt/2,y:ctr.y-hpt/2,w:wpt,h:hpt,rows:5,cols:5,group:1,free:true,grid:true,header:false,number:true,corner:0,centerImage:null,centerScale:0.85};
   S.cards.push(c);selectCard(c.id);refreshPreview();refreshList();redraw();setStep(3);
 };
 $('#dupCard').onclick=()=>{const c=cardById(S.selId);if(!c)return;const n={...c,id:'c'+(idSeq++),x:c.x+14,y:c.y-14};S.cards.push(n);selectCard(n.id);refreshPreview();refreshList();redraw();};
 $('#delCard').onclick=()=>delSel();
-/* se a prévia está ligada, cartelas novas já nascem com números de exemplo */
-function refreshPreview(){if(!S.previewNums)return;try{S.previewNums=buildSets();}catch(e){S.previewNums=null;}}
+/* Uma vez ligada, a prévia NÃO se desliga sozinha: toda mudança de configuração
+   apenas re-sorteia os números por cima. Se o sorteio falhar (faixa pequena demais
+   enquanto a pessoa ainda digita), mantém os números que já estavam na tela. */
+function refreshPreview(){if(!S.previewNums)return;try{S.previewNums=buildSets();}catch(e){}}
 function delSel(){
   const ids=S.selIds.length?S.selIds.slice():(S.selId?[S.selId]:[]);
   if(!ids.length)return;
@@ -821,12 +832,18 @@ function delSel(){
   S.selIds=[];S.selId=null;$('#selPanel').style.display='none';refreshList();redraw();
 }
 $('#fitSquare').onclick=()=>{const c=cardById(S.selId);if(!c)return;const s=Math.min(c.w,c.h);c.w=s;c.h=s;redraw();syncSel();};
-$('#applyAll').onclick=()=>{const c=cardById(S.selId);if(!c)return;S.cards.forEach(k=>{k.grid=c.grid;k.header=c.header;k.corner=c.corner||0;});redraw();refreshList();showMsg('Grade, cabeçalho e cantos aplicados a todas as '+S.cards.length+' cartelas.','info');};
+$('#applyAll').onclick=()=>{const c=cardById(S.selId);if(!c)return;S.cards.forEach(k=>{k.free=freeOf(c);k.grid=c.grid;k.header=c.header;k.corner=c.corner||0;});refreshPreview();redraw();refreshList();showMsg('Centro livre, grade, cabeçalho e cantos aplicados a todas as '+S.cards.length+' cartelas.','info');};
 $('#selAll').onclick=()=>{
   if(!S.cards.length)return;
   S.selIds=S.cards.map(c=>c.id);selectCard(S.selId||S.cards[S.cards.length-1].id,false,true);
 };
 $('#previewSel').onclick=()=>$('#preview').onclick();
+$('#cFree').addEventListener('change',()=>{
+  const c=cardById(S.selId);if(!c)return;
+  c.free=$('#cFree').checked;
+  $('#cImgSection').style.display=c.free?'block':'none';
+  refreshPreview();redraw();refreshList();
+});
 $('#cGrid').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.grid=$('#cGrid').checked;redraw();refreshList();}});
 $('#cHeader').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.header=$('#cHeader').checked;redraw();refreshList();}});
 $('#cCorner').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.corner=+$('#cCorner').value;$('#cCornerVal').textContent=Math.round(c.corner*100)+'%';redraw();});
@@ -845,9 +862,9 @@ function selectCard(id,additive,keepIds){
   else mh.style.display='none';
   if(c){
     $('#selTitle').textContent='Cartela '+(S.cards.indexOf(c)+1)+(S.selIds.length>1?(' · de '+S.selIds.length+' selecionadas'):'');
-    $('#cGrid').checked=c.grid;$('#cHeader').checked=c.header;$('#cNumber').checked=c.number;
+    $('#cFree').checked=freeOf(c);$('#cGrid').checked=c.grid;$('#cHeader').checked=c.header;$('#cNumber').checked=c.number;
     $('#cCorner').value=c.corner||0;$('#cCornerVal').textContent=Math.round((c.corner||0)*100)+'%';
-    $('#cImgSection').style.display=style.freeCenter?'block':'none';
+    $('#cImgSection').style.display=freeOf(c)?'block':'none';
     if(c.centerImage){$('#cImgThumb').src=c.centerImage.el.src;$('#cImgPrev').style.display='flex';$('#cImgScaleWrap').style.display='block';}
     else{$('#cImgPrev').style.display='none';$('#cImgScaleWrap').style.display='none';}
     $('#cImgScale').value=c.centerScale;$('#cImgScaleVal').textContent=Math.round((c.centerScale||0.85)*100)+'%';
@@ -871,7 +888,7 @@ function syncSel(){const c=cardById(S.selId);if(!c)return;cX.value=Math.round(c.
   const c=cardById(S.selId);if(!c)return;
   c.x=+cX.value;c.y=+cY.value;c.w=Math.max(10,+cW.value);c.h=Math.max(10,+cH.value);
   c.cols=Math.max(2,Math.min(12,+cCols.value||5));c.rows=Math.max(2,Math.min(12,+cRows.value||5));c.group=Math.max(1,+cGrp.value||1);
-  redraw();refreshList();
+  refreshPreview();redraw();refreshList();
 }));
 function refreshList(){
   const L=$('#cardList'),sel=$('#selPanel');
@@ -912,19 +929,19 @@ window.addEventListener('keydown',e=>{
 /* ---------- estilo ---------- */
 const modeVal=()=>document.querySelector('input[name=mode]:checked').value;
 function syncStyle(){
-  style.min=+cfgMin.value;style.max=+cfgMax.value;style.freeCenter=cfgFree.checked;
+  style.min=+cfgMin.value;style.max=+cfgMax.value;
   style.headerText=cfgHeaderText.value||'BINGO';style.headerFont=cfgHeaderFont.value;
-  style.idPos=cfgIdPos.value;style.idPrefix=cfgIdPrefix.value;style.idStart=+cfgIdStart.value||1;
+  style.idPos=cfgIdPos.value;style.idPrefix=cfgIdPrefix.value;style.idStart=+cfgIdStart.value||1;style.idScale=+cfgIdScale.value;
   style.font=cfgFont.value;style.fontScale=+cfgFontScale.value;style.numberMode=modeVal();style.quantity=+cfgQty.value;
   $('#grpWrap').style.display=(style.numberMode==='group'&&S.selId)?'block':'none';
-  $('#cImgSection').style.display=(style.freeCenter&&S.selId)?'block':'none';
   $('#fontVal').textContent=Math.round(style.fontScale*100)+'%';
-  redraw();refreshList();
+  $('#idScaleVal').textContent=Math.round(style.idScale*100)+'%';
+  refreshPreview();redraw();refreshList();
 }
-['cfgMin','cfgMax','cfgFree','cfgHeaderText','cfgHeaderFont','cfgIdPos','cfgIdPrefix','cfgIdStart','cfgFont','cfgFontScale','cfgQty'].forEach(id=>{
-  $('#'+id).addEventListener('input',()=>{if(['cfgMin','cfgMax','cfgFree'].includes(id))S.previewNums=null;syncStyle();});
+['cfgMin','cfgMax','cfgHeaderText','cfgHeaderFont','cfgIdPos','cfgIdPrefix','cfgIdStart','cfgIdScale','cfgFont','cfgFontScale','cfgQty'].forEach(id=>{
+  $('#'+id).addEventListener('input',syncStyle);
 });
-document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{S.previewNums=null;selectCard(S.selId);syncStyle();}));
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{selectCard(S.selId);syncStyle();}));
 $('#cfgBold').onclick=()=>{style.bold=!style.bold;$('#cfgBold').classList.toggle('on',style.bold);redraw();};
 
 /* ---------- sorteio ---------- */
@@ -932,24 +949,60 @@ function columnRanges(min,max,cols){const total=max-min+1,base=Math.floor(total/
 function sample(lo,hi,n){const p=[];for(let v=lo;v<=hi;v++)p.push(v);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}return p.slice(0,n).sort((a,b)=>a-b);}
 function makeGrid(c,st){
   st=st||style;
+  const free=freeOf(c);
   const{rows,cols}=c,ranges=columnRanges(st.min,st.max,cols),cR=Math.floor(rows/2),cC=Math.floor(cols/2),g=new Array(rows*cols).fill(null);
-  for(let cc=0;cc<cols;cc++){const[lo,hi]=ranges[cc];const need=rows-((st.freeCenter&&cc===cC)?1:0);
+  for(let cc=0;cc<cols;cc++){const[lo,hi]=ranges[cc];const need=rows-((free&&cc===cC)?1:0);
     if(hi-lo+1<need)throw new Error('Faixa de números pequena demais para '+cols+' colunas. Aumente o número final.');
-    const pk=sample(lo,hi,need);let k=0;for(let r=0;r<rows;r++){if(st.freeCenter&&r===cR&&cc===cC)continue;g[r*cols+cc]=pk[k++];}}
+    const pk=sample(lo,hi,need);let k=0;for(let r=0;r<rows;r++){if(free&&r===cR&&cc===cC)continue;g[r*cols+cc]=pk[k++];}}
   return g;
+}
+/* Como o centro livre é por cartela, duas cartelas que deveriam sair com os MESMOS
+   números podem discordar só na casa do meio. Em vez de sortear tudo de novo (o que
+   quebraria o "mesmo bilhete"), reaproveita a grade e ajusta apenas o centro. */
+function adaptGrid(g,c,st,baseFree){
+  const free=freeOf(c);if(free===baseFree)return g;
+  const{rows,cols}=c,cR=Math.floor(rows/2),cC=Math.floor(cols/2),out=g.slice();
+  if(free){out[cR*cols+cC]=null;return out;}
+  const[lo,hi]=columnRanges(st.min,st.max,cols)[cC];
+  const usados=[];for(let r=0;r<rows;r++){const v=out[r*cols+cC];if(v!=null)usados.push(v);}
+  const tem=new Set(usados),livres=[];
+  for(let v=lo;v<=hi;v++)if(!tem.has(v))livres.push(v);
+  if(!livres.length)return out;
+  usados.push(livres[Math.floor(Math.random()*livres.length)]);
+  usados.sort((a,b)=>a-b);
+  for(let r=0;r<rows;r++)out[r*cols+cC]=usados[r];
+  return out;
 }
 function buildSets(cards,st){
   cards=cards||S.cards;st=st||style;
   const mode=st.numberMode,res={};if(!cards.length)return res;
-  if(mode==='same'){const base=makeGrid(cards[0],st);cards.forEach(c=>{res[c.id]=(c.rows===cards[0].rows&&c.cols===cards[0].cols)?base:makeGrid(c,st);});}
-  else if(mode==='independent')cards.forEach(c=>res[c.id]=makeGrid(c,st));
-  else{const byG={};cards.forEach(c=>{if(!byG[c.group])byG[c.group]=makeGrid(c,st);res[c.id]=byG[c.group];});}
+  const mesmaGrade=(a,b)=>a.rows===b.rows&&a.cols===b.cols;
+  if(mode==='independent'){cards.forEach(c=>res[c.id]=makeGrid(c,st));return res;}
+  if(mode==='same'){
+    const ref=cards[0],base=makeGrid(ref,st);
+    cards.forEach(c=>{res[c.id]=mesmaGrade(c,ref)?adaptGrid(base,c,st,freeOf(ref)):makeGrid(c,st);});
+    return res;
+  }
+  const byG={};
+  cards.forEach(c=>{
+    if(!byG[c.group])byG[c.group]={ref:c,g:makeGrid(c,st)};
+    const b=byG[c.group];
+    res[c.id]=mesmaGrade(c,b.ref)?adaptGrid(b.g,c,st,freeOf(b.ref)):makeGrid(c,st);
+  });
   return res;
 }
 
+/* Os dois botões de prévia (passo 5 e painel da cartela) mostram o mesmo estado.
+   Como a prévia não se desliga mais sozinha, é o botão que a liga e desliga. */
+const OLHO='<svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> ';
+function setPreviewBtn(){
+  const on=!!S.previewNums,txt=OLHO+(on?'Ocultar a prévia':'Prévia com números');
+  ['#preview','#previewSel'].forEach(s=>{const b=$(s);if(b){b.innerHTML=txt;b.classList.toggle('on',on);}});
+}
 $('#preview').onclick=()=>{
+  if(S.previewNums){S.previewNums=null;setPreviewBtn();redraw();return showMsg('Prévia desligada. As cartelas voltaram a aparecer vazias.','info');}
   if(!S.cards.length)return showMsg('Marque ao menos uma cartela.','err');
-  try{S.previewNums=buildSets();redraw();showMsg('Prévia com números de exemplo — sai exatamente assim no PDF.','info');}
+  try{S.previewNums=buildSets();setPreviewBtn();redraw();showMsg('Prévia com números de exemplo — sai exatamente assim no PDF. Ela fica ligada enquanto você mexe nas outras opções.','info');}
   catch(e){showMsg(e.message,'err');}
 };
 
@@ -971,8 +1024,8 @@ $('#generate').onclick=async()=>{
     const fonts={};for(const fam of new Set([style.font,style.headerFont]))fonts[fam]=await embedFam(fam);
     const resolveFont=(fam,bold)=>fonts[fam][bold?'bold':'reg'];
     const imagesByCard={};
-    if(style.freeCenter){const cache=new Map();
-      for(const c of S.cards){if(!c.centerImage)continue;const ci=c.centerImage;
+    {const cache=new Map();
+      for(const c of S.cards){if(!c.centerImage||!freeOf(c))continue;const ci=c.centerImage;
         if(!cache.has(ci)){try{cache.set(ci,ci.kind==='png'?await out.embedPng(ci.bytes):await out.embedJpg(ci.bytes));}catch(err){cache.set(ci,null);}}
         imagesByCard[c.id]=cache.get(ci);
       }}
@@ -1001,7 +1054,7 @@ const bstage=$('#bstage'),bdraw=$('#bdraw'),boverlay=$('#boverlay'),bctx=bdraw.g
 const A4={w:595.28,h:841.89};
 const B={portrait:true,pageW:A4.w,pageH:A4.h,scale:0.7,els:[],selId:null,selIds:[],preview:false,previewNums:null,inited:false,bg:{kind:'none',color:'#ffffff',img:null,border:null}};
 let bSeq=1;
-const styleB={min:1,max:75,freeCenter:true,headerText:'BINGO',headerFont:'Times',idPos:'top-left',idPrefix:'Nº ',idStart:1,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',quantity:30};
+const styleB={min:1,max:75,headerText:'BINGO',headerFont:'Times',idPos:'top-left',idPrefix:'Nº ',idStart:1,idScale:0.42,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',quantity:30};
 const convB={toScreen:(x,y)=>({x:x*B.scale,y:(B.pageH-y)*B.scale}),get scale(){return B.scale;}};
 const bEl=id=>B.els.find(e=>e.id===id);
 function bElRect(e){return{left:e.x*B.scale,top:(B.pageH-(e.y+e.h))*B.scale,w:e.w*B.scale,h:e.h*B.scale};}
@@ -1010,7 +1063,7 @@ function bSetOrientation(p){B.portrait=p;B.pageW=p?A4.w:A4.h;B.pageH=p?A4.h:A4.w
 /* histórico (desfazer/refazer) */
 let hist=[],hIdx=-1,clip=null;
 function bSnap(){return{els:B.els.map(e=>Object.assign({},e)),bg:Object.assign({},B.bg),portrait:B.portrait};}
-function bRestore(s){B.els=s.els.map(e=>Object.assign({},e));B.bg=Object.assign({},s.bg);if(s.portrait!==B.portrait)bSetOrientation(s.portrait);B.selIds=B.selIds.filter(id=>bEl(id));if(B.selId&&!bEl(B.selId))B.selId=B.selIds[B.selIds.length-1]||null;bRender();bRefresh();}
+function bRestore(s){B.els=s.els.map(e=>Object.assign({},e));B.bg=Object.assign({},s.bg);if(s.portrait!==B.portrait)bSetOrientation(s.portrait);B.selIds=B.selIds.filter(id=>bEl(id));if(B.selId&&!bEl(B.selId))B.selId=B.selIds[B.selIds.length-1]||null;bRefreshPreview();bRender();bRefresh();}
 function commit(){hist=hist.slice(0,hIdx+1);hist.push(bSnap());if(hist.length>80)hist.shift();hIdx=hist.length-1;updHistBtns();}
 function bUndo(){if(hIdx>0){hIdx--;bRestore(hist[hIdx]);}}
 function bRedo(){if(hIdx<hist.length-1){hIdx++;bRestore(hist[hIdx]);}}
@@ -1116,7 +1169,7 @@ function bFit(){const avail=$('#bviewer').clientWidth-76;if(avail>0)B.scale=Math
 
 function bAdd(e){B.els.push(e);bSelect(e.id);bRefreshPreview();bRefresh();bRender();commit();}
 $('#bAddText').onclick=()=>bAdd({id:'b'+(bSeq++),type:'text',x:B.pageW/2-140,y:B.pageH-90,w:280,h:34,text:'Novo texto',size:16,family:'Helvetica',bold:false,align:'center',color:'#173a8a'});
-$('#bAddBingo').onclick=()=>bAdd({id:'b'+(bSeq++),type:'bingo',x:B.pageW/2-110,y:B.pageH/2-110,w:220,h:220,rows:5,cols:5,group:1,grid:true,header:true,number:false,corner:0,centerImage:null,centerScale:0.85});
+$('#bAddBingo').onclick=()=>bAdd({id:'b'+(bSeq++),type:'bingo',x:B.pageW/2-110,y:B.pageH/2-110,w:220,h:220,rows:5,cols:5,group:1,free:true,grid:true,header:true,number:false,corner:0,centerImage:null,centerScale:0.85});
 let bImgTarget=null;
 $('#bAddImg').onclick=()=>{bImgTarget='new';$('#bImgFile').click();};
 $('#bImgReplace').onclick=()=>{bImgTarget=B.selId;$('#bImgFile').click();};
@@ -1130,7 +1183,7 @@ $('#bImgFile').addEventListener('change',async ev=>{
 });
 $('#bAddRound').onclick=()=>{
   const n=B.els.filter(e=>e.type==='bingo').length+1;
-  const bg={id:'b'+(bSeq++),type:'bingo',x:60,y:B.pageH/2-60,w:150,h:150,rows:5,cols:5,group:n,grid:true,header:true,number:false,centerImage:null,centerScale:0.85};
+  const bg={id:'b'+(bSeq++),type:'bingo',x:60,y:B.pageH/2-60,w:150,h:150,rows:5,cols:5,group:n,free:true,grid:true,header:true,number:false,centerImage:null,centerScale:0.85};
   const tx={id:'b'+(bSeq++),type:'text',x:230,y:B.pageH/2-40,w:300,h:110,text:n+'ª RODADA\n1. \n2. \n3. ',size:12,family:'Helvetica',bold:false,align:'left',color:'#173a8a'};
   B.els.push(bg,tx);if(styleB.numberMode==='same'){styleB.numberMode='group';$('#bMode').value='group';}bSelect(bg.id);bRefresh();bRender();commit();
 };
@@ -1153,14 +1206,15 @@ $('#bSelAll').onclick=()=>{if(!B.els.length)return;B.selIds=B.els.map(e=>e.id);b
 $('#bApplyAll').onclick=()=>{
   const e=bEl(B.selId);if(!e||e.type!=='bingo')return;
   const alvos=B.els.filter(k=>k.type==='bingo');
-  alvos.forEach(k=>{k.grid=e.grid;k.header=e.header;k.corner=e.corner||0;});
-  bRender();bRefresh();commit();bShowMsg('Grade, cabeçalho e cantos aplicados às '+alvos.length+' cartelas.','info');
+  alvos.forEach(k=>{k.free=freeOf(e);k.grid=e.grid;k.header=e.header;k.corner=e.corner||0;});
+  bRefreshPreview();bRender();bRefresh();commit();bShowMsg('Centro livre, grade, cabeçalho e cantos aplicados às '+alvos.length+' cartelas.','info');
 };
 $('#bCorner').addEventListener('input',()=>{const e=bEl(B.selId);if(!e)return;e.corner=+$('#bCorner').value;$('#bCornerVal').textContent=Math.round(e.corner*100)+'%';bRender();});
 $('#bCorner').addEventListener('change',commit);
 $('#bPreviewSel').onclick=()=>$('#bPreview').onclick();
-/* se a prévia está ligada, elementos novos já nascem com números de exemplo */
-function bRefreshPreview(){if(!B.preview)return;const bingos=B.els.filter(e=>e.type==='bingo');try{B.previewNums=buildSets(bingos,styleB);}catch(err){B.preview=false;B.previewNums=null;}}
+/* Uma vez ligada, a prévia NÃO se desliga sozinha: cada mudança de configuração
+   só re-sorteia os números. Se o sorteio falhar, mantém o que já estava na tela. */
+function bRefreshPreview(){if(!B.preview)return;const bingos=B.els.filter(e=>e.type==='bingo');try{B.previewNums=buildSets(bingos,styleB);}catch(err){}}
 
 function bSelect(id,additive,keepIds){
   if(additive&&id){
@@ -1181,8 +1235,9 @@ function bSelect(id,additive,keepIds){
   $('#bImgProps').style.display=e.type==='image'?'block':'none';
   $('#bBingoProps').style.display=e.type==='bingo'?'block':'none';
   if(e.type==='text'){$('#bText').value=e.text;$('#bTFont').value=e.family;$('#bTSize').value=Math.round(e.size);$('#bTColor').value=e.color||'#173a8a';$('#bTBold').classList.toggle('on',!!e.bold);['bAlL','bAlC','bAlR'].forEach(a=>$('#'+a).classList.remove('on'));$('#'+{left:'bAlL',center:'bAlC',right:'bAlR'}[e.align||'left']).classList.add('on');}
-  if(e.type==='bingo'){$('#bCols').value=e.cols;$('#bRows').value=e.rows;$('#bGrid').checked=e.grid;$('#bHeader').checked=e.header;$('#bNum').checked=e.number;$('#bGrpWrap').style.display=styleB.numberMode==='group'?'block':'none';$('#bGrp').value=e.group;
+  if(e.type==='bingo'){$('#bCols').value=e.cols;$('#bRows').value=e.rows;$('#bFree').checked=freeOf(e);$('#bGrid').checked=e.grid;$('#bHeader').checked=e.header;$('#bNum').checked=e.number;$('#bGrpWrap').style.display=styleB.numberMode==='group'?'block':'none';$('#bGrp').value=e.group;
     $('#bCorner').value=e.corner||0;$('#bCornerVal').textContent=Math.round((e.corner||0)*100)+'%';
+    $('#bImgCenterSection').style.display=freeOf(e)?'block':'none';
     if(e.centerImage){$('#bBImgThumb').src=e.centerImage.el.src;$('#bBImgPrev').style.display='flex';$('#bBImgScaleWrap').style.display='block';}else{$('#bBImgPrev').style.display='none';$('#bBImgScaleWrap').style.display='none';}
     $('#bBImgScale').value=e.centerScale;$('#bBImgScaleVal').textContent=Math.round((e.centerScale||0.85)*100)+'%';}
   bSyncSel();bRefresh();
@@ -1195,18 +1250,24 @@ $('#bTSize').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.size=Mat
 $('#bTColor').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.color=$('#bTColor').value;bRender();}});
 $('#bTBold').onclick=()=>{const e=bEl(B.selId);if(e){e.bold=!e.bold;$('#bTBold').classList.toggle('on',e.bold);bRender();commit();}};
 [['bAlL','left'],['bAlC','center'],['bAlR','right']].forEach(pair=>$('#'+pair[0]).onclick=()=>{const e=bEl(B.selId);if(e){e.align=pair[1];['bAlL','bAlC','bAlR'].forEach(a=>$('#'+a).classList.remove('on'));$('#'+pair[0]).classList.add('on');bRender();commit();}});
-$('#bCols').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.cols=Math.max(2,Math.min(12,+$('#bCols').value||5));bRender();}});
-$('#bRows').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.rows=Math.max(2,Math.min(12,+$('#bRows').value||5));bRender();}});
+$('#bCols').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.cols=Math.max(2,Math.min(12,+$('#bCols').value||5));bRefreshPreview();bRender();}});
+$('#bRows').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.rows=Math.max(2,Math.min(12,+$('#bRows').value||5));bRefreshPreview();bRender();}});
+$('#bFree').addEventListener('change',()=>{
+  const e=bEl(B.selId);if(!e)return;
+  e.free=$('#bFree').checked;
+  $('#bImgCenterSection').style.display=e.free?'block':'none';
+  bRefreshPreview();bRender();
+});
 $('#bGrid').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.grid=$('#bGrid').checked;bRender();}});
 $('#bHeader').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.header=$('#bHeader').checked;bRender();}});
 $('#bNum').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.number=$('#bNum').checked;bRender();}});
-$('#bGrp').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.group=Math.max(1,+$('#bGrp').value||1);bRender();bRefresh();}});
+$('#bGrp').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.group=Math.max(1,+$('#bGrp').value||1);bRefreshPreview();bRender();bRefresh();}});
 $('#bBImg').addEventListener('change',async ev=>{const e=bEl(B.selId);if(!e)return;const f=ev.target.files[0];if(!f)return;const buf=await f.arrayBuffer();const bytes=new Uint8Array(buf);const kind=(f.type.includes('png')||bytes[0]===0x89)?'png':'jpg';const el=new Image();el.onload=()=>{e.centerImage={el,bytes,kind};bSelect(e.id);bRender();commit();};el.src=URL.createObjectURL(new Blob([buf],{type:f.type||'image/png'}));ev.target.value='';});
 $('#bBImgRemove').onclick=()=>{const e=bEl(B.selId);if(e){e.centerImage=null;bSelect(e.id);bRender();commit();}};
 $('#bBImgScale').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.centerScale=+$('#bBImgScale').value;$('#bBImgScaleVal').textContent=Math.round(e.centerScale*100)+'%';bRender();}});
 $('#bBImgScale').addEventListener('change',commit);
 /* commit ao terminar edições de campos */
-['bText','bTFont','bTSize','bTColor','bCols','bRows','bGrp','bX','bY','bW','bH','bGrid','bHeader','bNum'].forEach(id=>$('#'+id).addEventListener('change',commit));
+['bText','bTFont','bTSize','bTColor','bCols','bRows','bGrp','bX','bY','bW','bH','bFree','bGrid','bHeader','bNum'].forEach(id=>$('#'+id).addEventListener('change',commit));
 
 function bRefresh(){
   const L=$('#bList'),sel=$('#bSel');
@@ -1226,14 +1287,24 @@ function bRefresh(){
   });
   updHistBtns();
 }
-function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.freeCenter=bFree.checked;styleB.numberMode=bMode.value;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRender();bRefresh();}
-['bMin','bMax','bFree','bMode','bQty'].forEach(id=>$('#'+id).addEventListener('input',()=>{B.preview=false;bSyncStyle();}));
+function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.numberMode=bMode.value;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRefreshPreview();bRender();bRefresh();}
+['bMin','bMax','bMode','bQty'].forEach(id=>$('#'+id).addEventListener('input',bSyncStyle));
 $('#bOriP').onclick=()=>bSetOrientation(true);$('#bOriL').onclick=()=>bSetOrientation(false);
 $('#bzIn').onclick=()=>{B.scale=Math.min(B.scale*1.15,4);bRender();};
 $('#bzOut').onclick=()=>{B.scale=Math.max(B.scale/1.15,.2);bRender();};
 $('#bzFit').onclick=()=>bFit();
 
-$('#bPreview').onclick=()=>{const bingos=B.els.filter(e=>e.type==='bingo');if(!bingos.length)return bShowMsg('Adicione ao menos uma cartela.','err');try{B.previewNums=buildSets(bingos,styleB);B.preview=true;bRender();bShowMsg('Prévia com números de exemplo — sai assim no PDF.','info');}catch(e){bShowMsg(e.message,'err');}};
+function bSetPreviewBtn(){
+  const txt=OLHO+(B.preview?'Ocultar a prévia':'Prévia com números');
+  ['#bPreview','#bPreviewSel'].forEach(s=>{const b=$(s);if(b){b.innerHTML=txt;b.classList.toggle('on',B.preview);}});
+}
+$('#bPreview').onclick=()=>{
+  if(B.preview){B.preview=false;bSetPreviewBtn();bRender();return bShowMsg('Prévia desligada. As cartelas voltaram a aparecer vazias.','info');}
+  const bingos=B.els.filter(e=>e.type==='bingo');
+  if(!bingos.length)return bShowMsg('Adicione ao menos uma cartela.','err');
+  try{B.previewNums=buildSets(bingos,styleB);B.preview=true;bSetPreviewBtn();bRender();bShowMsg('Prévia com números de exemplo — sai assim no PDF. Ela fica ligada enquanto você mexe nas outras opções.','info');}
+  catch(e){bShowMsg(e.message,'err');}
+};
 $('#bGenerate').onclick=async()=>{
   const bingos=B.els.filter(e=>e.type==='bingo');
   if(!B.els.length)return bShowMsg('A folha está vazia.','err');
@@ -1249,7 +1320,7 @@ $('#bGenerate').onclick=async()=>{
     const fonts={};for(const fam of fams)fonts[fam]=await embedFam(fam);const resolveFont=(fam,bold)=>(fonts[fam]||fonts.Helvetica)[bold?'bold':'reg'];
     const imagesByKey={};const cache=new Map();
     async function emb(ci){if(cache.has(ci))return cache.get(ci);let im=null;try{im=ci.kind==='png'?await out.embedPng(ci.bytes):await out.embedJpg(ci.bytes);}catch(e){}cache.set(ci,im);return im;}
-    for(const e of B.els){if(e.type==='image'&&e.img)imagesByKey[e.id]=await emb(e.img);if(e.type==='bingo'&&styleB.freeCenter&&e.centerImage)imagesByKey[e.id]=await emb(e.centerImage);}
+    for(const e of B.els){if(e.type==='image'&&e.img)imagesByKey[e.id]=await emb(e.img);if(e.type==='bingo'&&freeOf(e)&&e.centerImage)imagesByKey[e.id]=await emb(e.centerImage);}
     let bgImg=null;if(B.bg.kind==='image'&&B.bg.img){try{bgImg=B.bg.img.kind==='png'?await out.embedPng(B.bg.img.bytes):await out.embedJpg(B.bg.img.bytes);}catch(e){}}
     for(let copy=0;copy<qty;copy++){
       const page=out.addPage([B.pageW,B.pageH]);
@@ -1272,9 +1343,9 @@ $('#bGenerate').onclick=async()=>{
 function bShowMsg(t,type){const m=$('#bMsg');m.className='msg show '+type;m.innerHTML='<span>'+t+'</span>';}
 
 function T(text,x,y,w,h,size,o){o=o||{};return{id:'b'+(bSeq++),type:'text',x:x,y:y,w:w,h:h,text:text,size:size,family:o.family||'Helvetica',bold:!!o.bold,align:o.align||'left',color:o.color||'#173a8a'};}
-function BG(x,y,w,h,o){o=o||{};return{id:'b'+(bSeq++),type:'bingo',x:x,y:y,w:w,h:h,rows:5,cols:5,group:o.group||1,grid:o.grid!==false,header:!!o.header,number:!!o.number,centerImage:null,centerScale:0.85};}
+function BG(x,y,w,h,o){o=o||{};return{id:'b'+(bSeq++),type:'bingo',x:x,y:y,w:w,h:h,rows:5,cols:5,group:o.group||1,free:o.free!==false,grid:o.grid!==false,header:!!o.header,number:!!o.number,centerImage:null,centerScale:0.85};}
 function bLoadTemplate(name){
-  bSetOrientation(true);const W=B.pageW,H=B.pageH;B.els=[];B.preview=false;
+  bSetOrientation(true);const W=B.pageW,H=B.pageH;B.els=[];B.preview=false;bSetPreviewBtn();
   if(name==='unica'){styleB.numberMode='same';$('#bMode').value='same';
     B.els=[T('SUPER BINGÃO',40,H-70,W-80,34,26,{align:'center',bold:true,family:'Times',color:'#1c47c4'}),
       T('Paróquia Nossa Senhora de Nazaré',40,H-98,W-80,18,13,{align:'center',color:'#555555'}),
