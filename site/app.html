@@ -337,9 +337,22 @@
         <div class="toggle"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Cabeçalho BINGO <b style="font-weight:400;color:var(--faint)">(nesta)</b></span><label class="sw"><input type="checkbox" id="cHeader"><span class="tr"></span></label></div>
         <label style="margin-top:12px">Cantos arredondados <span class="valtag" id="cCornerVal">0%</span></label>
         <input type="range" id="cCorner" min="0" max="1" step="0.05" value="0">
-        <button class="linkbtn" id="applyAll">↧ Aplicar centro, grade, cabeçalho e cantos a todas</button>
+        <button class="linkbtn" id="applyAll">↧ Aplicar estas opções a todas as cartelas</button>
 
         <div class="toggle"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Numerar esta cartela</span><label class="sw"><input type="checkbox" id="cNumber" checked><span class="tr"></span></label></div>
+        <div id="cIdSection">
+          <label style="margin-top:12px">Posição do número <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· só desta cartela</b></label>
+          <select id="cIdPos">
+            <option value="top-left">Acima · esquerda</option>
+            <option value="top-center">Acima · centro</option>
+            <option value="top-right">Acima · direita</option>
+            <option value="bottom-left">Abaixo · esquerda</option>
+            <option value="bottom-right">Abaixo · direita</option>
+          </select>
+          <label style="margin-top:12px">Tamanho do número <span class="valtag" id="cIdScaleVal">42%</span></label>
+          <input type="range" id="cIdScale" min="0.12" max="0.9" step="0.01" value="0.42">
+          <div class="hint" style="margin-top:6px">Puxe para a esquerda para <b>diminuir</b>. O prefixo e o número inicial (iguais para a folha toda) ficam no passo 4.</div>
+        </div>
 
         <div id="cImgSection">
           <label>Imagem do centro <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· só desta cartela</b></label>
@@ -377,22 +390,12 @@
       <select id="cfgHeaderFont" style="margin-top:9px"><option value="Times">Serif (Times)</option><option value="Helvetica">Sans (Helvetica)</option><option value="Courier">Mono (Courier)</option></select>
 
       <div class="divider"></div>
-      <label>Numeração das cartelas <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· ligue/desligue em cada cartela no passo 3</b></label>
+      <label>Numeração das cartelas</label>
       <div class="row">
         <div><label>Prefixo</label><input type="text" id="cfgIdPrefix" value="Nº "></div>
         <div><label>Começar em</label><input type="number" id="cfgIdStart" value="1"></div>
       </div>
-      <label>Posição do número</label>
-      <select id="cfgIdPos">
-        <option value="top-left">Acima · esquerda</option>
-        <option value="top-center">Acima · centro</option>
-        <option value="top-right">Acima · direita</option>
-        <option value="bottom-left">Abaixo · esquerda</option>
-        <option value="bottom-right">Abaixo · direita</option>
-      </select>
-      <label style="margin-top:12px">Tamanho do número da cartela <span class="valtag" id="idScaleVal">42%</span></label>
-      <input type="range" id="cfgIdScale" min="0.12" max="0.9" step="0.01" value="0.42">
-      <div class="hint" style="margin-top:6px">Puxe para a esquerda para <b>diminuir</b> a numeração (Nº 0001). A medida é em relação à altura de uma casa da cartela.</div>
+      <div class="hint" style="margin-top:7px">O prefixo e o número inicial valem para a folha inteira — a numeração é <b>sequencial por folha</b>.<br>Ligar/desligar, <b>posição</b> e <b>tamanho</b> são de <b>cada cartela</b>, no <b>passo 3</b>.</div>
     </div>
 
     <!-- 5 -->
@@ -512,9 +515,21 @@
           <div class="toggle"><span class="lbl">Desenhar grade</span><label class="sw"><input type="checkbox" id="bGrid" checked><span class="tr"></span></label></div>
           <div class="toggle"><span class="lbl">Cabeçalho BINGO</span><label class="sw"><input type="checkbox" id="bHeader" checked><span class="tr"></span></label></div>
           <div class="toggle"><span class="lbl">Numerar esta cartela</span><label class="sw"><input type="checkbox" id="bNum"><span class="tr"></span></label></div>
+          <div id="bIdSection">
+            <label style="margin-top:12px">Posição do número <b style="font-weight:400;color:var(--faint);text-transform:none;letter-spacing:0">· só desta cartela</b></label>
+            <select id="bIdPos">
+              <option value="top-left">Acima · esquerda</option>
+              <option value="top-center">Acima · centro</option>
+              <option value="top-right">Acima · direita</option>
+              <option value="bottom-left">Abaixo · esquerda</option>
+              <option value="bottom-right">Abaixo · direita</option>
+            </select>
+            <label style="margin-top:12px">Tamanho do número <span class="valtag" id="bIdScaleVal">42%</span></label>
+            <input type="range" id="bIdScale" min="0.12" max="0.9" step="0.01" value="0.42">
+          </div>
           <label style="margin-top:12px">Cantos arredondados <span class="valtag" id="bCornerVal">0%</span></label>
           <input type="range" id="bCorner" min="0" max="1" step="0.05" value="0">
-          <button class="linkbtn" id="bApplyAll">↧ Aplicar centro, grade, cabeçalho e cantos a todas</button>
+          <button class="linkbtn" id="bApplyAll">↧ Aplicar estas opções a todas as cartelas</button>
           <button id="bPreviewSel" style="width:100%;margin-top:4px"><svg class="ico s15" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévia com números</button>
           <div id="bGrpWrap" style="display:none"><label>Grupo / rodada</label><input type="number" id="bGrp" value="1" min="1"></div>
           <div id="bImgCenterSection">
@@ -564,12 +579,15 @@ let idSeq=1;
 const style={
   min:1,max:75,
   headerText:'BINGO',headerFont:'Times',
-  idPos:'top-left',idPrefix:'Nº ',idStart:1,idScale:0.42,
+  idPrefix:'Nº ',idStart:1,
   font:'Helvetica',bold:true,fontScale:0.62,numberMode:'same',quantity:30
 };
-/* "centro livre" é uma opção DE CADA CARTELA (passo 3). Cartela sem a
-   propriedade definida conta como ligada, que é o padrão do bingo. */
+/* Opções DE CADA CARTELA (passo 3). Cartela sem a propriedade definida cai no
+   padrão antigo, para nada quebrar: centro livre ligado, número acima à esquerda
+   e a 42% da altura de uma casa. O prefixo e o nº inicial continuam da folha toda. */
 const freeOf=c=>!!c&&c.free!==false;
+const idPosOf=c=>(c&&c.idPos)||'top-left';
+const idScaleOf=c=>(c&&c.idScale!=null)?c.idScale:0.42;
 
 /* ---------- carregar PDF ---------- */
 async function loadFile(file){
@@ -670,11 +688,11 @@ function cardOps(c,numbers,idText,st){
     ops.push({t:'image',x:ccx-bw/2,y:ccy-bh/2,w:bw,h:bh,imgEl:el,imgKey:c.id});
   }
   if(c.number&&idText){
-    const size=Math.max(4,ch*(st.idScale||0.42)),m=size*.4,top=y+h+headerH;let tx,ty,al;
-    if(st.idPos==='top-left'){tx=x;ty=top+m;al='left';}
-    else if(st.idPos==='top-center'){tx=x+w/2;ty=top+m;al='center';}
-    else if(st.idPos==='top-right'){tx=x+w;ty=top+m;al='right';}
-    else if(st.idPos==='bottom-left'){tx=x;ty=y-size-m*.4;al='left';}
+    const size=Math.max(4,ch*idScaleOf(c)),m=size*.4,top=y+h+headerH,pos=idPosOf(c);let tx,ty,al;
+    if(pos==='top-left'){tx=x;ty=top+m;al='left';}
+    else if(pos==='top-center'){tx=x+w/2;ty=top+m;al='center';}
+    else if(pos==='top-right'){tx=x+w;ty=top+m;al='right';}
+    else if(pos==='bottom-left'){tx=x;ty=y-size-m*.4;al='left';}
     else{tx=x+w;ty=y-size-m*.4;al='right';}
     ops.push({t:'text',x:tx,y:ty,text:idText,size:size,align:al,family:st.font,bold:true});
   }
@@ -816,15 +834,39 @@ const cardById=id=>S.cards.find(c=>c.id===id);
 $('#addCard').onclick=()=>{
   const wpt=(S.viewport.width*0.26)/S.scale,hpt=wpt;
   const ctr=screenToPdf(S.viewport.width/2,S.viewport.height/2);
-  const c={id:'c'+(idSeq++),page:S.pageIndex,x:ctr.x-wpt/2,y:ctr.y-hpt/2,w:wpt,h:hpt,rows:5,cols:5,group:1,free:true,grid:true,header:false,number:true,corner:0,centerImage:null,centerScale:0.85};
-  S.cards.push(c);selectCard(c.id);refreshPreview();refreshList();redraw();setStep(3);
+  const c={id:'c'+(idSeq++),page:S.pageIndex,x:ctr.x-wpt/2,y:ctr.y-hpt/2,w:wpt,h:hpt,rows:5,cols:5,group:1,free:true,grid:true,header:false,number:true,corner:0,idPos:'top-left',idScale:0.42,centerImage:null,centerScale:0.85};
+  S.cards.push(c);selectCard(c.id);fillPreviewGaps();refreshList();redraw();setStep(3);
 };
-$('#dupCard').onclick=()=>{const c=cardById(S.selId);if(!c)return;const n={...c,id:'c'+(idSeq++),x:c.x+14,y:c.y-14};S.cards.push(n);selectCard(n.id);refreshPreview();refreshList();redraw();};
+$('#dupCard').onclick=()=>{const c=cardById(S.selId);if(!c)return;const n={...c,id:'c'+(idSeq++),x:c.x+14,y:c.y-14};S.cards.push(n);selectCard(n.id);fillPreviewGaps();refreshList();redraw();};
 $('#delCard').onclick=()=>delSel();
-/* Uma vez ligada, a prévia NÃO se desliga sozinha: toda mudança de configuração
-   apenas re-sorteia os números por cima. Se o sorteio falhar (faixa pequena demais
-   enquanto a pessoa ainda digita), mantém os números que já estavam na tela. */
+/* A prévia, uma vez ligada, não se desliga sozinha E não fica re-sorteando à toa.
+   Só re-sorteia quando os números em si deixariam de valer — faixa, modo de sorteio,
+   grupo, linhas/colunas. Mudança de estilo (fonte, tamanho, posição, grade, cantos,
+   cabeçalho) apenas redesenha os MESMOS números. Se o sorteio falhar (faixa pequena
+   demais enquanto a pessoa ainda digita), mantém o que já estava na tela. */
 function refreshPreview(){if(!S.previewNums)return;try{S.previewNums=buildSets();}catch(e){}}
+/* cartela nova (ou duplicada) ganha números sem mexer nas que já estão na tela */
+function fillPreviewGaps(){
+  if(!S.previewNums)return;
+  const faltando=S.cards.filter(c=>!S.previewNums[c.id]);
+  if(!faltando.length)return;
+  try{
+    faltando.forEach(c=>{
+      let ref=null;
+      if(style.numberMode==='same')ref=S.cards.find(k=>S.previewNums[k.id]);
+      else if(style.numberMode==='group')ref=S.cards.find(k=>k.group===c.group&&S.previewNums[k.id]);
+      S.previewNums[c.id]=(ref&&ref.rows===c.rows&&ref.cols===c.cols)
+        ? adaptGrid(S.previewNums[ref.id],c,style,freeOf(ref))
+        : makeGrid(c,style);
+    });
+  }catch(e){}
+}
+/* ligar/desligar o centro livre só acende ou apaga a casa do meio desta cartela —
+   os outros números ficam onde estão, em vez de sortear tudo de novo */
+function adaptPreviewFor(c){
+  if(!S.previewNums||!S.previewNums[c.id])return;
+  try{S.previewNums[c.id]=adaptGrid(S.previewNums[c.id],c,style,!freeOf(c));}catch(e){}
+}
 function delSel(){
   const ids=S.selIds.length?S.selIds.slice():(S.selId?[S.selId]:[]);
   if(!ids.length)return;
@@ -832,7 +874,17 @@ function delSel(){
   S.selIds=[];S.selId=null;$('#selPanel').style.display='none';refreshList();redraw();
 }
 $('#fitSquare').onclick=()=>{const c=cardById(S.selId);if(!c)return;const s=Math.min(c.w,c.h);c.w=s;c.h=s;redraw();syncSel();};
-$('#applyAll').onclick=()=>{const c=cardById(S.selId);if(!c)return;S.cards.forEach(k=>{k.free=freeOf(c);k.grid=c.grid;k.header=c.header;k.corner=c.corner||0;});refreshPreview();redraw();refreshList();showMsg('Centro livre, grade, cabeçalho e cantos aplicados a todas as '+S.cards.length+' cartelas.','info');};
+$('#applyAll').onclick=()=>{
+  const c=cardById(S.selId);if(!c)return;
+  S.cards.forEach(k=>{
+    const antes=freeOf(k);
+    k.free=freeOf(c);k.grid=c.grid;k.header=c.header;k.corner=c.corner||0;
+    k.idPos=idPosOf(c);k.idScale=idScaleOf(c);
+    if(antes!==freeOf(k))adaptPreviewFor(k);   /* só acende/apaga o meio, não re-sorteia */
+  });
+  redraw();refreshList();
+  showMsg('Opções da Cartela '+(S.cards.indexOf(c)+1)+' aplicadas a todas as '+S.cards.length+' cartelas.','info');
+};
 $('#selAll').onclick=()=>{
   if(!S.cards.length)return;
   S.selIds=S.cards.map(c=>c.id);selectCard(S.selId||S.cards[S.cards.length-1].id,false,true);
@@ -842,8 +894,10 @@ $('#cFree').addEventListener('change',()=>{
   const c=cardById(S.selId);if(!c)return;
   c.free=$('#cFree').checked;
   $('#cImgSection').style.display=c.free?'block':'none';
-  refreshPreview();redraw();refreshList();
+  adaptPreviewFor(c);redraw();refreshList();
 });
+$('#cIdPos').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.idPos=$('#cIdPos').value;redraw();}});
+$('#cIdScale').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.idScale=+$('#cIdScale').value;$('#cIdScaleVal').textContent=Math.round(c.idScale*100)+'%';redraw();});
 $('#cGrid').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.grid=$('#cGrid').checked;redraw();refreshList();}});
 $('#cHeader').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.header=$('#cHeader').checked;redraw();refreshList();}});
 $('#cCorner').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.corner=+$('#cCorner').value;$('#cCornerVal').textContent=Math.round(c.corner*100)+'%';redraw();});
@@ -864,6 +918,9 @@ function selectCard(id,additive,keepIds){
     $('#selTitle').textContent='Cartela '+(S.cards.indexOf(c)+1)+(S.selIds.length>1?(' · de '+S.selIds.length+' selecionadas'):'');
     $('#cFree').checked=freeOf(c);$('#cGrid').checked=c.grid;$('#cHeader').checked=c.header;$('#cNumber').checked=c.number;
     $('#cCorner').value=c.corner||0;$('#cCornerVal').textContent=Math.round((c.corner||0)*100)+'%';
+    $('#cIdPos').value=idPosOf(c);
+    $('#cIdScale').value=idScaleOf(c);$('#cIdScaleVal').textContent=Math.round(idScaleOf(c)*100)+'%';
+    $('#cIdSection').style.display=c.number?'block':'none';
     $('#cImgSection').style.display=freeOf(c)?'block':'none';
     if(c.centerImage){$('#cImgThumb').src=c.centerImage.el.src;$('#cImgPrev').style.display='flex';$('#cImgScaleWrap').style.display='block';}
     else{$('#cImgPrev').style.display='none';$('#cImgScaleWrap').style.display='none';}
@@ -871,7 +928,7 @@ function selectCard(id,additive,keepIds){
   }
   syncSel();refreshList();redraw();
 }
-$('#cNumber').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.number=$('#cNumber').checked;redraw();}});
+$('#cNumber').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.number=$('#cNumber').checked;$('#cIdSection').style.display=c.number?'block':'none';redraw();}});
 $('#cCenterImg').addEventListener('change',async e=>{
   const c=cardById(S.selId);if(!c)return;const f=e.target.files[0];if(!f)return;
   const buf=await f.arrayBuffer();const bytes=new Uint8Array(buf);
@@ -886,9 +943,12 @@ $('#cImgScale').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)re
 function syncSel(){const c=cardById(S.selId);if(!c)return;cX.value=Math.round(c.x);cY.value=Math.round(c.y);cW.value=Math.round(c.w);cH.value=Math.round(c.h);cCols.value=c.cols;cRows.value=c.rows;cGrp.value=c.group;}
 ['cX','cY','cW','cH','cCols','cRows','cGrp'].forEach(id=>$('#'+id).addEventListener('input',()=>{
   const c=cardById(S.selId);if(!c)return;
+  const antes=c.cols+'x'+c.rows+'g'+c.group;
   c.x=+cX.value;c.y=+cY.value;c.w=Math.max(10,+cW.value);c.h=Math.max(10,+cH.value);
   c.cols=Math.max(2,Math.min(12,+cCols.value||5));c.rows=Math.max(2,Math.min(12,+cRows.value||5));c.group=Math.max(1,+cGrp.value||1);
-  refreshPreview();redraw();refreshList();
+  /* mover/redimensionar não mexe nos números; mudar grade ou grupo obriga a re-sortear */
+  if(antes!==c.cols+'x'+c.rows+'g'+c.group)refreshPreview();
+  redraw();refreshList();
 }));
 function refreshList(){
   const L=$('#cardList'),sel=$('#selPanel');
@@ -928,20 +988,25 @@ window.addEventListener('keydown',e=>{
 
 /* ---------- estilo ---------- */
 const modeVal=()=>document.querySelector('input[name=mode]:checked').value;
+/* syncStyle NÃO re-sorteia: mudar fonte, cabeçalho, prefixo ou quantidade só redesenha.
+   O re-sorteio fica com quem realmente muda os números (faixa e modo de sorteio). */
 function syncStyle(){
   style.min=+cfgMin.value;style.max=+cfgMax.value;
   style.headerText=cfgHeaderText.value||'BINGO';style.headerFont=cfgHeaderFont.value;
-  style.idPos=cfgIdPos.value;style.idPrefix=cfgIdPrefix.value;style.idStart=+cfgIdStart.value||1;style.idScale=+cfgIdScale.value;
+  style.idPrefix=cfgIdPrefix.value;style.idStart=+cfgIdStart.value||1;
   style.font=cfgFont.value;style.fontScale=+cfgFontScale.value;style.numberMode=modeVal();style.quantity=+cfgQty.value;
   $('#grpWrap').style.display=(style.numberMode==='group'&&S.selId)?'block':'none';
   $('#fontVal').textContent=Math.round(style.fontScale*100)+'%';
-  $('#idScaleVal').textContent=Math.round(style.idScale*100)+'%';
-  refreshPreview();redraw();refreshList();
+  redraw();refreshList();
 }
-['cfgMin','cfgMax','cfgHeaderText','cfgHeaderFont','cfgIdPos','cfgIdPrefix','cfgIdStart','cfgIdScale','cfgFont','cfgFontScale','cfgQty'].forEach(id=>{
+['cfgHeaderText','cfgHeaderFont','cfgIdPrefix','cfgIdStart','cfgFont','cfgFontScale','cfgQty'].forEach(id=>{
   $('#'+id).addEventListener('input',syncStyle);
 });
-document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{selectCard(S.selId);syncStyle();}));
+/* faixa de números e modo de sorteio mudam os próprios números: aí sim re-sorteia */
+['cfgMin','cfgMax'].forEach(id=>{
+  $('#'+id).addEventListener('input',()=>{syncStyle();refreshPreview();redraw();});
+});
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{selectCard(S.selId);syncStyle();refreshPreview();redraw();}));
 $('#cfgBold').onclick=()=>{style.bold=!style.bold;$('#cfgBold').classList.toggle('on',style.bold);redraw();};
 
 /* ---------- sorteio ---------- */
@@ -1054,7 +1119,7 @@ const bstage=$('#bstage'),bdraw=$('#bdraw'),boverlay=$('#boverlay'),bctx=bdraw.g
 const A4={w:595.28,h:841.89};
 const B={portrait:true,pageW:A4.w,pageH:A4.h,scale:0.7,els:[],selId:null,selIds:[],preview:false,previewNums:null,inited:false,bg:{kind:'none',color:'#ffffff',img:null,border:null}};
 let bSeq=1;
-const styleB={min:1,max:75,headerText:'BINGO',headerFont:'Times',idPos:'top-left',idPrefix:'Nº ',idStart:1,idScale:0.42,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',quantity:30};
+const styleB={min:1,max:75,headerText:'BINGO',headerFont:'Times',idPrefix:'Nº ',idStart:1,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',quantity:30};
 const convB={toScreen:(x,y)=>({x:x*B.scale,y:(B.pageH-y)*B.scale}),get scale(){return B.scale;}};
 const bEl=id=>B.els.find(e=>e.id===id);
 function bElRect(e){return{left:e.x*B.scale,top:(B.pageH-(e.y+e.h))*B.scale,w:e.w*B.scale,h:e.h*B.scale};}
@@ -1063,7 +1128,18 @@ function bSetOrientation(p){B.portrait=p;B.pageW=p?A4.w:A4.h;B.pageH=p?A4.h:A4.w
 /* histórico (desfazer/refazer) */
 let hist=[],hIdx=-1,clip=null;
 function bSnap(){return{els:B.els.map(e=>Object.assign({},e)),bg:Object.assign({},B.bg),portrait:B.portrait};}
-function bRestore(s){B.els=s.els.map(e=>Object.assign({},e));B.bg=Object.assign({},s.bg);if(s.portrait!==B.portrait)bSetOrientation(s.portrait);B.selIds=B.selIds.filter(id=>bEl(id));if(B.selId&&!bEl(B.selId))B.selId=B.selIds[B.selIds.length-1]||null;bRefreshPreview();bRender();bRefresh();}
+/* a prévia guardada só deixa de valer se a grade mudou de tamanho ou o centro livre
+   virou; desfazer uma troca de fonte, por exemplo, não pode re-sortear nada */
+function bPreviewStale(){
+  if(!B.preview||!B.previewNums)return false;
+  return B.els.some(e=>{
+    if(e.type!=='bingo')return false;
+    const g=B.previewNums[e.id];if(!g)return false;
+    if(g.length!==e.rows*e.cols)return true;
+    return freeOf(e)!==(g[Math.floor(e.rows/2)*e.cols+Math.floor(e.cols/2)]==null);
+  });
+}
+function bRestore(s){B.els=s.els.map(e=>Object.assign({},e));B.bg=Object.assign({},s.bg);if(s.portrait!==B.portrait)bSetOrientation(s.portrait);B.selIds=B.selIds.filter(id=>bEl(id));if(B.selId&&!bEl(B.selId))B.selId=B.selIds[B.selIds.length-1]||null;if(bPreviewStale())bRefreshPreview();else bFillPreviewGaps();bRender();bRefresh();}
 function commit(){hist=hist.slice(0,hIdx+1);hist.push(bSnap());if(hist.length>80)hist.shift();hIdx=hist.length-1;updHistBtns();}
 function bUndo(){if(hIdx>0){hIdx--;bRestore(hist[hIdx]);}}
 function bRedo(){if(hIdx<hist.length-1){hIdx++;bRestore(hist[hIdx]);}}
@@ -1167,9 +1243,9 @@ boverlay.addEventListener('pointerup',()=>{
 });
 function bFit(){const avail=$('#bviewer').clientWidth-76;if(avail>0)B.scale=Math.min(avail/B.pageW,1.4);bRender();}
 
-function bAdd(e){B.els.push(e);bSelect(e.id);bRefreshPreview();bRefresh();bRender();commit();}
+function bAdd(e){B.els.push(e);bSelect(e.id);bFillPreviewGaps();bRefresh();bRender();commit();}
 $('#bAddText').onclick=()=>bAdd({id:'b'+(bSeq++),type:'text',x:B.pageW/2-140,y:B.pageH-90,w:280,h:34,text:'Novo texto',size:16,family:'Helvetica',bold:false,align:'center',color:'#173a8a'});
-$('#bAddBingo').onclick=()=>bAdd({id:'b'+(bSeq++),type:'bingo',x:B.pageW/2-110,y:B.pageH/2-110,w:220,h:220,rows:5,cols:5,group:1,free:true,grid:true,header:true,number:false,corner:0,centerImage:null,centerScale:0.85});
+$('#bAddBingo').onclick=()=>bAdd({id:'b'+(bSeq++),type:'bingo',x:B.pageW/2-110,y:B.pageH/2-110,w:220,h:220,rows:5,cols:5,group:1,free:true,grid:true,header:true,number:false,corner:0,idPos:'top-left',idScale:0.42,centerImage:null,centerScale:0.85});
 let bImgTarget=null;
 $('#bAddImg').onclick=()=>{bImgTarget='new';$('#bImgFile').click();};
 $('#bImgReplace').onclick=()=>{bImgTarget=B.selId;$('#bImgFile').click();};
@@ -1183,14 +1259,18 @@ $('#bImgFile').addEventListener('change',async ev=>{
 });
 $('#bAddRound').onclick=()=>{
   const n=B.els.filter(e=>e.type==='bingo').length+1;
-  const bg={id:'b'+(bSeq++),type:'bingo',x:60,y:B.pageH/2-60,w:150,h:150,rows:5,cols:5,group:n,free:true,grid:true,header:true,number:false,centerImage:null,centerScale:0.85};
+  const bg={id:'b'+(bSeq++),type:'bingo',x:60,y:B.pageH/2-60,w:150,h:150,rows:5,cols:5,group:n,free:true,grid:true,header:true,number:false,corner:0,idPos:'top-left',idScale:0.42,centerImage:null,centerScale:0.85};
   const tx={id:'b'+(bSeq++),type:'text',x:230,y:B.pageH/2-40,w:300,h:110,text:n+'ª RODADA\n1. \n2. \n3. ',size:12,family:'Helvetica',bold:false,align:'left',color:'#173a8a'};
-  B.els.push(bg,tx);if(styleB.numberMode==='same'){styleB.numberMode='group';$('#bMode').value='group';}bSelect(bg.id);bRefresh();bRender();commit();
+  B.els.push(bg,tx);
+  /* virar "por grupo" muda quem divide números com quem: aí o re-sorteio é necessário */
+  if(styleB.numberMode==='same'){styleB.numberMode='group';$('#bMode').value='group';bRefreshPreview();}
+  else bFillPreviewGaps();
+  bSelect(bg.id);bRefresh();bRender();commit();
 };
 $('#bDup').onclick=()=>{
   const src=selectedEls();if(!src.length)return;
   const novos=src.map(e=>Object.assign({},e,{id:'b'+(bSeq++),x:e.x+16,y:e.y-16}));
-  B.els.push(...novos);B.selIds=novos.map(e=>e.id);bSelect(novos[novos.length-1].id,false,true);bRefreshPreview();bRefresh();bRender();commit();
+  B.els.push(...novos);B.selIds=novos.map(e=>e.id);bSelect(novos[novos.length-1].id,false,true);bFillPreviewGaps();bRefresh();bRender();commit();
 };
 $('#bDel').onclick=()=>{
   const ids=B.selIds.length?B.selIds.slice():(B.selId?[B.selId]:[]);if(!ids.length)return;
@@ -1206,15 +1286,39 @@ $('#bSelAll').onclick=()=>{if(!B.els.length)return;B.selIds=B.els.map(e=>e.id);b
 $('#bApplyAll').onclick=()=>{
   const e=bEl(B.selId);if(!e||e.type!=='bingo')return;
   const alvos=B.els.filter(k=>k.type==='bingo');
-  alvos.forEach(k=>{k.free=freeOf(e);k.grid=e.grid;k.header=e.header;k.corner=e.corner||0;});
-  bRefreshPreview();bRender();bRefresh();commit();bShowMsg('Centro livre, grade, cabeçalho e cantos aplicados às '+alvos.length+' cartelas.','info');
+  alvos.forEach(k=>{
+    const antes=freeOf(k);
+    k.free=freeOf(e);k.grid=e.grid;k.header=e.header;k.corner=e.corner||0;
+    k.idPos=idPosOf(e);k.idScale=idScaleOf(e);
+    if(antes!==freeOf(k))bAdaptPreviewFor(k);
+  });
+  bRender();bRefresh();commit();bShowMsg('Opções de '+bLabel(e)+' aplicadas às '+alvos.length+' cartelas.','info');
 };
 $('#bCorner').addEventListener('input',()=>{const e=bEl(B.selId);if(!e)return;e.corner=+$('#bCorner').value;$('#bCornerVal').textContent=Math.round(e.corner*100)+'%';bRender();});
 $('#bCorner').addEventListener('change',commit);
 $('#bPreviewSel').onclick=()=>$('#bPreview').onclick();
-/* Uma vez ligada, a prévia NÃO se desliga sozinha: cada mudança de configuração
-   só re-sorteia os números. Se o sorteio falhar, mantém o que já estava na tela. */
+/* Mesma regra do modo A: a prévia não se desliga sozinha e só re-sorteia quando os
+   números deixariam de valer. Estilo (fonte, tamanho, posição, cantos) só redesenha. */
 function bRefreshPreview(){if(!B.preview)return;const bingos=B.els.filter(e=>e.type==='bingo');try{B.previewNums=buildSets(bingos,styleB);}catch(err){}}
+function bFillPreviewGaps(){
+  if(!B.preview||!B.previewNums)return;
+  const bingos=B.els.filter(e=>e.type==='bingo'),faltando=bingos.filter(e=>!B.previewNums[e.id]);
+  if(!faltando.length)return;
+  try{
+    faltando.forEach(e=>{
+      let ref=null;
+      if(styleB.numberMode==='same')ref=bingos.find(k=>B.previewNums[k.id]);
+      else if(styleB.numberMode==='group')ref=bingos.find(k=>k.group===e.group&&B.previewNums[k.id]);
+      B.previewNums[e.id]=(ref&&ref.rows===e.rows&&ref.cols===e.cols)
+        ? adaptGrid(B.previewNums[ref.id],e,styleB,freeOf(ref))
+        : makeGrid(e,styleB);
+    });
+  }catch(err){}
+}
+function bAdaptPreviewFor(e){
+  if(!B.preview||!B.previewNums||!B.previewNums[e.id])return;
+  try{B.previewNums[e.id]=adaptGrid(B.previewNums[e.id],e,styleB,!freeOf(e));}catch(err){}
+}
 
 function bSelect(id,additive,keepIds){
   if(additive&&id){
@@ -1237,6 +1341,9 @@ function bSelect(id,additive,keepIds){
   if(e.type==='text'){$('#bText').value=e.text;$('#bTFont').value=e.family;$('#bTSize').value=Math.round(e.size);$('#bTColor').value=e.color||'#173a8a';$('#bTBold').classList.toggle('on',!!e.bold);['bAlL','bAlC','bAlR'].forEach(a=>$('#'+a).classList.remove('on'));$('#'+{left:'bAlL',center:'bAlC',right:'bAlR'}[e.align||'left']).classList.add('on');}
   if(e.type==='bingo'){$('#bCols').value=e.cols;$('#bRows').value=e.rows;$('#bFree').checked=freeOf(e);$('#bGrid').checked=e.grid;$('#bHeader').checked=e.header;$('#bNum').checked=e.number;$('#bGrpWrap').style.display=styleB.numberMode==='group'?'block':'none';$('#bGrp').value=e.group;
     $('#bCorner').value=e.corner||0;$('#bCornerVal').textContent=Math.round((e.corner||0)*100)+'%';
+    $('#bIdPos').value=idPosOf(e);
+    $('#bIdScale').value=idScaleOf(e);$('#bIdScaleVal').textContent=Math.round(idScaleOf(e)*100)+'%';
+    $('#bIdSection').style.display=e.number?'block':'none';
     $('#bImgCenterSection').style.display=freeOf(e)?'block':'none';
     if(e.centerImage){$('#bBImgThumb').src=e.centerImage.el.src;$('#bBImgPrev').style.display='flex';$('#bBImgScaleWrap').style.display='block';}else{$('#bBImgPrev').style.display='none';$('#bBImgScaleWrap').style.display='none';}
     $('#bBImgScale').value=e.centerScale;$('#bBImgScaleVal').textContent=Math.round((e.centerScale||0.85)*100)+'%';}
@@ -1256,18 +1363,21 @@ $('#bFree').addEventListener('change',()=>{
   const e=bEl(B.selId);if(!e)return;
   e.free=$('#bFree').checked;
   $('#bImgCenterSection').style.display=e.free?'block':'none';
-  bRefreshPreview();bRender();
+  bAdaptPreviewFor(e);bRender();
 });
 $('#bGrid').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.grid=$('#bGrid').checked;bRender();}});
 $('#bHeader').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.header=$('#bHeader').checked;bRender();}});
-$('#bNum').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.number=$('#bNum').checked;bRender();}});
-$('#bGrp').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.group=Math.max(1,+$('#bGrp').value||1);bRefreshPreview();bRender();bRefresh();}});
+$('#bNum').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.number=$('#bNum').checked;$('#bIdSection').style.display=e.number?'block':'none';bRender();}});
+$('#bIdPos').addEventListener('change',()=>{const e=bEl(B.selId);if(e){e.idPos=$('#bIdPos').value;bRender();}});
+$('#bIdScale').addEventListener('input',()=>{const e=bEl(B.selId);if(!e)return;e.idScale=+$('#bIdScale').value;$('#bIdScaleVal').textContent=Math.round(e.idScale*100)+'%';bRender();});
+$('#bIdScale').addEventListener('change',commit);
+$('#bGrp').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.group=Math.max(1,+$('#bGrp').value||1);if(styleB.numberMode==='group')bRefreshPreview();bRender();bRefresh();}});
 $('#bBImg').addEventListener('change',async ev=>{const e=bEl(B.selId);if(!e)return;const f=ev.target.files[0];if(!f)return;const buf=await f.arrayBuffer();const bytes=new Uint8Array(buf);const kind=(f.type.includes('png')||bytes[0]===0x89)?'png':'jpg';const el=new Image();el.onload=()=>{e.centerImage={el,bytes,kind};bSelect(e.id);bRender();commit();};el.src=URL.createObjectURL(new Blob([buf],{type:f.type||'image/png'}));ev.target.value='';});
 $('#bBImgRemove').onclick=()=>{const e=bEl(B.selId);if(e){e.centerImage=null;bSelect(e.id);bRender();commit();}};
 $('#bBImgScale').addEventListener('input',()=>{const e=bEl(B.selId);if(e){e.centerScale=+$('#bBImgScale').value;$('#bBImgScaleVal').textContent=Math.round(e.centerScale*100)+'%';bRender();}});
 $('#bBImgScale').addEventListener('change',commit);
 /* commit ao terminar edições de campos */
-['bText','bTFont','bTSize','bTColor','bCols','bRows','bGrp','bX','bY','bW','bH','bFree','bGrid','bHeader','bNum'].forEach(id=>$('#'+id).addEventListener('change',commit));
+['bText','bTFont','bTSize','bTColor','bCols','bRows','bGrp','bX','bY','bW','bH','bFree','bGrid','bHeader','bNum','bIdPos'].forEach(id=>$('#'+id).addEventListener('change',commit));
 
 function bRefresh(){
   const L=$('#bList'),sel=$('#bSel');
@@ -1287,8 +1397,10 @@ function bRefresh(){
   });
   updHistBtns();
 }
-function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.numberMode=bMode.value;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRefreshPreview();bRender();bRefresh();}
-['bMin','bMax','bMode','bQty'].forEach(id=>$('#'+id).addEventListener('input',bSyncStyle));
+/* como no modo A: bSyncStyle só redesenha; quem re-sorteia é a faixa e o modo */
+function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.numberMode=bMode.value;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRender();bRefresh();}
+$('#bQty').addEventListener('input',bSyncStyle);
+['bMin','bMax','bMode'].forEach(id=>$('#'+id).addEventListener('input',()=>{bSyncStyle();bRefreshPreview();bRender();}));
 $('#bOriP').onclick=()=>bSetOrientation(true);$('#bOriL').onclick=()=>bSetOrientation(false);
 $('#bzIn').onclick=()=>{B.scale=Math.min(B.scale*1.15,4);bRender();};
 $('#bzOut').onclick=()=>{B.scale=Math.max(B.scale/1.15,.2);bRender();};
@@ -1343,7 +1455,7 @@ $('#bGenerate').onclick=async()=>{
 function bShowMsg(t,type){const m=$('#bMsg');m.className='msg show '+type;m.innerHTML='<span>'+t+'</span>';}
 
 function T(text,x,y,w,h,size,o){o=o||{};return{id:'b'+(bSeq++),type:'text',x:x,y:y,w:w,h:h,text:text,size:size,family:o.family||'Helvetica',bold:!!o.bold,align:o.align||'left',color:o.color||'#173a8a'};}
-function BG(x,y,w,h,o){o=o||{};return{id:'b'+(bSeq++),type:'bingo',x:x,y:y,w:w,h:h,rows:5,cols:5,group:o.group||1,free:o.free!==false,grid:o.grid!==false,header:!!o.header,number:!!o.number,centerImage:null,centerScale:0.85};}
+function BG(x,y,w,h,o){o=o||{};return{id:'b'+(bSeq++),type:'bingo',x:x,y:y,w:w,h:h,rows:5,cols:5,group:o.group||1,free:o.free!==false,grid:o.grid!==false,header:!!o.header,number:!!o.number,corner:0,idPos:o.idPos||'top-left',idScale:o.idScale==null?0.42:o.idScale,centerImage:null,centerScale:0.85};}
 function bLoadTemplate(name){
   bSetOrientation(true);const W=B.pageW,H=B.pageH;B.els=[];B.preview=false;bSetPreviewBtn();
   if(name==='unica'){styleB.numberMode='same';$('#bMode').value='same';

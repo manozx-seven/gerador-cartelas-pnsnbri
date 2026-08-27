@@ -37,7 +37,11 @@ O bilhete físico é **um único papel** que serve para **5 rodadas de jogo**:
 Ao lado das cartelas ficam: título/arte do evento, data, local, valor e a
 **lista de prêmios de cada rodada** (1ª a 4ª, mais os prêmios da 5ª/principal).
 
-## 3. Solução construída (estado atual)
+## 3. Solução desenhada no começo (HISTÓRICO — não é o estado atual)
+
+> ⚠️ **Esta seção e a nota da seção 4 descrevem a primeira ideia** (duas abas, `.docx` com
+> tags e saída em `.zip`), que **foi abandonada**. O que existe hoje é o app da **seção 6**:
+> sobreposição sobre PDF e construtor A4, com saída em PDF. Mantido aqui só como histórico.
 
 Um **único app web em HTML/JS que roda no navegador (sem backend)**, com **duas
 abas**:
@@ -99,22 +103,36 @@ abas**:
   `1}}` em outra). O sistema já tenta **corrigir isso automaticamente** antes de
   substituir, mas vale **conferir o resultado** depois de gerar.
 
-## 6. App "Meu modelo" — editor de sobreposição (`bingo-sobreposicao.html`)
+## 6. O app (`site/app.html`) — os dois modos
 
-Foco atual do projeto. Fluxo em 4 passos, tudo no navegador (offline):
+Foco atual do projeto. Tudo roda no navegador (offline), num arquivo só, com duas abas
+no topo. **Modo A — "Sobre a folha (PDF)"**, em 5 passos:
 
-1. **Carregar folha** — upload do PDF da paróquia (pdf.js; multipágina + zoom).
-2. **Marcar cartelas** — carimba quadrados 5×5 sobre os espaços vazios: arrasta para
-   mover, puxa os cantos para redimensionar, "Duplicar" para repetir o tamanho nas 5
-   cartelas. Ajuste fino por teclado e por campos numéricos (X/Y/larg/alt/linhas/colunas).
-3. **Configurar** — faixa de números (ex. 1–75), centro livre on/off, modo dos números
-   (todas iguais / independentes / por grupo), quantidade de folhas, numeração e fonte.
-4. **Prévia + Gerar** — prévia com números de exemplo e geração de um único PDF com N
-   folhas, carimbando os sorteados sobre o layout original (pdf-lib).
+1. **Folha base** — upload do PDF da paróquia (pdf.js; multipágina + zoom).
+2. **Números** — faixa (ex. 1–75) e modo de sorteio (todas iguais / cada uma independente
+   / por grupo-rodada).
+3. **Cartelas** — carimba quadrados sobre os espaços vazios: arrasta para mover, puxa os
+   cantos/lados para redimensionar, "Duplicar" para repetir o tamanho. Ajuste fino por
+   teclado e por campos numéricos. Seleção múltipla (Ctrl/Shift+clique, Ctrl+A) move e
+   escala em grupo. **Opções por cartela:** centro livre, grade, cabeçalho BINGO, cantos
+   arredondados, numerar (com **posição e tamanho do número**) e imagem do centro — com botão
+   para aplicar todas essas opções às demais cartelas.
+4. **Estilo** — fonte e tamanho dos números, texto/fonte do cabeçalho, e o **prefixo/nº inicial**
+   da numeração (sequencial, valem para a folha toda).
+5. **Gerar** — quantidade de folhas, nome do arquivo, prévia com números de exemplo e
+   geração de um único PDF carimbando os sorteados sobre o layout original (pdf-lib).
 
-**Decisões:** grade 5×5 com centro livre; modo de números escolhível na tela; saída em
-PDF primeiro. **Pendências/ideias:** exportar Word e PNG/zip (jszip já baixado);
-possível "snap" automático aos espaços do PDF; testar o carimbo em impressão real.
+**Modo B — "Criar no sistema (A4)"**: mesma lógica, mas a folha é montada do zero em A4
+(estruturas prontas, elementos livres de texto/imagem/cartela, fundos, desfazer/refazer).
+Passos: 1 Folha A4 · 2 Números · 3 Elementos · 4 Gerar.
+
+**Decisões:** grade 5×5 com **centro livre configurável em cada cartela** (desde 27/08/2026;
+antes era uma chave global); modo de números escolhível na tela; saída em PDF primeiro.
+A **prévia, uma vez ligada, não se desliga sozinha** (só pelo próprio botão, "Ocultar a prévia")
+**e não fica re-sorteando à toa**: mudança de estilo apenas redesenha os mesmos números; só
+faixa, modo de sorteio, grupo e linhas/colunas re-sorteiam. A **numeração de cada cartela
+(posição e tamanho) é independente**; prefixo e nº inicial é que valem para a folha toda.
+As pendências estão consolidadas na **seção 7**.
 
 ## 6.1. Publicação (Netlify) e login (Firebase)
 
@@ -135,20 +153,26 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
 - **Presença/auditoria:** `session.js` grava `ultimoAcesso`/`ultimoAtivo` (heartbeat) e a
   coleção `atividades`. **As regras precisam ser republicadas** quando o `firestore.rules` muda.
 - Regras em `firestore.rules`. Firebase = **projeto NOVO só do bingo** (isolado do Beruri).
-- Chaves do Firebase ficam em `site/assets/js/firebase.js` (placeholders `COLE_AQUI`).
+- Chaves do Firebase ficam em `site/assets/js/firebase.js` — **já são as chaves reais e estão
+  commitadas** (normal e seguro para app web; a proteção fica nas regras do Firestore).
 - Passo a passo completo em **`SETUP-FIREBASE.md`**.
 - **Teste local:** abrir `site/app.html` por `file://` libera o app sem login (os módulos
   não rodam em file://); no site publicado (http/https) o login é obrigatório.
 
 ## 7. Próximos passos em aberto
 
-> Lista consolidada em **07/08/2026**. O detalhamento (com o que já está pronto e as
-> decisões tomadas) está na entrada de mesma data no `ATUALIZACOES.md`.
+> Lista consolidada em **27/08/2026**. O detalhamento de cada item (o que já está pronto,
+> as decisões e os testes) está nas entradas do `ATUALIZACOES.md`.
+> Última alteração de código: **27/08/2026** (centro livre por cartela, prévia que não
+> some, numeração ajustável). Repositório sincronizado com o GitHub no commit `562dcfb`.
 
-**Validação com a paróquia**
+**Prioridade — validação com a paróquia**
 - Testar o **modo sobreposição com o PDF real do São Pedro impresso** (encaixe dos
   quadrados, tamanho da fonte, alinhamento no papel) e ajustar conforme o resultado.
+  Continua sendo o único item que **não dá para validar sem imprimir**.
 - Colher o retorno da paróquia sobre o app publicado e sobre a proposta comercial.
+- ⚠️ **Prazo da proposta:** desenvolvimento de **10/08/2026 a 04/09/2026** (04/09 é o teto,
+  não a data alvo). A entrega pode vir antes, sem mudar o valor.
 
 **Funcionalidades pendentes**
 - Ao remover um admin, apagar também a conta no **Firebase Authentication** (hoje só pelo
@@ -158,6 +182,9 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
 - **Exportar em Word e em PNG/zip** (`jszip` já está em `site/libs/`).
 - Possível **"snap" automático** dos quadrados aos espaços vazios do PDF.
 - Estender **desfazer/refazer** ao modo A (sobreposição) — hoje só no construtor A4.
+- **Prefixo e nº inicial da numeração no construtor A4:** o modo A4 já tem posição e tamanho
+  do número (por cartela), mas o **prefixo** e o **"começar em"** continuam fixos no `styleB`
+  (`Nº ` e 1). Expor esses dois campos no passo 4 do A4 se a paróquia sentir falta.
 - Reintegrar a aba "Modelo do sistema" (layout pronto) num app único, se ainda desejado.
 
 **Operacional**

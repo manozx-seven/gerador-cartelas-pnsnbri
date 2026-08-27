@@ -9,6 +9,49 @@
 
 ---
 
+## 2026-08-27 — Prévia que não fica re-sorteando + numeração independente por cartela
+
+Dois ajustes pedidos logo depois da entrega da mesma data, nos **dois modos**.
+
+- **A prévia parou de mudar os números a cada mexida.** A correção anterior deixou a prévia
+  ligada, mas **re-sorteando a cada mudança** — mexer na fonte, no tamanho ou na posição do
+  número embaralhava tudo de novo e ficava estranho de acompanhar.
+  - Agora só re-sorteia quem **realmente invalida os números**: faixa (Nº inicial/final),
+    modo de sorteio, grupo (quando o modo é "por grupo") e linhas/colunas.
+  - **Estilo apenas redesenha os mesmos números:** fonte, tamanho dos números, cabeçalho,
+    grade, cantos, prefixo, nº inicial, posição e tamanho da numeração, quantidade de folhas,
+    mover e redimensionar a cartela. `syncStyle`/`bSyncStyle` deixaram de chamar o re-sorteio.
+  - **Centro livre virou um retoque, não um sorteio:** `adaptPreviewFor()` / `bAdaptPreviewFor()`
+    reaproveitam o `adaptGrid()` para só **acender ou apagar a casa do meio daquela cartela** —
+    as outras cartelas e as outras colunas ficam intactas.
+  - **Cartela nova não mexe nas antigas:** `fillPreviewGaps()` / `bFillPreviewGaps()` dão números
+    só a quem ainda não tem, herdando do bilhete certo conforme o modo.
+  - **Desfazer/refazer (modo A4):** `bPreviewStale()` checa se a grade guardada ainda bate com o
+    elemento (tamanho e centro). Só re-sorteia se não bater — desfazer uma troca de fonte não
+    embaralha mais nada.
+- **Estilo da numeração virou POR CARTELA.** Antes, mudar posição/tamanho no passo 4 mexia em
+  todas ao mesmo tempo.
+  - `c.idPos` e `c.idScale` agora são de cada cartela, com os helpers **`idPosOf()`** e
+    **`idScaleOf()`** (cartela sem a propriedade cai no padrão antigo: acima-esquerda, 42%).
+  - Os controles **"Posição do número"** e **"Tamanho do número"** foram para o bloco de edição
+    da cartela (passo 3), logo abaixo de "Numerar esta cartela", e só aparecem quando a
+    numeração dela está ligada.
+  - No passo 4 sobraram **prefixo** e **começar em**, que continuam da folha inteira porque a
+    numeração é sequencial — com um aviso explicando isso.
+  - **O modo A4 ganhou esses controles**, que lá não existiam (resolve a pendência registrada
+    no `CONTEXTO.md`). `styleB.idPos`/`idScale` foram removidos.
+  - Os botões de replicar viraram **"Aplicar estas opções a todas as cartelas"** e passaram a
+    levar junto a posição e o tamanho da numeração.
+- **Arquivo afetado:** `site/app.html`.
+- **Testado no navegador com o PDF real do São Pedro:** **14 mudanças de estilo seguidas no
+  modo A** (e 9 no A4, incluindo desfazer/refazer) com os números **byte a byte idênticos** do
+  começo ao fim; as 3 mudanças estruturais re-sortearam como devem; ligar/desligar centro livre
+  mexeu **só na coluna do meio daquela cartela** (ganhou exatamente 1 número, as outras cartelas
+  intactas); cartela nova nasceu com números sem tocar nas antigas. **PDF gerado e lido de volta
+  com pdf.js:** 4 cartelas com posições e tamanhos diferentes de numeração, conferidos pela
+  borda (encosta na esquerda / centralizado / encosta na direita, acima ou abaixo) e pela altura
+  do texto (14,4 / 8,4 / 21,6 / 4pt) — o mesmo no A4 (21 / 12 / 5,4pt). Sem erros no console.
+
 ## 2026-08-27 — Centro livre por cartela, prévia que não some e numeração menor
 
 Três pedidos do usuário, aplicados **nos dois modos** (Sobreposição e Construtor A4).
