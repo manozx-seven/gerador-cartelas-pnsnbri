@@ -109,14 +109,15 @@ Foco atual do projeto. Tudo roda no navegador (offline), num arquivo só, com du
 no topo. **Modo A — "Sobre a folha (PDF)"**, em 5 passos:
 
 1. **Folha base** — upload do PDF da paróquia (pdf.js; multipágina + zoom).
-2. **Números** — faixa (ex. 1–75) e modo de sorteio (todas iguais / cada uma independente
-   / por grupo-rodada).
+2. **Números** — faixa (ex. 1–75), **ordem dentro da coluna** (aleatória / crescente /
+   decrescente) e modo de sorteio (todas iguais / cada uma independente / por grupo-rodada).
 3. **Cartelas** — carimba quadrados sobre os espaços vazios: arrasta para mover, puxa os
-   cantos/lados para redimensionar, "Duplicar" para repetir o tamanho. Ajuste fino por
-   teclado e por campos numéricos. Seleção múltipla (Ctrl/Shift+clique, Ctrl+A) move e
-   escala em grupo. **Opções por cartela:** centro livre, grade, cabeçalho BINGO, cantos
-   arredondados, numerar (com **posição e tamanho do número**) e imagem do centro — com botão
-   para aplicar todas essas opções às demais cartelas.
+   cantos/lados para redimensionar, "Duplicar" para repetir o tamanho. **Desfazer/refazer**
+   (Ctrl+Z / Ctrl+Y). **Encaixe automático (snap)** com "Detectar espaços" e "Criar cartelas
+   neles". Ajuste fino por teclado e por campos numéricos. Seleção múltipla (Ctrl/Shift+clique,
+   Ctrl+A) move e escala em grupo. **Opções por cartela:** centro livre, grade, cabeçalho BINGO,
+   cantos arredondados, numerar (com **posição e tamanho do número**) e imagem do centro — com
+   botão para aplicar todas essas opções às demais cartelas.
 4. **Estilo** — fonte e tamanho dos números, texto/fonte do cabeçalho, e o **prefixo/nº inicial**
    da numeração (sequencial, valem para a folha toda).
 5. **Gerar** — quantidade de folhas, nome do arquivo, prévia com números de exemplo e
@@ -124,15 +125,21 @@ no topo. **Modo A — "Sobre a folha (PDF)"**, em 5 passos:
 
 **Modo B — "Criar no sistema (A4)"**: mesma lógica, mas a folha é montada do zero em A4
 (estruturas prontas, elementos livres de texto/imagem/cartela, fundos, desfazer/refazer).
-Passos: 1 Folha A4 · 2 Números · 3 Elementos · 4 Gerar.
+Passos: 1 Folha A4 · 2 Números · 3 Elementos · 4 Gerar (com prefixo e nº inicial da numeração).
 
 **Decisões:** grade 5×5 com **centro livre configurável em cada cartela** (desde 27/08/2026;
 antes era uma chave global); modo de números escolhível na tela; saída em PDF primeiro.
+A **ordem dos números dentro da coluna é aleatória por padrão** (desde 28/08/2026) — é o bingo
+tradicional e o que mais "embola" as cartelas; em crescente/decrescente o menor (ou o maior)
+número da faixa cai quase sempre na primeira linha e repete muito de uma cartela para outra.
 A **prévia, uma vez ligada, não se desliga sozinha** (só pelo próprio botão, "Ocultar a prévia")
 **e não fica re-sorteando à toa**: mudança de estilo apenas redesenha os mesmos números; só
-faixa, modo de sorteio, grupo e linhas/colunas re-sorteiam. A **numeração de cada cartela
-(posição e tamanho) é independente**; prefixo e nº inicial é que valem para a folha toda.
-As pendências estão consolidadas na **seção 7**.
+faixa, ordem da coluna, modo de sorteio, grupo e linhas/colunas re-sorteiam. A **numeração de
+cada cartela (posição e tamanho) é independente**; prefixo e nº inicial é que valem para a folha
+toda. O **encaixe automático** lê os pixels da página já desenhada (nada de servidor) e só aceita
+um retângulo como espaço se ele estiver vazio ou for uma **grade regular com todas as faixas
+cortadas pelas divisórias verticais** — é o que impede juntar duas cartelas vizinhas num quadro
+só. As pendências estão consolidadas na **seção 7**.
 
 ## 6.1. Publicação (Netlify) e login (Firebase)
 
@@ -148,7 +155,8 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
   topo mostra o usuário, botão **Admins** e **Sair**. Registra as gerações de PDF no histórico.
 - **`admin.html`**: abas **Administradores** (cria via app secundário sem deslogar; remove —
   dev remove qualquer um, adm só remove `adm`; mostra online/último acesso; troca a própria
-  senha) e **Histórico** (auditoria de tudo que os admins fazem).
+  senha) e **Histórico** (auditoria de tudo que os admins fazem, com **"Limpar histórico"
+  só para DEV** — apaga tudo em lotes e registra a própria limpeza).
 - **Permissões:** só **DEV** escolhe DEV/Administrador ao criar; admin comum só cria `adm`.
 - **Presença/auditoria:** `session.js` grava `ultimoAcesso`/`ultimoAtivo` (heartbeat) e a
   coleção `atividades`. **As regras precisam ser republicadas** quando o `firestore.rules` muda.
@@ -161,31 +169,30 @@ Firestore, na **mesma dinâmica do projeto Paróquia Beruri**:
 
 ## 7. Próximos passos em aberto
 
-> Lista consolidada em **27/08/2026**. O detalhamento de cada item (o que já está pronto,
+> Lista consolidada em **28/08/2026**. O detalhamento de cada item (o que já está pronto,
 > as decisões e os testes) está nas entradas do `ATUALIZACOES.md`.
-> Última alteração de código: **27/08/2026** (centro livre por cartela, prévia que não
-> some, numeração ajustável). Repositório sincronizado com o GitHub no commit `562dcfb`.
+> Última alteração de código: **28/08/2026** (ordem dos números, encaixe automático,
+> desfazer/refazer no modo A, prefixo no A4, limpar histórico).
 
 **Prioridade — validação com a paróquia**
 - Testar o **modo sobreposição com o PDF real do São Pedro impresso** (encaixe dos
   quadrados, tamanho da fonte, alinhamento no papel) e ajustar conforme o resultado.
   Continua sendo o único item que **não dá para validar sem imprimir**.
+- **Testar "Limpar histórico" logado como DEV no site publicado** — a parte de Firebase é a
+  única que não deu para conferir localmente (o login exige o site no ar).
 - Colher o retorno da paróquia sobre o app publicado e sobre a proposta comercial.
 - ⚠️ **Prazo da proposta:** desenvolvimento de **10/08/2026 a 04/09/2026** (04/09 é o teto,
   não a data alvo). A entrega pode vir antes, sem mudar o valor.
 
 **Funcionalidades pendentes**
-- Ao remover um admin, apagar também a conta no **Firebase Authentication** (hoje só pelo
-  Console; exigiria Admin SDK / Cloud Function).
-- **"Limpar histórico"** (só DEV) direto no painel.
 - **Exportar/imprimir o histórico** de atividades.
 - **Exportar em Word e em PNG/zip** (`jszip` já está em `site/libs/`).
-- Possível **"snap" automático** dos quadrados aos espaços vazios do PDF.
-- Estender **desfazer/refazer** ao modo A (sobreposição) — hoje só no construtor A4.
-- **Prefixo e nº inicial da numeração no construtor A4:** o modo A4 já tem posição e tamanho
-  do número (por cartela), mas o **prefixo** e o **"começar em"** continuam fixos no `styleB`
-  (`Nº ` e 1). Expor esses dois campos no passo 4 do A4 se a paróquia sentir falta.
 - Reintegrar a aba "Modelo do sistema" (layout pronto) num app único, se ainda desejado.
+
+**Descartado (decisão do usuário, 28/08/2026)**
+- ~~Ao remover um admin, apagar também a conta no Firebase Authentication~~ — exigiria
+  Admin SDK / Cloud Function (custo extra) e **o usuário não quer pagar nada a mais**.
+  Continua sendo feito à mão pelo Console do Firebase.
 
 **Operacional**
 - Republicar as **regras do Firestore** no Console sempre que o `firestore.rules` mudar.

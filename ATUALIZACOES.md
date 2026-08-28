@@ -9,6 +9,76 @@
 
 ---
 
+## 2026-08-28 — Sorteio embaralhado, encaixe automático, desfazer/refazer no modo A e limpar histórico
+
+Cinco pedidos do usuário. (O sexto — apagar a conta no Firebase Auth ao remover um admin —
+**foi descartado por ele**: exigiria Cloud Function/Admin SDK e ele não quer pagar mais nada.
+Continua sendo feito pelo Console do Firebase.)
+
+- **Ordem dos números dentro da coluna virou opção** (`style.numberOrder` / `styleB.numberOrder`,
+  novo campo no passo 2 dos dois modos): **aleatória (padrão, o bingo tradicional)**, crescente
+  ou decrescente.
+  - **Era a queixa:** `sample()` devolvia a coluna sempre em ordem crescente, então o **menor
+    número da faixa caía sempre na primeira linha**. Medido: com 1–75, o "1" aparecia no topo da
+    coluna B em **34% das cartelas**; em ordem aleatória caiu para **6,5%** — as cartelas
+    "embolam" muito mais.
+  - `sample(lo,hi,n,ord)` e o novo `ordenar()` decidem a ordem; `makeGrid` repassa a escolha.
+  - **`adaptGrid` ficou mais fiel no modo aleatório:** ao acender o centro, o número novo entra
+    **só na casa do meio** e as outras ficam onde estavam (antes reordenava a coluna inteira).
+    Em crescente/decrescente ele reordena, como tem de ser.
+  - Trocar a ordem re-sorteia a prévia (é mudança que invalida os números); estilo continua só
+    redesenhando.
+- **Encaixe automático (snap) nos espaços vazios do PDF** — modo A, passo 3:
+  - Botão **"Detectar espaços"**: lê os pixels da página **já desenhada na tela** e acha os
+    retângulos onde a cartela entra. Aparecem tracejados em verde.
+  - Chave **"Encaixe automático (snap)"**: arrastando, o quadrado **gruda** no espaço (encaixe
+    inteiro) ou nas bordas mais próximas; redimensionando, só a aresta puxada gruda. Linhas-guia
+    verdes mostram onde prendeu. Tolerância de 9 px de tela.
+  - Botão **"Criar cartelas neles"**: cria as cartelas já encaixadas, com **linhas e colunas
+    lidas da grade impressa**, grade desligada onde o quadro já está impresso e ligada nos
+    espaços em branco. Só a maior vem numerada (numerar as cinco carimbaria o mesmo "Nº 0001"
+    cinco vezes sobre a arte).
+  - **Como o detector decide:** linhas horizontais compridas → pares que formam retângulo →
+    as 4 arestas precisam estar quase inteiras **e sem buraco grande** → o miolo precisa ser
+    **grade regular** (linhas igualmente espaçadas) **ou** estar vazio. Além disso **toda faixa
+    horizontal tem de ser cortada pelas divisórias verticais**: é essa regra que impede o
+    sistema de juntar as duas cartelas de uma coluna num quadro só (a faixa do título
+    "3ª RODADA" não tem divisória). A faixa de cima sem divisória é reconhecida como o
+    **cabeçalho B I N G O** e sai da conta, porque o app desenha o cabeçalho *acima* da grade.
+  - **Desempenho:** reaproveita o canvas já renderizado — **42 ms**. A primeira versão
+    redesenhava a página num canvas próprio e levava de **8 a 21 segundos** no PDF do São Pedro.
+- **Desfazer / Refazer no modo A (sobreposição)** — resolve a pendência antiga (só existia no
+  construtor A4). Botões no passo 3 e **Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z**, mais **Ctrl+D**
+  (duplicar). Histórico de 80 estados (`aHist`), com `aPreviewStale()` igual ao do A4: desfazer
+  uma mudança de posição **não re-sorteia** os números.
+- **Prefixo e "começar em" no construtor A4** (passo 4) — resolve a outra pendência: eram fixos
+  em `styleB` (`Nº ` e 1).
+- **"Limpar histórico" (só DEV)** no painel de administração, aba Histórico. Apaga a coleção
+  `atividades` em lotes de 400 (`writeBatch`) e **registra a própria limpeza** como primeiro
+  item do histórico novo, para não sumir o rastro de quem apagou. O botão só aparece para DEV e
+  as regras do Firestore já garantiam `delete: if ehDev()` — admin comum é barrado no servidor.
+- **Bugs corrigidos no caminho** (achados testando):
+  - `innerLines` devolvia meio-pixel (`902,5`) e o índice fracionário fazia toda leitura do mapa
+    de pixels virar `undefined` — a detecção "via" linhas que existiam como se não existissem.
+  - `inkRatio` amostrava com o mesmo passo nos dois eixos e **"casava" com tramas**: uma foto
+    pontilhada era lida como folha limpa. Passos diferentes (sx, sx+1) resolveram.
+  - `inkMapFrom` lia **pixel transparente como tinta preta** (canvas recém-limpo = folha toda
+    escura). Agora exige alfa > 40.
+- **Arquivos afetados:** `site/app.html`, `site/admin.html`, `site/assets/js/admin.js`.
+- **Testado:** `node --check` no script do app e no `admin.js`; **19 testes automatizados em
+  Node** das funções puras (ordem crescente/decrescente/aleatória em 300 sorteios cada, a medição
+  dos 34% × 6,5%, faixas e repetições, `adaptGrid` nos três modos, os três modos de sorteio, e a
+  detecção numa folha sintética com dois quadros + texto + foto, que também cobre os dois bugs de
+  amostragem). **No navegador, com o PDF real do São Pedro:** detectou **exatamente os 5 espaços**
+  (a área vazia da 5ª rodada, 288×332, e as 4 cartelas impressas, 139×126 cada, com 5×5 e o
+  cabeçalho descontado) em 42 ms; "Criar cartelas neles" encaixou as 5 e os números caíram
+  **dentro das casas impressas**; arraste de verdade grudou no espaço com precisão de 0,01 pt e
+  as guias sumiram ao soltar; com o snap desligado ficou solto, como deve. **PDF gerado e lido de
+  volta com pdf.js:** 2 folhas, 24 números por cartela, todos dentro da faixa da coluna e **fora
+  de ordem** (B: 14, 8, 12, 15, 6). No **modo A4**: prefixo "Bilhete " e início 250 saíram
+  `Bilhete 0250/0251/0252` nas 3 folhas, e a ordem crescente saiu crescente. Desfazer/refazer de
+  arraste e de "Nova cartela" conferidos. Sem erros no console.
+
 ## 2026-08-27 — Prévia que não fica re-sorteando + numeração independente por cartela
 
 Dois ajustes pedidos logo depois da entrega da mesma data, nos **dois modos**.

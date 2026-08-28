@@ -73,6 +73,10 @@
   .grouprect{position:absolute;border:2px dashed #c67f00;background:rgba(240,169,31,.07);border-radius:5px;pointer-events:none;z-index:4}
   .grouprect .badge{position:absolute;top:-24px;left:-2px;background:linear-gradient(145deg,#f5b93a,#c67f00);color:#fff;font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:8px;white-space:nowrap;pointer-events:none;box-shadow:2px 2px 6px rgba(198,127,0,.35)}
   .grouprect .handle{pointer-events:auto;border-color:#c67f00}
+  /* espaços vazios detectados no PDF (encaixe automático) */
+  .snapbox{position:absolute;border:1.5px dashed #1f9d55;background:rgba(31,157,85,.07);border-radius:3px;pointer-events:none;z-index:0}
+  .snapbox b{position:absolute;top:2px;left:4px;font-size:9.5px;font-weight:700;color:#14663a;background:rgba(255,255,255,.75);border-radius:5px;padding:0 4px}
+  .snapguide{position:absolute;background:#1f9d55;pointer-events:none;z-index:7;opacity:.85}
   .handle{position:absolute;width:13px;height:13px;background:#fff;border:2px solid var(--blue);border-radius:4px;z-index:6;box-shadow:1px 1px 4px rgba(28,71,196,.4)}
   .handle.nw{left:-7px;top:-7px;cursor:nwse-resize}.handle.ne{right:-7px;top:-7px;cursor:nesw-resize}
   .handle.sw{left:-7px;bottom:-7px;cursor:nesw-resize}.handle.se{right:-7px;bottom:-7px;cursor:nwse-resize}
@@ -293,6 +297,15 @@
       <div class="hint" style="margin-top:7px"><b>Nº inicial</b> é o <b>menor</b> número que pode sair numa cartela; <b>Nº final</b> é o <b>maior</b>. Todo número sorteado fica entre os dois — no bingo tradicional de 75 bolas, de <b>1 a 75</b>.<br>A faixa é repartida em partes iguais entre as colunas: com 1–75 e 5 colunas sai <b>B</b> 1–15, <b>I</b> 16–30, <b>N</b> 31–45, <b>G</b> 46–60, <b>O</b> 61–75.</div>
 
       <div class="divider"></div>
+      <label>Ordem dos números dentro de cada coluna</label>
+      <select id="cfgOrder">
+        <option value="random">Aleatória (tradicional)</option>
+        <option value="asc">Crescente — do menor para o maior</option>
+        <option value="desc">Decrescente — do maior para o menor</option>
+      </select>
+      <div class="hint" style="margin-top:7px">Na <b>aleatória</b> os números são embaralhados dentro da coluna — é o bingo tradicional e o que mais <b>embola</b> as cartelas. Em crescente/decrescente a coluna sai sempre em ordem, e aí o menor (ou o maior) número da faixa cai quase sempre na <b>primeira linha</b>, repetindo muito entre as cartelas.</div>
+
+      <div class="divider"></div>
       <label>Como sortear os números da folha</label>
       <div class="radio">
         <label><input type="radio" name="mode" value="same" checked><span>Todas iguais<small>Todas as cartelas da folha recebem os mesmos números — o mesmo bilhete, jogado em todas as rodadas.</small></span></label>
@@ -304,11 +317,23 @@
     <!-- 3 -->
     <div class="box">
       <h2><span class="stepno">3</span> Cartelas</h2>
+      <div class="btns" style="margin-bottom:10px">
+        <button id="aUndo" disabled title="Ctrl+Z"><svg class="ico s15" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg> Desfazer</button>
+        <button id="aRedo" disabled title="Ctrl+Y"><svg class="ico s15" viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg> Refazer</button>
+      </div>
       <div class="btns">
         <button class="primary" id="addCard" disabled><svg class="ico s15" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova</button>
         <button id="dupCard" disabled><svg class="ico s15" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Duplicar</button>
       </div>
-      <button class="linkbtn" id="selAll" style="margin-top:9px">⛶ Selecionar todas as cartelas</button>
+      <div class="divider"></div>
+      <div class="toggle" style="padding-top:0"><span class="lbl"><svg class="ico s15" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg> Encaixe automático (snap)</span><label class="sw"><input type="checkbox" id="cfgSnap" checked><span class="tr"></span></label></div>
+      <div class="btns" style="margin-top:10px">
+        <button id="findSlots" disabled><svg class="ico s15" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Detectar espaços</button>
+        <button id="fillSlots" disabled><svg class="ico s15" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Criar cartelas neles</button>
+      </div>
+      <div class="hint" id="slotsHint">Com o encaixe ligado, ao arrastar ou redimensionar um quadrado ele <b>gruda</b> nos espaços e nas linhas da folha. Clique em <b>Detectar espaços</b> para o sistema achar sozinho os quadros vazios do PDF (aparecem tracejados em verde).</div>
+      <div class="divider"></div>
+      <button class="linkbtn" id="selAll">⛶ Selecionar todas as cartelas</button>
       <div class="cardlist" id="cardList"></div>
       <div class="empty-note" id="noCards">Nenhum quadrado ainda. Clique em <b>Nova</b> e arraste sobre um espaço da folha. Use <b>Duplicar</b> para repetir o mesmo tamanho.</div>
       <div class="hint" id="multiHint" style="display:none"></div>
@@ -464,6 +489,15 @@
       <div class="row"><div><label>Nº inicial</label><input type="number" id="bMin" value="1"></div><div><label>Nº final</label><input type="number" id="bMax" value="75"></div></div>
       <div class="hint" style="margin-top:7px"><b>Nº inicial</b> é o <b>menor</b> número que pode sair numa cartela; <b>Nº final</b> é o <b>maior</b>. Todo número sorteado fica entre os dois — no bingo tradicional de 75 bolas, de <b>1 a 75</b>.<br>A faixa é repartida em partes iguais entre as colunas: com 1–75 e 5 colunas sai <b>B</b> 1–15, <b>I</b> 16–30, <b>N</b> 31–45, <b>G</b> 46–60, <b>O</b> 61–75.</div>
       <div class="divider"></div>
+      <label>Ordem dos números dentro de cada coluna</label>
+      <select id="bOrder">
+        <option value="random">Aleatória (tradicional)</option>
+        <option value="asc">Crescente — do menor para o maior</option>
+        <option value="desc">Decrescente — do maior para o menor</option>
+      </select>
+      <div class="hint" style="margin-top:7px">Na <b>aleatória</b> os números são embaralhados dentro da coluna — é o bingo tradicional e o que mais <b>embola</b> as cartelas. Em crescente/decrescente a coluna sai sempre em ordem, e aí o menor (ou o maior) número da faixa cai quase sempre na <b>primeira linha</b>, repetindo muito entre as cartelas.</div>
+
+      <div class="divider"></div>
       <label>Números entre as cartelas da folha</label>
       <select id="bMode"><option value="same">Todas iguais</option><option value="independent">Cada cartela diferente</option><option value="group">Por grupo / rodada</option></select>
     </div>
@@ -553,7 +587,16 @@
       <h2><span class="stepno">4</span> Gerar</h2>
       <label>Quantidade de folhas a gerar</label>
       <input type="number" id="bQty" value="30" min="1" max="3000">
-      <label style="margin-top:12px">Nome do arquivo</label>
+      <div class="divider"></div>
+      <label>Numeração das cartelas</label>
+      <div class="row">
+        <div><label>Prefixo</label><input type="text" id="bIdPrefix" value="Nº "></div>
+        <div><label>Começar em</label><input type="number" id="bIdStart" value="1"></div>
+      </div>
+      <div class="hint" style="margin-top:7px">O prefixo e o número inicial valem para a folha inteira — a numeração é <b>sequencial por folha</b>.<br>Ligar/desligar, <b>posição</b> e <b>tamanho</b> são de <b>cada cartela</b>, no <b>passo 3</b>.</div>
+
+      <div class="divider"></div>
+      <label>Nome do arquivo</label>
       <input type="text" id="bFileName" value="modelo-bingo" placeholder="modelo-bingo" maxlength="80">
       <div class="hint" style="margin-top:6px">O <b>.pdf</b> é acrescentado sozinho. Vale um nome por evento, tipo <b>bingao-sao-pedro-2026</b>.</div>
       <div class="hint" style="margin-top:7px">A faixa de números e o modo de sorteio ficam no <b>passo 2</b>.</div>
@@ -573,14 +616,15 @@ const $=s=>document.querySelector(s);
 const stage=$('#stage'),pdfCanvas=$('#pdfCanvas'),drawCanvas=$('#drawCanvas'),overlay=$('#overlay');
 const pctx=pdfCanvas.getContext('2d'),dctx=drawCanvas.getContext('2d');
 
-const S={pdfjsDoc:null,pdflibBytes:null,numPages:0,pageIndex:0,viewport:null,scale:1.2,cards:[],selId:null,selIds:[],previewNums:null};
+const S={pdfjsDoc:null,pdflibBytes:null,numPages:0,pageIndex:0,viewport:null,scale:1.2,cards:[],selId:null,selIds:[],previewNums:null,
+  snap:true,slots:{},showSlots:false,guides:[]};
 let idSeq=1;
 
 const style={
   min:1,max:75,
   headerText:'BINGO',headerFont:'Times',
   idPrefix:'Nº ',idStart:1,
-  font:'Helvetica',bold:true,fontScale:0.62,numberMode:'same',quantity:30
+  font:'Helvetica',bold:true,fontScale:0.62,numberMode:'same',numberOrder:'random',quantity:30
 };
 /* Opções DE CADA CARTELA (passo 3). Cartela sem a propriedade definida cai no
    padrão antigo, para nada quebrar: centro livre ligado, número acima à esquerda
@@ -597,12 +641,13 @@ async function loadFile(file){
   try{S.pdfjsDoc=await pdfjsLib.getDocument({data:new Uint8Array(buf.slice(0))}).promise;}
   catch(e){return showMsg('Não consegui abrir o PDF: '+e.message,'err');}
   S.numPages=S.pdfjsDoc.numPages;S.pageIndex=0;
+  S.slots={};S.showSlots=false;S.guides=[];$('#fillSlots').disabled=true;
   $('#pgTot').textContent=S.numPages;
   $('#pager').style.display=S.numPages>1?'flex':'none';
   $('#empty').style.display='none';stage.style.display='block';$('#zoomBar').style.display='flex';
   $('#fileMeta').style.display='flex';
   $('#fileMeta').innerHTML='<svg class="ico s15" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><b style="color:var(--ink)">'+file.name+'</b> · '+S.numPages+' pág.';
-  ['addCard','generate','preview'].forEach(id=>$('#'+id).disabled=false);
+  ['addCard','generate','preview','findSlots'].forEach(id=>$('#'+id).disabled=false);
   setStep(2);
   S.scale=0;await renderPage(true);
 }
@@ -618,7 +663,9 @@ async function renderPage(fit=false){
   stage.style.width=W+'px';stage.style.height=H+'px';
   pctx.setTransform(dpr,0,0,dpr,0,0);pctx.clearRect(0,0,W,H);
   await page.render({canvasContext:pctx,viewport:S.viewport}).promise;
-  $('#pgNum').textContent=S.pageIndex+1;redraw();
+  $('#pgNum').textContent=S.pageIndex+1;
+  $('#fillSlots').disabled=!((S.slots[S.pageIndex]||[]).length);
+  redraw();
 }
 $('#prevPg').onclick=async()=>{if(S.pageIndex>0){S.pageIndex--;await renderPage();}};
 $('#nextPg').onclick=async()=>{if(S.pageIndex<S.numPages-1){S.pageIndex++;await renderPage();}};
@@ -759,6 +806,14 @@ function groupBoxA(){
 function groupScreenRectA(b){const p1=pdfToScreen(b.x,b.y),p2=pdfToScreen(b.x+b.w,b.y+b.h);return{left:Math.min(p1.x,p2.x),top:Math.min(p1.y,p2.y),w:Math.abs(p2.x-p1.x),h:Math.abs(p2.y-p1.y)};}
 function drawInteraction(){
   overlay.innerHTML='';
+  /* espaços vazios detectados na folha (vão atrás de tudo) */
+  if(S.showSlots)(S.slots[S.pageIndex]||[]).forEach((b,i)=>{
+    const r=cardScreenRect(b),d=document.createElement('div');
+    d.className='snapbox';
+    d.style.left=r.left+'px';d.style.top=r.top+'px';d.style.width=r.w+'px';d.style.height=r.h+'px';
+    d.innerHTML='<b>espaço '+(i+1)+'</b>';
+    overlay.appendChild(d);
+  });
   S.cards.filter(c=>c.page===S.pageIndex).forEach(c=>{
     const r=cardScreenRect(c);
     const el=document.createElement('div');
@@ -778,7 +833,312 @@ function drawInteraction(){
     HANDLES.forEach(h=>{const hd=document.createElement('div');hd.className='handle '+h;hd.dataset.handle=h;hd.dataset.group='1';g.appendChild(hd);});
     overlay.appendChild(g);
   }
+  /* linhas-guia do encaixe (só enquanto arrasta) */
+  (S.guides||[]).forEach(gu=>{
+    const d=document.createElement('div');d.className='snapguide';
+    if(gu.x!=null){const p=pdfToScreen(gu.x,0);d.style.left=(p.x-1)+'px';d.style.top='0';d.style.width='2px';d.style.height='100%';}
+    else{const p=pdfToScreen(0,gu.y);d.style.top=(p.y-1)+'px';d.style.left='0';d.style.height='2px';d.style.width='100%';}
+    overlay.appendChild(d);
+  });
 }
+
+/* ---------- encaixe automático (snap) nos espaços da folha ---------- */
+/* Lê a página do PDF num canvas fora da tela, acha os retângulos desenhados
+   (as molduras e grades onde as cartelas entram) e usa as bordas deles como
+   imã ao arrastar e redimensionar os quadrados. Tudo no navegador, sem servidor. */
+const SNAPTOL=9;                                   /* imã: 9 pixels de tela */
+function inkMapFrom(data,n){
+  const ink=new Uint8Array(n);
+  /* pixel transparente é papel em branco, não tinta preta */
+  for(let i=0,p=0;i<n;i++,p+=4)ink[i]=(data[p+3]>40&&(data[p]*0.299+data[p+1]*0.587+data[p+2]*0.114)<185)?1:0;
+  return ink;
+}
+/* linhas horizontais compridas; linhas grossas (2–3 px) viram uma só */
+function hLines(ink,W,H,minLen){
+  const segs=[];
+  for(let y=0;y<H;y++){
+    let st=-1,last=-1;
+    for(let x=0;x<W;x++){
+      if(ink[y*W+x]){if(st<0)st=x;last=x;}
+      else if(st>=0&&x-last>2){if(last-st+1>=minLen)segs.push({y:y,x0:st,x1:last});st=-1;}
+    }
+    if(st>=0&&last-st+1>=minLen)segs.push({y:y,x0:st,x1:last});
+  }
+  const out=[];
+  segs.forEach(s=>{
+    const m=out.find(o=>Math.abs(o.y-s.y)<=3&&(Math.min(o.x1,s.x1)-Math.max(o.x0,s.x0))>0.7*Math.min(o.x1-o.x0,s.x1-s.x0));
+    if(m){m.x0=Math.min(m.x0,s.x0);m.x1=Math.max(m.x1,s.x1);}
+    else out.push({y:s.y,x0:s.x0,x1:s.x1});
+  });
+  out.sort((a,b)=>a.y-b.y);
+  return out;
+}
+/* a aresta é mesmo uma linha desenhada? Precisa estar quase toda pintada (80%)
+   E sem nenhum buraco grande (10% do lado). O buraco é o que separa uma moldura
+   de verdade de duas coisas soltas que por acaso ficaram alinhadas. */
+function edgeOk(ink,W,H,fixed,a,b,vertical){
+  let hit=0,tot=0,gap=0,maiorGap=0;const lim=vertical?H:W,limF=vertical?W:H;
+  for(let t=Math.max(0,a);t<=Math.min(lim-1,b);t++){
+    tot++;let achou=false;
+    for(let d=-2;d<=2;d++){
+      const f=fixed+d;if(f<0||f>=limF)continue;
+      if(ink[vertical?(t*W+f):(f*W+t)]){achou=true;break;}
+    }
+    if(achou){hit++;gap=0;}else{gap++;if(gap>maiorGap)maiorGap=gap;}
+  }
+  return tot>0&&hit/tot>=0.8&&maiorGap<=Math.max(4,tot*0.1);
+}
+/* quanto o miolo está pintado — separa quadro vazio/grade (pouco) de foto (muito).
+   Os passos horizontal e vertical são diferentes de propósito: com passo igual a
+   amostragem "casa" com tramas/pontilhados e chega a ler uma foto como folha limpa. */
+function inkRatio(ink,W,x0,y0,x1,y1){
+  const w=x1-x0-6,h=y1-y0-6;if(w<=0||h<=0)return 0;
+  const sx=Math.max(1,Math.round(Math.sqrt(w*h/20000))),sy=sx+1;
+  let n=0,tot=0;
+  for(let y=y0+3;y<=y1-3;y+=sy)for(let x=x0+3;x<=x1-3;x+=sx){tot++;if(ink[y*W+x])n++;}
+  return tot?n/tot:0;
+}
+/* linhas internas que atravessam a caixa — é o que revela uma grade de verdade.
+   `minSpan` é o quanto a linha precisa cruzar do lado para valer. */
+function innerLines(ink,W,H,x0,y0,x1,y1,vertical,minSpan){
+  const a=vertical?x0:y0,b=vertical?x1:y1,c0=vertical?y0:x0,c1=vertical?y1:x1;
+  const lim=vertical?W:H,n=Math.floor((c1-c0-4)/2);
+  if(n<=0)return[];
+  const brutas=[];
+  for(let p=a+2;p<=b-2;p++){
+    let hit=0;
+    for(let t=c0+2;t<c1-2;t+=2){
+      for(let d=-1;d<=1;d++){
+        const q=p+d;if(q<0||q>=lim)continue;
+        if(ink[vertical?(t*W+q):(q*W+t)]){hit++;break;}
+      }
+    }
+    if(hit/n>=minSpan)brutas.push(p);
+  }
+  const out=[];                                                  /* linha grossa vira uma só */
+  brutas.forEach(p=>{const u=out[out.length-1];if(u&&p-u.fim<=2)u.fim=p;else out.push({ini:p,fim:p});});
+  /* inteiro de propósito: essas posições viram índice do mapa de pixels e um
+     meio-pixel (902,5) faria toda leitura cair em "undefined" */
+  return out.map(m=>Math.round((m.ini+m.fim)/2));
+}
+/* O retângulo serve mesmo como espaço de cartela? Ou ele está vazio (a cartela é
+   colada depois), ou é uma grade regular, com as linhas igualmente espaçadas nos
+   dois sentidos. Uma coluna que junta duas cartelas com um título no meio NÃO passa:
+   o vão do título quebra o ritmo — e é justamente isso que separa o quadro certo.
+   Devolve null se não serve; senão, o retângulo útil já com linhas, colunas e
+   cabeçalho descontado (o app desenha o "B I N G O" ACIMA da grade, então a faixa
+   das letras não pode entrar na conta das linhas). */
+/* quanto de tinta existe numa coluna x, dentro da faixa de ya a yb */
+function colCov(ink,W,x,ya,yb){
+  let hit=0,tot=0;x=Math.round(x);ya=Math.round(ya);yb=Math.round(yb);
+  for(let t=ya+2;t<yb-2;t++){
+    tot++;
+    for(let d=-1;d<=1;d++){const q=x+d;if(q<0||q>=W)continue;if(ink[t*W+q]){hit++;break;}}
+  }
+  return tot?hit/tot:0;
+}
+function slotInfo(ink,W,H,x0,y0,x1,y1){
+  const semBorda=(pos,ini,fim)=>pos.filter(p=>p-ini>4&&fim-p>4); /* a própria moldura não é linha interna */
+  const regular=p=>{
+    if(p.length<4)return false;                                  /* menos de 3 faixas não é grade */
+    let mn=Infinity,mx=0;
+    for(let i=1;i<p.length;i++){const g=p[i]-p[i-1];if(g<mn)mn=g;if(g>mx)mx=g;}
+    return mn>0&&mx/mn<=1.7;
+  };
+  const vs=semBorda(innerLines(ink,W,H,x0,y0,x1,y1,true,0.6),x0,x1);
+  const hs=regular([x0].concat(vs,[x1]))?semBorda(innerLines(ink,W,H,x0,y0,x1,y1,false,0.8),y0,y1):[];
+  if(hs.length&&regular([y0].concat(hs,[y1]))){
+    /* Toda faixa horizontal tem que ser cortada pelas divisórias verticais.
+       Faixa de cima sem divisória = o cabeçalho "B I N G O" (que o app desenha
+       ACIMA da grade, então sai da conta). Faixa SEM divisória no meio quer dizer
+       que o retângulo juntou duas cartelas com um título entre elas — não serve. */
+    const bandas=[y0].concat(hs,[y1]),sem=[];
+    for(let i=1;i<bandas.length;i++)
+      if(!vs.some(x=>colCov(ink,W,Math.round(x),bandas[i-1],bandas[i])>=0.6))sem.push(i-1);
+    if(!sem.length)
+      return{x0:x0,y0:y0,x1:x1,y1:y1,rows:bandas.length-1,cols:vs.length+1,header:false,impresso:true};
+    if(sem.length===1&&sem[0]===0)
+      return{x0:x0,y0:hs[0],x1:x1,y1:y1,rows:bandas.length-2,cols:vs.length+1,header:true,impresso:true};
+    return null;
+  }
+  /* não é grade impressa: só vale se o quadro estiver vazio (a cartela é
+     desenhada por cima, como no espaço da 5ª rodada) */
+  if(inkRatio(ink,W,x0,y0,x1,y1)<0.03)return{x0:x0,y0:y0,x1:x1,y1:y1,rows:5,cols:5,header:false,impresso:false};
+  return null;
+}
+function findBoxes(ink,W,H){
+  const lines=hLines(ink,W,H,Math.max(26,Math.round(W*0.045)));
+  const minSide=Math.max(26,Math.round(Math.min(W,H)*0.05));
+  const tol=Math.max(4,Math.round(W*0.006));
+  const achados=[];
+  for(let i=0;i<lines.length;i++)for(let j=i+1;j<lines.length;j++){
+    const a=lines[i],b=lines[j];
+    if(b.y-a.y<minSide)continue;
+    if(Math.abs(a.x0-b.x0)>tol||Math.abs(a.x1-b.x1)>tol)continue;
+    const x0=Math.round((a.x0+b.x0)/2),x1=Math.round((a.x1+b.x1)/2);
+    if(x1-x0<minSide)continue;
+    if((x1-x0)*(b.y-a.y)>0.8*W*H)continue;                       /* a folha inteira não é espaço */
+    if(!edgeOk(ink,W,H,x0,a.y,b.y,true))continue;                /* lado esquerdo */
+    if(!edgeOk(ink,W,H,x1,a.y,b.y,true))continue;                /* lado direito */
+    if(!edgeOk(ink,W,H,a.y,x0,x1,false))continue;                /* topo */
+    if(!edgeOk(ink,W,H,b.y,x0,x1,false))continue;                /* base */
+    if(inkRatio(ink,W,x0,a.y,x1,b.y)>0.35)continue;
+    achados.push({x0:x0,y0:a.y,x1:x1,y1:b.y});
+  }
+  /* do maior para o menor: o quadro de fora ganha do de dentro. Mas um quadro
+     REPROVADO não protege os de dentro — é assim que a coluna com duas cartelas
+     cai e as duas cartelas de verdade aparecem no lugar dela. */
+  achados.sort((p,q)=>(q.x1-q.x0)*(q.y1-q.y0)-(p.x1-p.x0)*(p.y1-p.y0));
+  const keep=[];
+  for(const bx of achados){
+    if(keep.length>=80)break;
+    const area=(bx.x1-bx.x0)*(bx.y1-bx.y0);
+    const jaCoberto=keep.some(k=>{
+      const ix=Math.max(0,Math.min(bx.x1,k.x1)-Math.max(bx.x0,k.x0));
+      const iy=Math.max(0,Math.min(bx.y1,k.y1)-Math.max(bx.y0,k.y0));
+      return ix*iy>0.6*area;
+    });
+    if(jaCoberto)continue;
+    const info=slotInfo(ink,W,H,bx.x0,bx.y0,bx.x1,bx.y1);
+    if(info)keep.push(info);
+  }
+  return keep;
+}
+async function detectSlots(pi){
+  let W,H,data,paraPdf;
+  if(pi===S.pageIndex&&pdfCanvas.width>=700){
+    /* caminho normal: a página já está desenhada na tela, então é instantâneo.
+       (Redesenhar num canvas próprio custa segundos num PDF com imagem grande.) */
+    W=pdfCanvas.width;H=pdfCanvas.height;
+    data=pctx.getImageData(0,0,W,H).data;
+    const dpr=window.devicePixelRatio||1;
+    paraPdf=(x,y)=>{const p=screenToPdf(x/dpr,y/dpr);return[p.x,p.y];};
+  }else{
+    /* página que não está na tela (ou zoom muito pequeno): desenha só para analisar */
+    const page=await S.pdfjsDoc.getPage(pi+1);
+    const v1=page.getViewport({scale:1});
+    const sc=Math.min(3,Math.max(1,1400/Math.max(v1.width,v1.height)));
+    const vp=page.getViewport({scale:sc});
+    const cv=document.createElement('canvas');
+    cv.width=Math.floor(vp.width);cv.height=Math.floor(vp.height);
+    const cx=cv.getContext('2d');
+    cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
+    await page.render({canvasContext:cx,viewport:vp}).promise;
+    W=cv.width;H=cv.height;data=cx.getImageData(0,0,W,H).data;
+    paraPdf=(x,y)=>vp.convertToPdfPoint(x,y);
+  }
+  const ink=inkMapFrom(data,W*H);
+  return findBoxes(ink,W,H).map(b=>{
+    const p1=paraPdf(b.x0,b.y0),p2=paraPdf(b.x1,b.y1);
+    return{x:Math.min(p1[0],p2[0]),y:Math.min(p1[1],p2[1]),w:Math.abs(p2[0]-p1[0]),h:Math.abs(p2[1]-p1[1]),
+      rows:b.rows,cols:b.cols,header:b.header,impresso:b.impresso};
+  });
+}
+/* quanto dois retângulos se sobrepõem, em relação ao menor deles */
+function overlapFrac(a,b){
+  const ix=Math.max(0,Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x));
+  const iy=Math.max(0,Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y));
+  const menor=Math.min(a.w*a.h,b.w*b.h);
+  return menor?(ix*iy)/menor:0;
+}
+/* devolve o retângulo já "grudado": ou encaixado inteiro num espaço, ou com as
+   arestas que estão sendo movidas puxadas para a borda mais próxima. */
+function snapRect(x,y,w,h,handle){
+  const slots=S.slots[S.pageIndex]||[];
+  S.guides=[];
+  if(!slots.length)return{x:x,y:y,w:w,h:h};
+  const tol=SNAPTOL/(S.scale||1);
+  if(!handle){
+    let best=null;
+    slots.forEach(b=>{
+      const f=overlapFrac({x:x,y:y,w:w,h:h},b);
+      if(f>0.55&&Math.abs(b.w-w)<=Math.max(tol*2,b.w*0.18)&&Math.abs(b.h-h)<=Math.max(tol*2,b.h*0.18)&&(!best||f>best.f))best={f:f,b:b};
+    });
+    if(best){
+      S.guides=[{x:best.b.x},{x:best.b.x+best.b.w},{y:best.b.y},{y:best.b.y+best.b.h}];
+      return{x:best.b.x,y:best.b.y,w:best.b.w,h:best.b.h};
+    }
+  }
+  const xs=[],ys=[];
+  slots.forEach(b=>{xs.push(b.x,b.x+b.w);ys.push(b.y,b.y+b.h);});
+  const near=(v,arr)=>{let d=tol,r=null;arr.forEach(t=>{const dd=Math.abs(t-v);if(dd<d){d=dd;r=t;}});return r;};
+  let nx=x,ny=y,nw=w,nh=h;
+  if(!handle){
+    const px=[[near(x,xs),x],[near(x+w,xs),x+w]].filter(p=>p[0]!=null);
+    if(px.length){const d=px.map(p=>p[0]-p[1]).reduce((a,b)=>Math.abs(b)<Math.abs(a)?b:a);nx=x+d;S.guides.push({x:px.find(p=>Math.abs(p[0]-p[1]-d)<1e-6)[0]});}
+    const py=[[near(y,ys),y],[near(y+h,ys),y+h]].filter(p=>p[0]!=null);
+    if(py.length){const d=py.map(p=>p[0]-p[1]).reduce((a,b)=>Math.abs(b)<Math.abs(a)?b:a);ny=y+d;S.guides.push({y:py.find(p=>Math.abs(p[0]-p[1]-d)<1e-6)[0]});}
+  }else{
+    if(handle.indexOf('w')>=0){const t=near(x,xs);if(t!=null){nw=x+w-t;nx=t;S.guides.push({x:t});}}
+    if(handle.indexOf('e')>=0){const t=near(x+w,xs);if(t!=null){nw=t-nx;S.guides.push({x:t});}}
+    if(handle.indexOf('s')>=0){const t=near(y,ys);if(t!=null){nh=y+h-t;ny=t;S.guides.push({y:t});}}
+    if(handle.indexOf('n')>=0){const t=near(y+h,ys);if(t!=null){nh=t-ny;S.guides.push({y:t});}}
+  }
+  return{x:nx,y:ny,w:Math.max(10,nw),h:Math.max(10,nh)};
+}
+$('#cfgSnap').addEventListener('change',()=>{S.snap=$('#cfgSnap').checked;if(!S.snap)S.guides=[];redraw();});
+$('#findSlots').onclick=async()=>{
+  if(!S.pdfjsDoc)return;
+  const btn=$('#findSlots'),antes=btn.innerHTML;
+  btn.disabled=true;btn.textContent='Analisando…';
+  try{
+    const bx=await detectSlots(S.pageIndex);
+    S.slots[S.pageIndex]=bx;S.showSlots=true;
+    $('#fillSlots').disabled=!bx.length;
+    redraw();
+    showMsg(bx.length
+      ? ('Encontrei '+bx.length+' espaço(s) nesta página — aparecem tracejados em verde. Agora os quadrados grudam neles ao arrastar.')
+      : 'Não achei quadros desenhados nesta página. Dá para posicionar as cartelas na mão normalmente.',
+      bx.length?'ok':'info');
+  }catch(e){showMsg('Não consegui analisar a página: '+e.message,'err');}
+  finally{btn.disabled=false;btn.innerHTML=antes;}
+};
+$('#fillSlots').onclick=()=>{
+  const bx=S.slots[S.pageIndex]||[];if(!bx.length)return;
+  let n=0;
+  bx.forEach(b=>{
+    if(S.cards.some(c=>c.page===S.pageIndex&&overlapFrac(c,b)>0.3))return;
+    /* espaço já impresso na folha → só carimba os números (grade e cabeçalho
+       desligados). Espaço em branco → o app desenha a grade. */
+    /* só a maior (a cartela principal) já vem numerada — numerar as cinco
+       carimbaria o mesmo "Nº 0001" cinco vezes em cima da arte da folha */
+    S.cards.push({id:'c'+(idSeq++),page:S.pageIndex,x:b.x,y:b.y,w:b.w,h:b.h,
+      rows:b.rows||5,cols:b.cols||5,group:1,free:true,
+      grid:!b.impresso,header:false,number:n===0,corner:0,
+      idPos:'top-left',idScale:0.42,centerImage:null,centerScale:0.85});
+    n++;
+  });
+  if(!n)return showMsg('Todos os espaços detectados já têm cartela.','info');
+  fillPreviewGaps();selectCard(S.cards[S.cards.length-1].id);aCommit();
+  showMsg(n+' cartela(s) criada(s) já encaixadas nos espaços. Onde a grade já vem impressa na folha ela ficou desligada (o app só carimba os números); nos espaços em branco a grade vem ligada. A numeração ficou só na maior — ligue nas outras se quiser. Confira na prévia.','ok');
+};
+
+/* ---------- desfazer / refazer (modo A) ---------- */
+let aHist=[],aIdx=-1;
+function aSnap(){return{cards:S.cards.map(c=>Object.assign({},c)),seq:idSeq};}
+function aCommit(){aHist=aHist.slice(0,aIdx+1);aHist.push(aSnap());if(aHist.length>80)aHist.shift();aIdx=aHist.length-1;updAHistBtns();}
+function updAHistBtns(){const u=$('#aUndo'),r=$('#aRedo');if(u)u.disabled=aIdx<=0;if(r)r.disabled=aIdx>=aHist.length-1;}
+/* igual ao modo A4: a prévia guardada só deixa de valer se a grade mudou de tamanho
+   ou o centro livre virou. Desfazer uma troca de posição não re-sorteia nada. */
+function aPreviewStale(){
+  if(!S.previewNums)return false;
+  return S.cards.some(c=>{
+    const g=S.previewNums[c.id];if(!g)return false;
+    if(g.length!==c.rows*c.cols)return true;
+    return freeOf(c)!==(g[Math.floor(c.rows/2)*c.cols+Math.floor(c.cols/2)]==null);
+  });
+}
+function aRestore(s){
+  S.cards=s.cards.map(c=>Object.assign({},c));
+  idSeq=Math.max(idSeq,s.seq);
+  S.selIds=S.selIds.filter(id=>cardById(id));
+  if(S.selId&&!cardById(S.selId))S.selId=S.selIds[S.selIds.length-1]||null;
+  if(S.previewNums){if(aPreviewStale())refreshPreview();else fillPreviewGaps();}
+  selectCard(S.selId,false,true);updAHistBtns();
+}
+function aUndo(){if(aIdx>0){aIdx--;aRestore(aHist[aIdx]);}}
+function aRedo(){if(aIdx<aHist.length-1){aIdx++;aRestore(aHist[aIdx]);}}
+$('#aUndo').onclick=aUndo;$('#aRedo').onclick=aRedo;
 
 /* ---------- interação ---------- */
 let drag=null;
@@ -815,18 +1175,21 @@ overlay.addEventListener('pointermove',e=>{
     const nx=Math.min(q1.x,q2.x),ny=Math.min(q1.y,q2.y),nw=Math.abs(q2.x-q1.x),nh=Math.abs(q2.y-q1.y);
     const b=drag.box,sx=b.w?nw/b.w:1,sy=b.h?nh/b.h:1;
     drag.snap.forEach(s=>{s.c.x=nx+(s.x-b.x)*sx;s.c.y=ny+(s.y-b.y)*sy;s.c.w=Math.max(10,s.w*sx);s.c.h=Math.max(10,s.h*sy);});
-    redraw();return;
+    S.guides=[];redraw();return;
   }
   w=Math.max(24,w);h=Math.max(24,h);
   const p1=screenToPdf(left,top+h),p2=screenToPdf(left+w,top);
-  drag.c.x=Math.min(p1.x,p2.x);drag.c.y=Math.min(p1.y,p2.y);drag.c.w=Math.abs(p2.x-p1.x);drag.c.h=Math.abs(p2.y-p1.y);
-  redraw();
+  let nx=Math.min(p1.x,p2.x),ny=Math.min(p1.y,p2.y),nw=Math.abs(p2.x-p1.x),nh=Math.abs(p2.y-p1.y);
+  if(S.snap){const sn=snapRect(nx,ny,nw,nh,drag.handle);nx=sn.x;ny=sn.y;nw=sn.w;nh=sn.h;}else S.guides=[];
+  drag.c.x=nx;drag.c.y=ny;drag.c.w=nw;drag.c.h=nh;
+  drag.moved=true;redraw();
 });
 overlay.addEventListener('pointerup',()=>{
   if(!drag)return;
-  const collapse=(drag.group&&!drag.moved&&drag.collapseTo)?drag.collapseTo:null;
-  drag=null;
-  if(collapse)selectCard(collapse);else syncSel();
+  const collapse=(drag.group&&!drag.moved&&drag.collapseTo)?drag.collapseTo:null,mv=drag.moved;
+  drag=null;S.guides=[];
+  if(collapse){selectCard(collapse);return;}
+  syncSel();redraw();if(mv)aCommit();
 });
 
 /* ---------- cartelas ---------- */
@@ -835,9 +1198,9 @@ $('#addCard').onclick=()=>{
   const wpt=(S.viewport.width*0.26)/S.scale,hpt=wpt;
   const ctr=screenToPdf(S.viewport.width/2,S.viewport.height/2);
   const c={id:'c'+(idSeq++),page:S.pageIndex,x:ctr.x-wpt/2,y:ctr.y-hpt/2,w:wpt,h:hpt,rows:5,cols:5,group:1,free:true,grid:true,header:false,number:true,corner:0,idPos:'top-left',idScale:0.42,centerImage:null,centerScale:0.85};
-  S.cards.push(c);selectCard(c.id);fillPreviewGaps();refreshList();redraw();setStep(3);
+  S.cards.push(c);selectCard(c.id);fillPreviewGaps();refreshList();redraw();setStep(3);aCommit();
 };
-$('#dupCard').onclick=()=>{const c=cardById(S.selId);if(!c)return;const n={...c,id:'c'+(idSeq++),x:c.x+14,y:c.y-14};S.cards.push(n);selectCard(n.id);fillPreviewGaps();refreshList();redraw();};
+$('#dupCard').onclick=()=>{const c=cardById(S.selId);if(!c)return;const n={...c,id:'c'+(idSeq++),x:c.x+14,y:c.y-14};S.cards.push(n);selectCard(n.id);fillPreviewGaps();refreshList();redraw();aCommit();};
 $('#delCard').onclick=()=>delSel();
 /* A prévia, uma vez ligada, não se desliga sozinha E não fica re-sorteando à toa.
    Só re-sorteia quando os números em si deixariam de valer — faixa, modo de sorteio,
@@ -871,9 +1234,9 @@ function delSel(){
   const ids=S.selIds.length?S.selIds.slice():(S.selId?[S.selId]:[]);
   if(!ids.length)return;
   S.cards=S.cards.filter(c=>!ids.includes(c.id));
-  S.selIds=[];S.selId=null;$('#selPanel').style.display='none';refreshList();redraw();
+  S.selIds=[];S.selId=null;$('#selPanel').style.display='none';refreshList();redraw();aCommit();
 }
-$('#fitSquare').onclick=()=>{const c=cardById(S.selId);if(!c)return;const s=Math.min(c.w,c.h);c.w=s;c.h=s;redraw();syncSel();};
+$('#fitSquare').onclick=()=>{const c=cardById(S.selId);if(!c)return;const s=Math.min(c.w,c.h);c.w=s;c.h=s;redraw();syncSel();aCommit();};
 $('#applyAll').onclick=()=>{
   const c=cardById(S.selId);if(!c)return;
   S.cards.forEach(k=>{
@@ -882,7 +1245,7 @@ $('#applyAll').onclick=()=>{
     k.idPos=idPosOf(c);k.idScale=idScaleOf(c);
     if(antes!==freeOf(k))adaptPreviewFor(k);   /* só acende/apaga o meio, não re-sorteia */
   });
-  redraw();refreshList();
+  redraw();refreshList();aCommit();
   showMsg('Opções da Cartela '+(S.cards.indexOf(c)+1)+' aplicadas a todas as '+S.cards.length+' cartelas.','info');
 };
 $('#selAll').onclick=()=>{
@@ -894,13 +1257,15 @@ $('#cFree').addEventListener('change',()=>{
   const c=cardById(S.selId);if(!c)return;
   c.free=$('#cFree').checked;
   $('#cImgSection').style.display=c.free?'block':'none';
-  adaptPreviewFor(c);redraw();refreshList();
+  adaptPreviewFor(c);redraw();refreshList();aCommit();
 });
-$('#cIdPos').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.idPos=$('#cIdPos').value;redraw();}});
+$('#cIdPos').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.idPos=$('#cIdPos').value;redraw();aCommit();}});
 $('#cIdScale').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.idScale=+$('#cIdScale').value;$('#cIdScaleVal').textContent=Math.round(c.idScale*100)+'%';redraw();});
-$('#cGrid').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.grid=$('#cGrid').checked;redraw();refreshList();}});
-$('#cHeader').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.header=$('#cHeader').checked;redraw();refreshList();}});
+$('#cIdScale').addEventListener('change',aCommit);
+$('#cGrid').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.grid=$('#cGrid').checked;redraw();refreshList();aCommit();}});
+$('#cHeader').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.header=$('#cHeader').checked;redraw();refreshList();aCommit();}});
 $('#cCorner').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.corner=+$('#cCorner').value;$('#cCornerVal').textContent=Math.round(c.corner*100)+'%';redraw();});
+$('#cCorner').addEventListener('change',aCommit);
 function selectCard(id,additive,keepIds){
   if(additive&&id){
     const i=S.selIds.indexOf(id);
@@ -928,18 +1293,19 @@ function selectCard(id,additive,keepIds){
   }
   syncSel();refreshList();redraw();
 }
-$('#cNumber').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.number=$('#cNumber').checked;$('#cIdSection').style.display=c.number?'block':'none';redraw();}});
+$('#cNumber').addEventListener('change',()=>{const c=cardById(S.selId);if(c){c.number=$('#cNumber').checked;$('#cIdSection').style.display=c.number?'block':'none';redraw();aCommit();}});
 $('#cCenterImg').addEventListener('change',async e=>{
   const c=cardById(S.selId);if(!c)return;const f=e.target.files[0];if(!f)return;
   const buf=await f.arrayBuffer();const bytes=new Uint8Array(buf);
   const kind=(f.type.includes('png')||bytes[0]===0x89)?'png':'jpg';
   const el=new Image();
-  el.onload=()=>{c.centerImage={el,bytes,kind};selectCard(c.id);redraw();};
+  el.onload=()=>{c.centerImage={el,bytes,kind};selectCard(c.id);redraw();aCommit();};
   el.src=URL.createObjectURL(new Blob([buf],{type:f.type||'image/png'}));
   e.target.value='';
 });
-$('#cImgRemove').onclick=()=>{const c=cardById(S.selId);if(!c)return;c.centerImage=null;selectCard(c.id);redraw();};
+$('#cImgRemove').onclick=()=>{const c=cardById(S.selId);if(!c)return;c.centerImage=null;selectCard(c.id);redraw();aCommit();};
 $('#cImgScale').addEventListener('input',()=>{const c=cardById(S.selId);if(!c)return;c.centerScale=+$('#cImgScale').value;$('#cImgScaleVal').textContent=Math.round(c.centerScale*100)+'%';redraw();});
+$('#cImgScale').addEventListener('change',aCommit);
 function syncSel(){const c=cardById(S.selId);if(!c)return;cX.value=Math.round(c.x);cY.value=Math.round(c.y);cW.value=Math.round(c.w);cH.value=Math.round(c.h);cCols.value=c.cols;cRows.value=c.rows;cGrp.value=c.group;}
 ['cX','cY','cW','cH','cCols','cRows','cGrp'].forEach(id=>$('#'+id).addEventListener('input',()=>{
   const c=cardById(S.selId);if(!c)return;
@@ -950,6 +1316,7 @@ function syncSel(){const c=cardById(S.selId);if(!c)return;cX.value=Math.round(c.
   if(antes!==c.cols+'x'+c.rows+'g'+c.group)refreshPreview();
   redraw();refreshList();
 }));
+['cX','cY','cW','cH','cCols','cRows','cGrp'].forEach(id=>$('#'+id).addEventListener('change',aCommit));
 function refreshList(){
   const L=$('#cardList'),sel=$('#selPanel');
   if(sel.parentNode!==document.body)document.body.appendChild(sel);
@@ -976,14 +1343,22 @@ function refreshList(){
 window.addEventListener('keydown',e=>{
   if($('#modeA').style.display==='none')return;
   const typing=['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName);
-  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a'&&!typing&&S.cards.length){e.preventDefault();$('#selAll').onclick();return;}
+  if(e.ctrlKey||e.metaKey){
+    if(typing)return;                       /* deixa o desfazer nativo do campo de texto */
+    const k=e.key.toLowerCase();
+    if(k==='z'&&!e.shiftKey){e.preventDefault();aUndo();}
+    else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();aRedo();}
+    else if(k==='a'&&S.cards.length){e.preventDefault();$('#selAll').onclick();}
+    else if(k==='d'&&S.selId){e.preventDefault();$('#dupCard').onclick();}
+    return;
+  }
   if(!S.selIds.length||typing)return;
   const cs=selectedCards();if(!cs.length)return;const st=e.shiftKey?10:1;
   let dx=0,dy=0;
   if(e.key==='ArrowLeft')dx=-st;else if(e.key==='ArrowRight')dx=st;else if(e.key==='ArrowUp')dy=st;else if(e.key==='ArrowDown')dy=-st;
   else if(e.key==='Delete'||e.key==='Backspace'){delSel();return;}else return;
   cs.forEach(c=>{c.x+=dx;c.y+=dy;});
-  e.preventDefault();redraw();syncSel();
+  e.preventDefault();redraw();syncSel();aCommit();
 });
 
 /* ---------- estilo ---------- */
@@ -994,7 +1369,7 @@ function syncStyle(){
   style.min=+cfgMin.value;style.max=+cfgMax.value;
   style.headerText=cfgHeaderText.value||'BINGO';style.headerFont=cfgHeaderFont.value;
   style.idPrefix=cfgIdPrefix.value;style.idStart=+cfgIdStart.value||1;
-  style.font=cfgFont.value;style.fontScale=+cfgFontScale.value;style.numberMode=modeVal();style.quantity=+cfgQty.value;
+  style.font=cfgFont.value;style.fontScale=+cfgFontScale.value;style.numberMode=modeVal();style.numberOrder=cfgOrder.value;style.quantity=+cfgQty.value;
   $('#grpWrap').style.display=(style.numberMode==='group'&&S.selId)?'block':'none';
   $('#fontVal').textContent=Math.round(style.fontScale*100)+'%';
   redraw();refreshList();
@@ -1002,8 +1377,8 @@ function syncStyle(){
 ['cfgHeaderText','cfgHeaderFont','cfgIdPrefix','cfgIdStart','cfgFont','cfgFontScale','cfgQty'].forEach(id=>{
   $('#'+id).addEventListener('input',syncStyle);
 });
-/* faixa de números e modo de sorteio mudam os próprios números: aí sim re-sorteia */
-['cfgMin','cfgMax'].forEach(id=>{
+/* faixa, ordem da coluna e modo de sorteio mudam os próprios números: aí sim re-sorteia */
+['cfgMin','cfgMax','cfgOrder'].forEach(id=>{
   $('#'+id).addEventListener('input',()=>{syncStyle();refreshPreview();redraw();});
 });
 document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{selectCard(S.selId);syncStyle();refreshPreview();redraw();}));
@@ -1011,14 +1386,24 @@ $('#cfgBold').onclick=()=>{style.bold=!style.bold;$('#cfgBold').classList.toggle
 
 /* ---------- sorteio ---------- */
 function columnRanges(min,max,cols){const total=max-min+1,base=Math.floor(total/cols),rem=total%cols,out=[];let s=min;for(let i=0;i<cols;i++){const sz=base+(i<rem?1:0);out.push([s,s+sz-1]);s+=sz;}return out;}
-function sample(lo,hi,n){const p=[];for(let v=lo;v<=hi;v++)p.push(v);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}return p.slice(0,n).sort((a,b)=>a-b);}
+/* Ordem dos números DENTRO de cada coluna (de cima para baixo):
+   'random' = embaralhado, o bingo tradicional — é o que mais varia entre as cartelas.
+   'asc'/'desc' = a coluna sai sempre em ordem, e aí o menor (ou o maior) número da
+   faixa cai quase sempre na primeira linha, repetindo muito de uma cartela para outra. */
+const orderOf=st=>((st&&st.numberOrder)||'random');
+function ordenar(arr,ord){
+  if(ord==='asc')return arr.sort((a,b)=>a-b);
+  if(ord==='desc')return arr.sort((a,b)=>b-a);
+  return arr;                                    /* aleatória: mantém o embaralhado */
+}
+function sample(lo,hi,n,ord){const p=[];for(let v=lo;v<=hi;v++)p.push(v);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}return ordenar(p.slice(0,n),ord);}
 function makeGrid(c,st){
   st=st||style;
-  const free=freeOf(c);
+  const free=freeOf(c),ord=orderOf(st);
   const{rows,cols}=c,ranges=columnRanges(st.min,st.max,cols),cR=Math.floor(rows/2),cC=Math.floor(cols/2),g=new Array(rows*cols).fill(null);
   for(let cc=0;cc<cols;cc++){const[lo,hi]=ranges[cc];const need=rows-((free&&cc===cC)?1:0);
     if(hi-lo+1<need)throw new Error('Faixa de números pequena demais para '+cols+' colunas. Aumente o número final.');
-    const pk=sample(lo,hi,need);let k=0;for(let r=0;r<rows;r++){if(free&&r===cR&&cc===cC)continue;g[r*cols+cc]=pk[k++];}}
+    const pk=sample(lo,hi,need,ord);let k=0;for(let r=0;r<rows;r++){if(free&&r===cR&&cc===cC)continue;g[r*cols+cc]=pk[k++];}}
   return g;
 }
 /* Como o centro livre é por cartela, duas cartelas que deveriam sair com os MESMOS
@@ -1033,8 +1418,11 @@ function adaptGrid(g,c,st,baseFree){
   const tem=new Set(usados),livres=[];
   for(let v=lo;v<=hi;v++)if(!tem.has(v))livres.push(v);
   if(!livres.length)return out;
-  usados.push(livres[Math.floor(Math.random()*livres.length)]);
-  usados.sort((a,b)=>a-b);
+  const novo=livres[Math.floor(Math.random()*livres.length)],ord=orderOf(st);
+  /* na ordem aleatória o número novo só ocupa a casa do meio — os outros ficam
+     exatamente onde estavam. Em crescente/decrescente a coluna é reordenada. */
+  if(ord==='random'){out[cR*cols+cC]=novo;return out;}
+  usados.push(novo);ordenar(usados,ord);
   for(let r=0;r<rows;r++)out[r*cols+cC]=usados[r];
   return out;
 }
@@ -1119,7 +1507,7 @@ const bstage=$('#bstage'),bdraw=$('#bdraw'),boverlay=$('#boverlay'),bctx=bdraw.g
 const A4={w:595.28,h:841.89};
 const B={portrait:true,pageW:A4.w,pageH:A4.h,scale:0.7,els:[],selId:null,selIds:[],preview:false,previewNums:null,inited:false,bg:{kind:'none',color:'#ffffff',img:null,border:null}};
 let bSeq=1;
-const styleB={min:1,max:75,headerText:'BINGO',headerFont:'Times',idPrefix:'Nº ',idStart:1,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',quantity:30};
+const styleB={min:1,max:75,headerText:'BINGO',headerFont:'Times',idPrefix:'Nº ',idStart:1,font:'Helvetica',bold:true,fontScale:0.6,numberMode:'same',numberOrder:'random',quantity:30};
 const convB={toScreen:(x,y)=>({x:x*B.scale,y:(B.pageH-y)*B.scale}),get scale(){return B.scale;}};
 const bEl=id=>B.els.find(e=>e.id===id);
 function bElRect(e){return{left:e.x*B.scale,top:(B.pageH-(e.y+e.h))*B.scale,w:e.w*B.scale,h:e.h*B.scale};}
@@ -1398,9 +1786,9 @@ function bRefresh(){
   updHistBtns();
 }
 /* como no modo A: bSyncStyle só redesenha; quem re-sorteia é a faixa e o modo */
-function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.numberMode=bMode.value;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRender();bRefresh();}
-$('#bQty').addEventListener('input',bSyncStyle);
-['bMin','bMax','bMode'].forEach(id=>$('#'+id).addEventListener('input',()=>{bSyncStyle();bRefreshPreview();bRender();}));
+function bSyncStyle(){styleB.min=+bMin.value;styleB.max=+bMax.value;styleB.numberMode=bMode.value;styleB.numberOrder=bOrder.value;styleB.idPrefix=bIdPrefix.value;styleB.idStart=+bIdStart.value||1;styleB.quantity=+bQty.value;const se=bEl(B.selId);$('#bGrpWrap').style.display=(styleB.numberMode==='group'&&se&&se.type==='bingo')?'block':'none';bRender();bRefresh();}
+['bQty','bIdPrefix','bIdStart'].forEach(id=>$('#'+id).addEventListener('input',bSyncStyle));
+['bMin','bMax','bMode','bOrder'].forEach(id=>$('#'+id).addEventListener('input',()=>{bSyncStyle();bRefreshPreview();bRender();}));
 $('#bOriP').onclick=()=>bSetOrientation(true);$('#bOriL').onclick=()=>bSetOrientation(false);
 $('#bzIn').onclick=()=>{B.scale=Math.min(B.scale*1.15,4);bRender();};
 $('#bzOut').onclick=()=>{B.scale=Math.max(B.scale/1.15,.2);bRender();};
@@ -1548,7 +1936,7 @@ function nomeArquivo(campo,padrao){
 }
 function setStep(n){for(let i=1;i<=4;i++){const c=$('#chip'+i);if(c)c.classList.toggle('on',i<=n);}}
 window.addEventListener('resize',()=>{if($('#modeB').style.display!=='none')bRender();else if(S.pdfjsDoc)redraw();});
-syncStyle();
+syncStyle();aCommit();
 </script>
 <!-- Abertura local (file://): os módulos não carregam, então libera o app p/ testes offline.
      No site publicado (http/https) o guarda abaixo roda e exige login. -->

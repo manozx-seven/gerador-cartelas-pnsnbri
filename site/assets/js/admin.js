@@ -5,7 +5,7 @@ import {
   signOut as signOutApp, updatePassword, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { toast, comCarregamento, REGRAS_SENHA, validarSenhaForte, olhoSenhaEm, dataHoraBR, tempoRelativo, estaOnline } from './utils.js';
 import { iniciarSessao, registrarAtividade } from './session.js';
@@ -17,7 +17,8 @@ const ACOES = {
   login: 'Entrou no sistema', logout: 'Saiu do sistema',
   criar_admin: 'Criou administrador', excluir_admin: 'Removeu administrador',
   reset_senha: 'Reiniciou a senha de um admin',
-  alterar_senha: 'Alterou a senha', gerar_cartelas: 'Gerou cartelas'
+  alterar_senha: 'Alterou a senha', gerar_cartelas: 'Gerou cartelas',
+  limpar_historico: 'Limpou o histórico'
 };
 let ADMINS = [];
 
@@ -32,8 +33,12 @@ onAuthStateChanged(auth, async (user) => {
     MEU = { uid: user.uid, email: user.email, role: adm.role || 'adm' };
     iniciarSessao(user, adm);
     $('#quemSou').innerHTML = `${MEU.email} <span class="badge ${MEU.role}">${MEU.role === 'dev' ? 'DEV' : 'ADM'}</span>`;
-    // só DEV escolhe o papel; admin comum sempre cria "adm"
-    if (MEU.role === 'dev') $('#wrapRole').classList.remove('hidden');
+    // só DEV escolhe o papel e só DEV limpa o histórico; admin comum sempre cria "adm"
+    if (MEU.role === 'dev'){
+      $('#wrapRole').classList.remove('hidden');
+      $('#wrapLimparLog').classList.remove('hidden');
+      $('#dicaLimparLog').style.display = 'block';
+    }
     const ov = document.getElementById('authOverlay'); if (ov) ov.remove();
     await carregarAdmins();
     await carregarHistorico();
@@ -232,3 +237,34 @@ function renderHistorico(){
 $('#logFiltroAdmin').addEventListener('change', renderHistorico);
 $('#logFiltroAcao').addEventListener('change', renderHistorico);
 $('#btnAtualizarLog').addEventListener('click', () => comCarregamento($('#btnAtualizarLog'), carregarHistorico));
+
+// ---------- Limpar histórico (só DEV) ----------
+// Apaga a coleção inteira em lotes de 400 (o Firestore não apaga coleção de uma vez
+// pelo navegador). As regras já garantem que só o DEV consegue: para um admin comum
+// o delete é recusado no servidor, mesmo que o botão apareça de alguma forma.
+const btnLimparLog = $('#btnLimparLog');
+btnLimparLog.addEventListener('click', () => {
+  if (MEU.role !== 'dev'){ toast('Só o desenvolvedor (DEV) pode limpar o histórico.', 'warn'); return; }
+  if (!confirm(`Apagar TODO o histórico de atividades (${LOGS.length >= 300 ? '300+' : LOGS.length} registro(s) visíveis)?\n\nIsso não pode ser desfeito.`)) return;
+  comCarregamento(btnLimparLog, async () => {
+    let total = 0;
+    try {
+      for (;;){
+        const qs = await getDocs(query(collection(db, COL_LOGS), limit(400)));
+        if (qs.empty) break;
+        const lote = writeBatch(db);
+        qs.docs.forEach(d => lote.delete(d.ref));
+        await lote.commit();
+        total += qs.size;
+        if (qs.size < 400) break;
+      }
+      // a própria limpeza fica registrada, para não sumir o rastro de quem apagou
+      await registrarAtividade('limpar_historico', `Limpou o histórico (${total} registro(s) apagados)`);
+      toast(total ? `Histórico limpo: ${total} registro(s) apagados.` : 'O histórico já estava vazio.', 'ok', 6000);
+      await carregarHistorico();
+    } catch (e){
+      console.error(e);
+      toast('Não foi possível limpar o histórico. Confirme se as regras do Firestore estão publicadas e se você é DEV.', 'erro', 8000);
+    }
+  });
+});

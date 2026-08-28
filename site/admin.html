@@ -67,7 +67,9 @@
         <div><label>Administrador</label><select id="logFiltroAdmin"><option value="">Todos</option></select></div>
         <div><label>Ação</label><select id="logFiltroAcao"><option value="">Todas</option></select></div>
         <div style="max-width:150px;display:flex;align-items:flex-end"><button id="btnAtualizarLog" style="width:100%">Atualizar</button></div>
+        <div id="wrapLimparLog" class="hidden" style="max-width:180px;display:flex;align-items:flex-end"><button id="btnLimparLog" class="danger" style="width:100%">Limpar histórico</button></div>
       </div>
+      <p class="hint" id="dicaLimparLog" style="display:none">Só o <b>desenvolvedor (DEV)</b> pode limpar. Apaga <b>todos</b> os registros e não tem como desfazer — a própria limpeza fica registrada como o primeiro item do histórico novo.</p>
       <p class="muted mt" id="logContador" style="font-size:12.5px"></p>
       <div id="listaLog"></div>
     </div>
