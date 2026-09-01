@@ -98,10 +98,13 @@ variável `$CLAUDE_PROJECT_DIR` em vez de caminho fixo da máquina):
 }
 ```
 
-**Não é preciso copiar `claude-settings.json` do pendrive** — o conteúdo acima já
-é a versão correta e portátil. O arquivo do pendrive serve só como conferência:
-ele é idêntico, exceto que usa o caminho absoluto do PC antigo
-(`C:/Users/murylo.neves/Desktop/BINGO/...`), que **não deve** ser reaproveitado.
+O arquivo `claude-settings.json` do pendrive é **idêntico a este conteúdo** — o
+PC de origem também usa a versão portátil. Então tanto faz: copie o arquivo do
+pendrive para `.claude/settings.json`, ou escreva o conteúdo acima direto. Não há
+nenhum caminho fixo de máquina para ajustar.
+
+`$CLAUDE_PROJECT_DIR` é preenchido pelo próprio Claude Code com a raiz do
+projeto, seja qual for a pasta do clone.
 
 Depois de criar, **reinicie o Claude Code** para o hook passar a valer.
 
