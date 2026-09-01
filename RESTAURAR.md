@@ -192,12 +192,58 @@ acesso no PC novo:
 | Serviço | O que você precisa |
 |---|---|
 | **GitHub** | Credencial de `git push` (login no Git Credential Manager na primeira vez). Repo: `manozx-seven/gerador-cartelas-pnsnbri`. |
-| **Firebase** | Projeto `gerador-cartelas-pnsnbri`. As chaves públicas já estão versionadas em `site/assets/js/firebase.js` — não precisa configurar nada. Só é preciso o login de admin (Firebase Auth) para entrar no sistema. Detalhes em `SETUP-FIREBASE.md`. |
+| **Firebase** | Projeto `gerador-cartelas-pnsnbri`. As chaves públicas já estão versionadas em `site/assets/js/firebase.js` — não precisa configurar nada. Só é preciso o login de admin (Firebase Auth) para entrar no sistema. Detalhes em `SETUP-FIREBASE.md`; sobre as chaves estarem no GitHub, ver **§7**. |
 | **Netlify** | Deploy automático a partir do GitHub (`netlify.toml` já versionado). Nada a instalar localmente. |
 
 ---
 
-## 7. Checklist final
+## 7. Segurança — por que as chaves do Firebase estão no GitHub
+
+**O repositório é público e a `apiKey` do Firebase está visível** em
+`site/assets/js/firebase.js`. Isso é esperado e **não é um vazamento**.
+
+A config web do Firebase (`apiKey`, `projectId`, `appId`) **não é segredo por
+definição**: ela é enviada ao navegador de todo mundo que abre o site. Mesmo com
+o repositório privado, qualquer pessoa leria essas chaves pelo DevTools. Segundo
+a própria documentação do Google, a `apiKey` do Firebase é um **identificador de
+projeto**, não uma credencial de acesso.
+
+Quem protege de verdade são as **regras do Firestore** (`firestore.rules`, já
+versionado), que:
+
+- fecham tudo por padrão — `match /{document=**} { allow read, write: if false; }`
+- exigem, em `/admins` e `/atividades`, estar logado **e** ter documento em
+  `/admins/{uid}` (só criar conta no Auth não dá acesso a nada)
+- tornam a auditoria imutável — `allow update: if false`
+
+Varredura feita em 01/09/2026 no repositório e em **todo o histórico de commits**:
+nenhum segredo real. Sem `service_account.json`, sem chave privada, sem `.env`,
+sem senha em código. O único match foi a `apiKey` pública.
+
+### 7.1 — O que conferir no console (estes sim são riscos reais)
+
+O `firestore.rules` cobre **apenas o Firestore**. Outros serviços do mesmo
+projeto têm regras próprias e não são protegidos por ele. Vale conferir no
+[console do Firebase](https://console.firebase.google.com/) — projeto
+`gerador-cartelas-pnsnbri`:
+
+| # | O que checar | Onde | Por quê |
+|---|---|---|---|
+| 1 | **Storage / Realtime Database** | Build → Storage / Realtime Database | Se algum já foi ativado com as regras de teste padrão (`allow read, write: if true`), aí sim é buraco aberto. Se não estiverem em uso, o ideal é mantê-los desativados. |
+| 2 | **Domínios autorizados** | Authentication → Settings → Authorized domains | Deixe só o domínio do Netlify e `localhost`. Impede que alguém suba um front clonado apontando para o seu projeto. |
+| 3 | **Cadastro aberto** | Authentication → Sign-in method → Email/Senha | Se o cadastro livre estiver habilitado, um estranho cria conta. Não ganha acesso a nada (as regras barram), mas polui a base e consome cota. |
+
+**Endurecimento opcional:** no
+[Google Cloud Console](https://console.cloud.google.com/apis/credentials) dá para
+restringir a chave do navegador por *referenciador HTTP*, limitando o uso ao
+domínio do Netlify. Não é necessário — é camada extra.
+
+> Nada disso impede o clone nem o funcionamento do sistema. É verificação
+> pontual, feita uma vez no console.
+
+---
+
+## 8. Checklist final
 
 - [ ] `git clone` feito e `git log` bate com o PC antigo
 - [ ] `.claude/settings.json` criado (versão `$CLAUDE_PROJECT_DIR`)
@@ -206,3 +252,5 @@ acesso no PC novo:
 - [ ] `git status --ignored` mostrando só os itens esperados
 - [ ] Site abrindo em `http://localhost:8000`
 - [ ] Login de admin funcionando (Firebase)
+- [ ] Storage e Realtime Database conferidos (§7.1) — desativados ou com regras fechadas
+- [ ] Domínios autorizados do Auth limitados ao Netlify + `localhost`
